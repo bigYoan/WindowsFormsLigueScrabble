@@ -13,6 +13,7 @@ namespace WindowsFormsLigueScrabble
     public partial class AjoutJoueurForm : Form
     {
         Controleur controleur;
+        DB_Manager db_manager = new DB_Manager();
         List<Joueur> joueurs = new List<Joueur>();
 
         public AjoutJoueurForm(Controleur controleurX)
@@ -23,10 +24,11 @@ namespace WindowsFormsLigueScrabble
 
         private void buttonAjouterJoueur_Click(object sender, EventArgs e)
         {
-            char IdCode = textBoxIdCode.Text[0];
+            string IdCode = textBoxIdCode.Text;
             string nom = textBoxNom.Text;
             string pseudo = textBoxPseudo.Text;
             Joueur nouveauJoueur = new Joueur(IdCode, nom, pseudo);
+            joueurs.Add(nouveauJoueur);
             dataGridViewAjoutJoueur.DataSource = null;
             dataGridViewAjoutJoueur.DataSource = controleur.AjouterJoueur(nouveauJoueur, 1);
             
@@ -39,6 +41,7 @@ namespace WindowsFormsLigueScrabble
 
         private void buttonTerminer_Click(object sender, EventArgs e)
         {
+            db_manager.AjouterJoueurDansBD(joueurs);
             this.Close();
         }
 

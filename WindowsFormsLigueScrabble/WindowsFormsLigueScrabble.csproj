@@ -105,6 +105,7 @@
       <DependentUpon>AjoutJoueurForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Controleur.cs" />
+    <Compile Include="DB_Manager.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
