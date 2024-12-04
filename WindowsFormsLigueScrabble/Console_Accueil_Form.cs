@@ -26,6 +26,7 @@ namespace WindowsFormsLigueScrabble
         private void FormConsole_Load(object sender, EventArgs e)
         {
             EssayerConnexionBD(utilisateur);
+            this.Shown += new EventHandler(FormConsole_Shown);
         }
         private void EssayerConnexionBD(string utilisateur)
         {
@@ -35,8 +36,8 @@ namespace WindowsFormsLigueScrabble
                 MySqlConnection sqlConnexion = new MySqlConnection(maConnexionString);
                 sqlConnexion.Open();
                 sqlConnexion.Close();
-                MessageBox.Show("Connecté à la base de données");
-                labelConnexion.Text += utilisateur;
+                //MessageBox.Show("Connecté à la base de données");
+                labelConnexion.Text += utilisateur + " connecté.";
             }
             catch (Exception)
             {
@@ -57,5 +58,24 @@ namespace WindowsFormsLigueScrabble
             ajoutJoueurForm.ShowDialog();
         }
 
+        private void timerDelai_Tick(object sender, EventArgs e)
+        {
+            timerDelai.Stop();
+            timerFlash.Stop();
+            labelConnexion.Visible = true;
+        }
+
+        private void timerFlash_Tick(object sender, EventArgs e)
+        {
+            labelConnexion.Visible = !labelConnexion.Visible;
+        }
+
+        private void FormConsole_Shown(Object sender, EventArgs e)
+        {
+            timerFlash.Enabled = true;
+            timerFlash.Start();
+            timerDelai.Enabled = true;
+            timerDelai.Start();
+        }
     }
 }

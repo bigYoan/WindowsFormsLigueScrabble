@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.buttonJoueurs = new System.Windows.Forms.Button();
             this.buttonRencontres = new System.Windows.Forms.Button();
             this.buttonParties = new System.Windows.Forms.Button();
@@ -37,6 +38,8 @@
             this.buttonFutur = new System.Windows.Forms.Button();
             this.buttonQuitter = new System.Windows.Forms.Button();
             this.labelConnexion = new System.Windows.Forms.Label();
+            this.timerFlash = new System.Windows.Forms.Timer(this.components);
+            this.timerDelai = new System.Windows.Forms.Timer(this.components);
             this.SuspendLayout();
             // 
             // buttonJoueurs
@@ -121,6 +124,16 @@
             this.labelConnexion.TabIndex = 2;
             this.labelConnexion.Text = "Connexion : ";
             // 
+            // timerFlash
+            // 
+            this.timerFlash.Interval = 250;
+            this.timerFlash.Tick += new System.EventHandler(this.timerFlash_Tick);
+            // 
+            // timerDelai
+            // 
+            this.timerDelai.Interval = 2500;
+            this.timerDelai.Tick += new System.EventHandler(this.timerDelai_Tick);
+            // 
             // FormConsole
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -154,6 +167,8 @@
         private System.Windows.Forms.Button buttonFutur;
         private System.Windows.Forms.Button buttonQuitter;
         private System.Windows.Forms.Label labelConnexion;
+        private System.Windows.Forms.Timer timerFlash;
+        private System.Windows.Forms.Timer timerDelai;
     }
 }
 
