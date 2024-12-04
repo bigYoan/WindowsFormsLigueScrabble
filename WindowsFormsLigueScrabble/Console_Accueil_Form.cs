@@ -16,21 +16,27 @@ namespace WindowsFormsLigueScrabble
     {
         Controleur controleur = new Controleur();
         List<Joueur> joueurs = new List<Joueur>();
+        string utilisateur;
 
         public FormConsole()
         {
             InitializeComponent();
+            utilisateur = "SU_Scrabble";
         }
-
-        private void buttonConnect_Click(object sender, EventArgs e)
+        private void FormConsole_Load(object sender, EventArgs e)
+        {
+            EssayerConnexionBD(utilisateur);
+        }
+        private void EssayerConnexionBD(string utilisateur)
         {
             try
             {
-                string maConnexionString = "Server=localhost;Database=Ligue_Scrabble;Uid=SU_Scrabble;Pwd=ABCD";
+                string maConnexionString = "Server=localhost;Database=Ligue_Scrabble;Uid="+utilisateur+";Pwd=ABCD";
                 MySqlConnection sqlConnexion = new MySqlConnection(maConnexionString);
                 sqlConnexion.Open();
                 sqlConnexion.Close();
-                MessageBox.Show("Connecté");
+                MessageBox.Show("Connecté à la base de données");
+                labelConnexion.Text += utilisateur;
             }
             catch (Exception)
             {
@@ -42,8 +48,14 @@ namespace WindowsFormsLigueScrabble
 
         private void buttonAjouterJoueur_Click(object sender, EventArgs e)
         {
-            AjoutJoueurForm ajoutJoueurForm = new AjoutJoueurForm(controleur);
+            
+        }
+
+        private void buttonJoueurs_Click(object sender, EventArgs e)
+        {
+            JoueurForm ajoutJoueurForm = new JoueurForm(controleur);
             ajoutJoueurForm.ShowDialog();
         }
+
     }
 }

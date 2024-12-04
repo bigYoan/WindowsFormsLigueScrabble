@@ -10,13 +10,13 @@ using System.Windows.Forms;
 
 namespace WindowsFormsLigueScrabble
 {
-    public partial class AjoutJoueurForm : Form
+    public partial class JoueurForm : Form
     {
         Controleur controleur;
         DB_Manager db_manager = new DB_Manager();
         List<Joueur> joueurs = new List<Joueur>();
 
-        public AjoutJoueurForm(Controleur controleurX)
+        public JoueurForm(Controleur controleurX)
         {
             InitializeComponent();
             controleur = controleurX;

@@ -1,6 +1,6 @@
 ﻿namespace WindowsFormsLigueScrabble
 {
-    partial class AjoutJoueurForm
+    partial class JoueurForm
     {
         /// <summary>
         /// Required designer variable.

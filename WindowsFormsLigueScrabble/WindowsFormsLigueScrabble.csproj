@@ -98,28 +98,28 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AjoutJoueurForm.cs">
+    <Compile Include="JoueurForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="AjoutJoueurForm.Designer.cs">
-      <DependentUpon>AjoutJoueurForm.cs</DependentUpon>
+    <Compile Include="JoueurForm.Designer.cs">
+      <DependentUpon>JoueurForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Controleur.cs" />
     <Compile Include="DB_Manager.cs" />
-    <Compile Include="Form1.cs">
+    <Compile Include="Console_Accueil_Form.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <Compile Include="Console_Accueil_Form.Designer.cs">
+      <DependentUpon>Console_Accueil_Form.cs</DependentUpon>
     </Compile>
     <Compile Include="Joueur.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="AjoutJoueurForm.resx">
-      <DependentUpon>AjoutJoueurForm.cs</DependentUpon>
+    <EmbeddedResource Include="JoueurForm.resx">
+      <DependentUpon>JoueurForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Form1.resx">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <EmbeddedResource Include="Console_Accueil_Form.resx">
+      <DependentUpon>Console_Accueil_Form.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
