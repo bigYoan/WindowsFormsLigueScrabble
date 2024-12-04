@@ -60,6 +60,7 @@
             this.buttonRencontres.TabIndex = 1;
             this.buttonRencontres.Text = "Rencontres";
             this.buttonRencontres.UseVisualStyleBackColor = true;
+            this.buttonRencontres.Click += new System.EventHandler(this.buttonRencontres_Click);
             // 
             // buttonParties
             // 

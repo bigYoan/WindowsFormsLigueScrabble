@@ -34,7 +34,7 @@ namespace WindowsFormsLigueScrabble
             }
             catch (Exception) { throw; }
         }
-        public List<Joueur> ListerJoueursDansBD()
+        public List<Joueur> ListerJoueursDansBD(string orderBy)
         {
             List<Joueur> joueurs = new List<Joueur>();
             try
@@ -44,7 +44,7 @@ namespace WindowsFormsLigueScrabble
                 using (sqlConnexion)
                 {
                     sqlConnexion.Open();
-                    using (MySqlCommand cmd = new MySqlCommand("SELECT * FROM Joueur ORDER BY Joueur.Nom", sqlConnexion))
+                    using (MySqlCommand cmd = new MySqlCommand("SELECT * FROM Joueur " + orderBy, sqlConnexion))
                     {
                         using (MySqlDataReader reader = cmd.ExecuteReader())
                         {
@@ -63,6 +63,45 @@ namespace WindowsFormsLigueScrabble
                 }
             }
             catch (Exception) { throw; }
+        }
+
+        internal int AjouterRencontreDansBD(Rencontre newRencontre)
+        {
+            throw new NotImplementedException();
+        }
+
+        internal List<Rencontre> ListerRencontresDansBD(string orderBy)
+        {
+            throw new NotImplementedException();
+        }
+
+        internal int ModifierJoueurDansBD(Joueur nouveauJoueur, int modifier)
+        {
+            try
+            {
+                MySqlConnection sqlConnexion = new MySqlConnection(maConnexionString);
+                int lignesAffectees = 0;
+                using (sqlConnexion)
+                {
+                    sqlConnexion.Open();
+
+                    using (MySqlCommand cmd = new MySqlCommand("UPDATE Joueur SET Nom = @Nom, Pseudo = @Pseudo  WHERE ID_Joueur = @ID_Joueur", sqlConnexion))
+                    {
+                        cmd.Parameters.Add(new MySqlParameter("@ID_Joueur", nouveauJoueur.IdCode));
+                        cmd.Parameters.Add(new MySqlParameter("@Nom", nouveauJoueur.Nom));
+                        cmd.Parameters.Add(new MySqlParameter("@Pseudo", nouveauJoueur.Pseudo));
+                        lignesAffectees = cmd.ExecuteNonQuery();
+                    }
+                    sqlConnexion.Close();
+                    return lignesAffectees;
+                }
+            }
+            catch (Exception) { throw; }
+        }
+
+        internal int ModifierRencontreDansBD(Rencontre newRencontre, int modifier)
+        {
+            throw new NotImplementedException();
         }
 
         internal int SupprimerJoueurDansBD(string IDCode)
@@ -85,7 +124,11 @@ namespace WindowsFormsLigueScrabble
                 }
             }
             catch (Exception) { throw; }
-            return 0;
+        }
+
+        internal int SupprimerRencontreDansBD(DateTime dateDeJeu)
+        {
+            throw new NotImplementedException();
         }
     }
 }

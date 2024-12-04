@@ -77,5 +77,10 @@ namespace WindowsFormsLigueScrabble
             timerDelai.Enabled = true;
             timerDelai.Start();
         }
+
+        private void buttonRencontres_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

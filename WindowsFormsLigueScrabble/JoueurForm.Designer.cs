@@ -41,7 +41,12 @@
             this.buttonSupprimerJoueur = new System.Windows.Forms.Button();
             this.buttonModifierJoueur = new System.Windows.Forms.Button();
             this.labelNombreJoueurs = new System.Windows.Forms.Label();
+            this.groupBoxTriage = new System.Windows.Forms.GroupBox();
+            this.radioButtonPseudo = new System.Windows.Forms.RadioButton();
+            this.radioButtonNom = new System.Windows.Forms.RadioButton();
+            this.radioButtonIDCode = new System.Windows.Forms.RadioButton();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewJoueurs)).BeginInit();
+            this.groupBoxTriage.SuspendLayout();
             this.SuspendLayout();
             // 
             // dataGridViewJoueurs
@@ -55,6 +60,7 @@
             this.dataGridViewJoueurs.RowTemplate.Height = 24;
             this.dataGridViewJoueurs.Size = new System.Drawing.Size(487, 275);
             this.dataGridViewJoueurs.TabIndex = 0;
+            this.dataGridViewJoueurs.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewJoueurs_CellClick);
             // 
             // textBoxIdCode
             // 
@@ -131,14 +137,18 @@
             this.buttonAjouterJoueur.TabIndex = 3;
             this.buttonAjouterJoueur.UseVisualStyleBackColor = false;
             this.buttonAjouterJoueur.Click += new System.EventHandler(this.buttonAjouterJoueur_Click);
+            this.buttonAjouterJoueur.MouseHover += new System.EventHandler(this.buttonConfirmMouseHover);
             // 
             // buttonTerminer
             // 
+            this.buttonTerminer.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("buttonTerminer.BackgroundImage")));
             this.buttonTerminer.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.buttonTerminer.FlatAppearance.BorderSize = 0;
             this.buttonTerminer.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.buttonTerminer.Location = new System.Drawing.Point(648, 105);
+            this.buttonTerminer.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.buttonTerminer.Location = new System.Drawing.Point(618, 96);
             this.buttonTerminer.Name = "buttonTerminer";
-            this.buttonTerminer.Size = new System.Drawing.Size(90, 43);
+            this.buttonTerminer.Size = new System.Drawing.Size(147, 52);
             this.buttonTerminer.TabIndex = 4;
             this.buttonTerminer.Text = "Terminé";
             this.buttonTerminer.UseVisualStyleBackColor = true;
@@ -162,6 +172,7 @@
             this.buttonSupprimerJoueur.Text = "–";
             this.buttonSupprimerJoueur.UseVisualStyleBackColor = false;
             this.buttonSupprimerJoueur.Click += new System.EventHandler(this.buttonRetirerJoueur_Click);
+            this.buttonSupprimerJoueur.MouseHover += new System.EventHandler(this.buttonConfirmMouseHover);
             // 
             // buttonModifierJoueur
             // 
@@ -179,7 +190,8 @@
             this.buttonModifierJoueur.Size = new System.Drawing.Size(45, 44);
             this.buttonModifierJoueur.TabIndex = 3;
             this.buttonModifierJoueur.UseVisualStyleBackColor = false;
-            this.buttonModifierJoueur.Click += new System.EventHandler(this.buttonAjouterJoueur_Click);
+            this.buttonModifierJoueur.Click += new System.EventHandler(this.buttonModifierJoueur_Click);
+            this.buttonModifierJoueur.MouseHover += new System.EventHandler(this.buttonConfirmMouseHover);
             // 
             // labelNombreJoueurs
             // 
@@ -191,12 +203,62 @@
             this.labelNombreJoueurs.TabIndex = 2;
             this.labelNombreJoueurs.Text = "Nombre de joueurs : ";
             // 
+            // groupBoxTriage
+            // 
+            this.groupBoxTriage.Controls.Add(this.radioButtonPseudo);
+            this.groupBoxTriage.Controls.Add(this.radioButtonNom);
+            this.groupBoxTriage.Controls.Add(this.radioButtonIDCode);
+            this.groupBoxTriage.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.groupBoxTriage.Location = new System.Drawing.Point(574, 193);
+            this.groupBoxTriage.Name = "groupBoxTriage";
+            this.groupBoxTriage.Size = new System.Drawing.Size(191, 205);
+            this.groupBoxTriage.TabIndex = 5;
+            this.groupBoxTriage.TabStop = false;
+            this.groupBoxTriage.Text = "Trier par ...";
+            // 
+            // radioButtonPseudo
+            // 
+            this.radioButtonPseudo.AutoSize = true;
+            this.radioButtonPseudo.Location = new System.Drawing.Point(19, 133);
+            this.radioButtonPseudo.Name = "radioButtonPseudo";
+            this.radioButtonPseudo.Size = new System.Drawing.Size(147, 29);
+            this.radioButtonPseudo.TabIndex = 2;
+            this.radioButtonPseudo.TabStop = true;
+            this.radioButtonPseudo.Text = "Pseudo/Nom";
+            this.radioButtonPseudo.UseVisualStyleBackColor = true;
+            this.radioButtonPseudo.CheckedChanged += new System.EventHandler(this.radioButtonAny_CheckedChanged);
+            // 
+            // radioButtonNom
+            // 
+            this.radioButtonNom.AutoSize = true;
+            this.radioButtonNom.Location = new System.Drawing.Point(19, 92);
+            this.radioButtonNom.Name = "radioButtonNom";
+            this.radioButtonNom.Size = new System.Drawing.Size(101, 29);
+            this.radioButtonNom.TabIndex = 1;
+            this.radioButtonNom.TabStop = true;
+            this.radioButtonNom.Text = "Prénom";
+            this.radioButtonNom.UseVisualStyleBackColor = true;
+            this.radioButtonNom.CheckedChanged += new System.EventHandler(this.radioButtonAny_CheckedChanged);
+            // 
+            // radioButtonIDCode
+            // 
+            this.radioButtonIDCode.AutoSize = true;
+            this.radioButtonIDCode.Location = new System.Drawing.Point(19, 48);
+            this.radioButtonIDCode.Name = "radioButtonIDCode";
+            this.radioButtonIDCode.Size = new System.Drawing.Size(105, 29);
+            this.radioButtonIDCode.TabIndex = 0;
+            this.radioButtonIDCode.TabStop = true;
+            this.radioButtonIDCode.Text = "ID Code";
+            this.radioButtonIDCode.UseVisualStyleBackColor = true;
+            this.radioButtonIDCode.CheckedChanged += new System.EventHandler(this.radioButtonAny_CheckedChanged);
+            // 
             // JoueurForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.DeepSkyBlue;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.groupBoxTriage);
             this.Controls.Add(this.buttonTerminer);
             this.Controls.Add(this.buttonModifierJoueur);
             this.Controls.Add(this.buttonSupprimerJoueur);
@@ -210,9 +272,11 @@
             this.Controls.Add(this.textBoxIdCode);
             this.Controls.Add(this.dataGridViewJoueurs);
             this.Name = "JoueurForm";
-            this.Text = "AjoutJoueurForm";
-            this.Load += new System.EventHandler(this.AjoutJoueurForm_Load);
+            this.Text = "Joueurs";
+            this.Load += new System.EventHandler(this.JoueurForm_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewJoueurs)).EndInit();
+            this.groupBoxTriage.ResumeLayout(false);
+            this.groupBoxTriage.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -232,5 +296,9 @@
         private System.Windows.Forms.Button buttonSupprimerJoueur;
         private System.Windows.Forms.Button buttonModifierJoueur;
         private System.Windows.Forms.Label labelNombreJoueurs;
+        private System.Windows.Forms.GroupBox groupBoxTriage;
+        private System.Windows.Forms.RadioButton radioButtonPseudo;
+        private System.Windows.Forms.RadioButton radioButtonNom;
+        private System.Windows.Forms.RadioButton radioButtonIDCode;
     }
 }
