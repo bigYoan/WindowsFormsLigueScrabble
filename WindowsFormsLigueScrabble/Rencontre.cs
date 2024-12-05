@@ -11,5 +11,10 @@ namespace WindowsFormsLigueScrabble
         DateTime dateDeJeu;
 
         public DateTime DateDeJeu { get => dateDeJeu; set => dateDeJeu = value; }
+
+        public override string ToString()
+        {
+            return dateDeJeu.ToString("D");
+        }
     }
 }

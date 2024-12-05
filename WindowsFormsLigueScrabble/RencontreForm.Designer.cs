@@ -37,7 +37,7 @@
             this.comboBoxRencontres.FormattingEnabled = true;
             this.comboBoxRencontres.Location = new System.Drawing.Point(43, 40);
             this.comboBoxRencontres.Name = "comboBoxRencontres";
-            this.comboBoxRencontres.Size = new System.Drawing.Size(212, 33);
+            this.comboBoxRencontres.Size = new System.Drawing.Size(248, 33);
             this.comboBoxRencontres.TabIndex = 0;
             // 
             // RencontreForm

@@ -80,7 +80,8 @@ namespace WindowsFormsLigueScrabble
 
         private void buttonRencontres_Click(object sender, EventArgs e)
         {
-
+            RencontreForm rencontreForm = new RencontreForm(controleur);
+            rencontreForm.ShowDialog();
         }
     }
 }

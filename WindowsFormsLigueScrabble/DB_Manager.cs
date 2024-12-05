@@ -72,7 +72,33 @@ namespace WindowsFormsLigueScrabble
 
         internal List<Rencontre> ListerRencontresDansBD(string orderBy)
         {
-            throw new NotImplementedException();
+            // Dans la BD :    rencontre -> session
+
+            List<Rencontre> sessions = new List<Rencontre>();
+            try
+            {
+                MySqlConnection sqlConnexion = new MySqlConnection(maConnexionString);
+                //int lignesAffectees = 0;
+                using (sqlConnexion)
+                {
+                    sqlConnexion.Open();
+                    using (MySqlCommand cmd = new MySqlCommand("SELECT * FROM Session " + orderBy, sqlConnexion))
+                    {
+                        using (MySqlDataReader reader = cmd.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                Rencontre maSession = new Rencontre();
+                                maSession.DateDeJeu = (DateTime)reader["Date_Rencontre"];
+                                sessions.Add(maSession);
+                            }
+                        }
+                    }
+                    sqlConnexion.Close();
+                    return sessions;
+                }
+            }
+            catch (Exception) { throw; }
         }
 
         internal int ModifierJoueurDansBD(Joueur nouveauJoueur, int modifier)

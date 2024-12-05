@@ -13,7 +13,7 @@ namespace WindowsFormsLigueScrabble
     internal partial class RencontreForm : Form
     {
         Controleur controleur;
-        string orderBy = "";
+        string orderBy = "ORDER BY Date_Rencontre DESC";
         public RencontreForm(Controleur controleurX)
         {
             InitializeComponent();
