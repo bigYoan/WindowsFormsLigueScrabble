@@ -127,7 +127,27 @@ namespace WindowsFormsLigueScrabble
 
         internal int ModifierRencontreDansBD(Rencontre newRencontre, int modifier)
         {
-            throw new NotImplementedException();
+            // Dans la BD :    rencontre -> session
+
+            try
+            {
+                MySqlConnection sqlConnexion = new MySqlConnection(maConnexionString);
+                int lignesAffectees = 0;
+                using (sqlConnexion)
+                {
+                    sqlConnexion.Open();
+
+                    using (MySqlCommand cmd = new MySqlCommand("UPDATE Session SET Date_Rencontre = @New_Date where Date_Rencontre = @Old_Date", sqlConnexion))
+                    {
+                        cmd.Parameters.Add(new MySqlParameter("@New_Date", newRencontre.DateNouvelle));
+                        cmd.Parameters.Add(new MySqlParameter("@Old_Date", newRencontre.DateDeJeu));
+                        lignesAffectees = cmd.ExecuteNonQuery();
+                    }
+                    sqlConnexion.Close();
+                    return lignesAffectees;
+                }
+            }
+            catch (Exception) { throw; }
         }
 
         internal int SupprimerJoueurDansBD(string IDCode)

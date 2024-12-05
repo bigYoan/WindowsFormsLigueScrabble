@@ -9,8 +9,10 @@ namespace WindowsFormsLigueScrabble
     internal class Rencontre
     {
         DateTime dateDeJeu;
+        DateTime dateNouvelle;
 
         public DateTime DateDeJeu { get => dateDeJeu; set => dateDeJeu = value; }
+        public DateTime DateNouvelle { get => dateNouvelle; set => dateNouvelle = value; }
 
         public override string ToString()
         {
