@@ -108,5 +108,16 @@ namespace WindowsFormsLigueScrabble
             }
             return null;
         }
+
+        internal List<LienTableSession> ListerLiens(string commande)
+        {
+            List<LienTableSession> liens = new List<LienTableSession>();
+
+            if (commande == "Table_Session")
+            {
+                liens = dB_Manager.ListerLiensRencontre_Table("");
+            }
+            return liens;
+        }
     }
 }

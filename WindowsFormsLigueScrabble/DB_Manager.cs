@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Google.Protobuf.WellKnownTypes;
 using MySql.Data.MySqlClient;
+using Mysqlx.Crud;
 
 
 namespace WindowsFormsLigueScrabble
@@ -67,7 +69,8 @@ namespace WindowsFormsLigueScrabble
 
         internal int AjouterRencontreDansBD(Rencontre newRencontre)
         {
-            throw new NotImplementedException();
+            //datetimep
+            return 0;
         }
 
         internal List<Rencontre> ListerRencontresDansBD(string orderBy)
@@ -95,12 +98,55 @@ namespace WindowsFormsLigueScrabble
                         }
                     }
                     sqlConnexion.Close();
+                    Rencontre rencontreBidon = new Rencontre();
+                    rencontreBidon.DateNouvelle = DateTime.Now;
+                    rencontreBidon.DateDeJeu = DateTime.Now;
+                    
+
                     return sessions;
                 }
             }
             catch (Exception) { throw; }
         }
 
+        internal List<LienTableSession> ListerLiensRencontre_Table(string orderBy)
+        {
+            // Dans la BD :    rencontre -> session      table -> _table
+
+            //insert into table_session values(2, '2024-11-20 19:00:00');
+            List <LienTableSession> liensTS = new List<LienTableSession> ();
+
+            try
+            {
+                MySqlConnection sqlConnexion = new MySqlConnection(maConnexionString);
+                //int lignesAffectees = 0;
+                using (sqlConnexion)
+                {
+                    sqlConnexion.Open();
+                    using (MySqlCommand cmd = new MySqlCommand("SELECT * FROM table_session", sqlConnexion))
+                    {
+                        using (MySqlDataReader reader = cmd.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                LienTableSession monLienTS = new LienTableSession();
+                                monLienTS.IdSession = (DateTime)reader["Date_Rencontre"];
+                                monLienTS.IdTable = (int)reader["No_Table"];
+                                liensTS.Add(monLienTS);
+                            }
+                        }
+                    }
+                    sqlConnexion.Close();
+                    Rencontre rencontreBidon = new Rencontre();
+                    rencontreBidon.DateNouvelle = DateTime.Now;
+                    rencontreBidon.DateDeJeu = DateTime.Now;
+
+
+                    return liensTS;
+                }
+            }
+            catch (Exception) { throw; }
+        }
         internal int ModifierJoueurDansBD(Joueur nouveauJoueur, int modifier)
         {
             try

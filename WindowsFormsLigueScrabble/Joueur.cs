@@ -25,5 +25,12 @@ namespace WindowsFormsLigueScrabble
         public string IdCode { get => idCode; set => idCode = value; }
         public string Nom { get => nom; set => nom = value; }
         public string Pseudo { get => pseudo; set => pseudo = value; }
+
+        public override string ToString()
+        {
+            if (pseudo == "(vide)") return "".ToString();
+            else return idCode + " :  " + nom.ToString();
+
+        }
     }
 }

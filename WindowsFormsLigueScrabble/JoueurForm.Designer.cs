@@ -205,6 +205,7 @@
             // 
             // groupBoxTriage
             // 
+            this.groupBoxTriage.BackColor = System.Drawing.Color.Transparent;
             this.groupBoxTriage.Controls.Add(this.radioButtonPseudo);
             this.groupBoxTriage.Controls.Add(this.radioButtonNom);
             this.groupBoxTriage.Controls.Add(this.radioButtonIDCode);
