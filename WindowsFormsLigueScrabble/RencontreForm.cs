@@ -22,7 +22,7 @@ namespace WindowsFormsLigueScrabble
 
         private void RencontreForm_Load(object sender, EventArgs e)
         {
-            RemplirComboBoxRencontre();
+            RemplirDataGridViewRencontre();
             dateTimePickerNewSession.Value = TrouverProchainMercredi();
         }
 
@@ -35,7 +35,7 @@ namespace WindowsFormsLigueScrabble
             return mercrediProchain;
         }
 
-        private void RemplirComboBoxRencontre()
+        private void RemplirDataGridViewRencontre()
         {
             List<Rencontre> listeBidon = controleur.GererRencontres(null, controleur.lister, orderBy);
             List<RencontresDataGrid> listeDataGrid = new List<RencontresDataGrid>();
@@ -79,6 +79,7 @@ namespace WindowsFormsLigueScrabble
         {
             EditionRencontreForm editionRencontreForm = new EditionRencontreForm(controleur);
             editionRencontreForm.ShowDialog();
+            RemplirDataGridViewRencontre();
             //if (comboBoxSession.SelectedItem != null)
             //{
             //    dateTimePickerNewSession.Visible = true;
@@ -94,6 +95,11 @@ namespace WindowsFormsLigueScrabble
 
         private void buttonSupprimerSession_Click(object sender, EventArgs e)
         {
+            Rencontre rencontreASupprimer = new Rencontre();
+            rencontreASupprimer.IdSession = (int)dataGridViewSessions["IdSession", dataGridViewSessions.CurrentRow.Index].Value;
+            int lignesAffectees = 0;
+            controleur.GererRencontres(rencontreASupprimer, controleur.supprimer, "");
+            RemplirDataGridViewRencontre();
 
         }
 

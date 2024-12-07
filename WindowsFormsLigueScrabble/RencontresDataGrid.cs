@@ -8,6 +8,7 @@ namespace WindowsFormsLigueScrabble
 {
     internal class RencontresDataGrid
     {
+        int idSession;
         string jourRencontre;
         Rencontre rencontreDataGrid;
         string heureRencontre;
@@ -27,6 +28,7 @@ namespace WindowsFormsLigueScrabble
         public string Gagnant { get => gagnant; set => gagnant = value; }
         public int ScoreGagnant { get => scoreGagnant; set => scoreGagnant = value; }
         public bool Homologation { get => homologation; set => homologation = value; }
+        public int IdSession { get => rencontreDataGrid.IdSession; }
 
         public override string ToString()
         {

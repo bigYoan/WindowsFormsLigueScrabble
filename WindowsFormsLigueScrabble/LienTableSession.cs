@@ -9,9 +9,9 @@ namespace WindowsFormsLigueScrabble
     internal class LienTableSession
     {
         int idTable;
-        DateTime idSession;
+        int idSession;
 
         public int IdTable { get => idTable; set => idTable = value; }
-        public DateTime IdSession { get => idSession; set => idSession = value; }
+        public int IdSession { get => idSession; set => idSession = value; }
     }
 }

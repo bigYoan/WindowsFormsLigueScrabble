@@ -43,7 +43,7 @@ namespace WindowsFormsLigueScrabble
             if (nouveauJoueur !=null && ordre == supprimer)
             {
                 // Supprimer joueur dans BD
-                lignesAffectees = dB_Manager.SupprimerJoueurDansBD(nouveauJoueur.IdCode);
+                lignesAffectees = dB_Manager.SupprimerJoueurDansBD(nouveauJoueur.IdJoueur);
                 if (lignesAffectees == 0) { MessageBox.Show("Exécution annulée"); }
                 joueurs = dB_Manager.ListerJoueursDansBD(orderBy);
                 return joueurs;
@@ -51,7 +51,7 @@ namespace WindowsFormsLigueScrabble
             if (nouveauJoueur != null && ordre == modifier)
             {
                 //Modifier joueur dans BD
-                lignesAffectees = dB_Manager.ModifierJoueurDansBD(nouveauJoueur, modifier);
+                lignesAffectees = dB_Manager.ModifierJoueurDansBD(nouveauJoueur);
                 if (lignesAffectees == 0) { MessageBox.Show("Exécution annulée"); }
                 joueurs = dB_Manager.ListerJoueursDansBD(orderBy);
                 return joueurs;
@@ -93,7 +93,7 @@ namespace WindowsFormsLigueScrabble
             if (newRencontre != null && ordre == supprimer)
             {
                 // Supprimer joueur dans BD
-                lignesAffectees = dB_Manager.SupprimerRencontreDansBD(newRencontre.DateDeJeu);
+                lignesAffectees = dB_Manager.SupprimerRencontreDansBD(newRencontre.IdSession);
                 if (lignesAffectees == 0) { MessageBox.Show("Exécution annulée"); }
                 rencontres = dB_Manager.ListerRencontresDansBD(orderBy);
                 return rencontres;
@@ -118,6 +118,73 @@ namespace WindowsFormsLigueScrabble
                 liens = dB_Manager.ListerLiensRencontre_Table("");
             }
             return liens;
+        }
+
+        internal bool VerifierLiens(DonneeRencontre nouvelledonneeRencontre)
+        {
+            List<Rencontre> rencontresDansBD = dB_Manager.ListerRencontresDansBD("");
+            List<Table> tablesDansBD = dB_Manager.ListerTablesDansBD("");
+            List<Partie> partiesDansBD = dB_Manager.ListerPartiesDansBD("");
+            List<LiensSessionTablePartie> liensSessionTableParties = dB_Manager.ListerLiensSessionTablePartie("");
+
+
+            int idRencontre = 0;
+            int idTable = 0;
+            int idPartie = 0;
+            bool trouveMatchRencontre = false;
+            bool trouveMatchTable = false;
+
+            foreach (var rencontreAVerifier in rencontresDansBD)
+            {
+                if (nouvelledonneeRencontre.DateEtHeure == rencontreAVerifier.DateNouvelle)
+                {
+                    ChercherMatchDansLiens(rencontreAVerifier, nouvelledonneeRencontre);
+                    trouveMatchRencontre = true;
+                }
+                else
+                {
+                    trouveMatchRencontre = true;
+                    //idRencontre = rencontreAVerifier.IdSession;
+                }
+                if (!trouveMatchRencontre) return false;
+
+                foreach (var tableAVerifier in tablesDansBD)
+                {
+                    if (nouvelledonneeRencontre.Table != tableAVerifier.NoTable)
+                    {
+                        return false;
+                    }
+                    else
+                    {
+                        idTable = tableAVerifier.IDTable;
+                    }
+
+                    foreach (var partieAVerifier in partiesDansBD)
+                    {
+                        if (nouvelledonneeRencontre.Partie != partieAVerifier.NoPartie)
+                        {
+                            return false;
+                        }
+                        else
+                        {
+                            idPartie = tableAVerifier.IDTable;
+                        }
+                    }
+                }
+            }
+            foreach (var lienAVerifier in liensSessionTableParties)
+            {
+                if (idRencontre == lienAVerifier.IdSession & idTable == lienAVerifier.IdTable && idPartie == lienAVerifier.IdPartie)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        private void ChercherMatchDansLiens(Rencontre rencontreAVerifier, DonneeRencontre nouvelledonneeRencontre)
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -46,18 +46,18 @@ namespace WindowsFormsLigueScrabble
                 Joueur nouveauJoueur = new Joueur(IdCode, nom, pseudo);
                 controleur.GererJoueur(nouveauJoueur, controleur.ajouter, orderBy);
                 MettreAJourDataGridView();
-                AjusterFocusDataGridView(nouveauJoueur.IdCode);
+                AjusterFocusDataGridView(nouveauJoueur.CodeJoueur);
             }
         }
 
         private void buttonRetirerJoueur_Click(object sender, EventArgs e)
         {
             Joueur joueurARetirer = new Joueur();
-            joueurARetirer.IdCode = dataGridViewJoueurs["IDCode", dataGridViewJoueurs.CurrentRow.Index].Value.ToString();
+            joueurARetirer.IdJoueur = (int)dataGridViewJoueurs["IDJoueur", dataGridViewJoueurs.CurrentRow.Index].Value;
             joueurARetirer.Nom = dataGridViewJoueurs["Nom", dataGridViewJoueurs.CurrentRow.Index].Value.ToString();
             joueurARetirer.Pseudo = dataGridViewJoueurs["Pseudo", dataGridViewJoueurs.CurrentRow.Index].Value.ToString();
 
-            string rubrique = "ID Code : " + joueurARetirer.IdCode + "\nNom : " + joueurARetirer.Nom + " (" + joueurARetirer.Pseudo + ")\n";
+            string rubrique = "Code Joueur : " + joueurARetirer.CodeJoueur + "\nNom : " + joueurARetirer.Nom + " (" + joueurARetirer.Pseudo + ")\n";
             if (controleur.DemandeDeConfirmation(rubrique))
             {
                 controleur.GererJoueur(joueurARetirer, controleur.supprimer, orderBy);
@@ -76,7 +76,7 @@ namespace WindowsFormsLigueScrabble
                     dataGridViewJoueurs.DataSource = null;
                     dataGridViewJoueurs.DataSource = controleur.GererJoueur(nouveauJoueurAModifier, controleur.modifier, orderBy);
                     MettreAJourDataGridView();
-                    AjusterFocusDataGridView(nouveauJoueurAModifier.IdCode);
+                    AjusterFocusDataGridView(nouveauJoueurAModifier.CodeJoueur);
                     ancienJoueurAModifier.Nom = nouveauJoueurAModifier.Nom;
                     ancienJoueurAModifier.Pseudo = nouveauJoueurAModifier.Pseudo;
                 }
@@ -117,7 +117,7 @@ namespace WindowsFormsLigueScrabble
                 }
                 else
                 {
-                    bool idOK = textBoxIdCode.Text == ancienJoueurAModifier.IdCode;
+                    bool idOK = textBoxIdCode.Text == ancienJoueurAModifier.CodeJoueur;
                     bool nomChange = textBoxNom.Text != "" && textBoxNom.Text != ancienJoueurAModifier.Nom;
                     bool pseudoChange = textBoxPseudo.Text != ancienJoueurAModifier.Pseudo;
                     if (!(idOK && (nomChange || pseudoChange)))
@@ -127,7 +127,7 @@ namespace WindowsFormsLigueScrabble
                     }
                     else
                     {
-                        nouveauJoueurAModifier.IdCode = textBoxIdCode.Text;
+                        nouveauJoueurAModifier.CodeJoueur = textBoxIdCode.Text;
                         nouveauJoueurAModifier.Nom = textBoxNom.Text;
                         nouveauJoueurAModifier.Pseudo = textBoxPseudo.Text;
                     }
@@ -136,11 +136,11 @@ namespace WindowsFormsLigueScrabble
             return true;
         }
 
-        private bool VerifierDuplicationID(string idCode)
+        private bool VerifierDuplicationID(string codeJoueur)
         {
             foreach (var joueurAVerifier in controleur.joueurs)
             {
-                if (idCode == joueurAVerifier.IdCode) return true;
+                if (codeJoueur == joueurAVerifier.CodeJoueur) return true;
             }
             return false;
         }
@@ -198,10 +198,11 @@ namespace WindowsFormsLigueScrabble
 
         private void dataGridViewJoueurs_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            ancienJoueurAModifier.IdCode = dataGridViewJoueurs["IDCode", dataGridViewJoueurs.CurrentRow.Index].Value.ToString();
+            ancienJoueurAModifier.IdJoueur = (int)dataGridViewJoueurs["IdJoueur", dataGridViewJoueurs.CurrentRow.Index].Value;
+            ancienJoueurAModifier.CodeJoueur = dataGridViewJoueurs["CodeJoueur", dataGridViewJoueurs.CurrentRow.Index].Value.ToString();
             ancienJoueurAModifier.Nom = dataGridViewJoueurs["Nom", dataGridViewJoueurs.CurrentRow.Index].Value.ToString();
             ancienJoueurAModifier.Pseudo = dataGridViewJoueurs["Pseudo", dataGridViewJoueurs.CurrentRow.Index].Value.ToString();
-            textBoxIdCode.Text = ancienJoueurAModifier.IdCode;
+            textBoxIdCode.Text = ancienJoueurAModifier.CodeJoueur;
             textBoxNom.Text = ancienJoueurAModifier.Nom;
             textBoxPseudo.Text = ancienJoueurAModifier.Pseudo;
         }
