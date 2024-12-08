@@ -12,7 +12,7 @@ namespace WindowsFormsLigueScrabble
     {
         DB_Manager dB_Manager = new DB_Manager();
         public List<Joueur> joueurs = new List<Joueur>();
-        public List<Rencontre> rencontres = new List<Rencontre>();
+        public List<RencontresDataGrid> rencontres = new List<RencontresDataGrid>();
         public int lister = 0;
         public int ajouter = 1;
         public int supprimer = 2;
@@ -73,7 +73,7 @@ namespace WindowsFormsLigueScrabble
             }
         }
 
-        internal List<Rencontre> GererRencontres(Rencontre newRencontre, int ordre, string orderBy)
+        internal List<RencontresDataGrid> GererRencontres(Rencontre newRencontre, int noTable, int noPartie, List<Joueur> joueurs, int ordre, string orderBy)
         {
             int lignesAffectees = 0;
 
@@ -85,10 +85,23 @@ namespace WindowsFormsLigueScrabble
             }
             if (newRencontre != null && ordre == ajouter)
             {
-                lignesAffectees = dB_Manager.AjouterRencontreDansBD(newRencontre);
-                rencontres.Add(newRencontre);
-                if (lignesAffectees == 0) { MessageBox.Show("Exécution annulée"); }
-                return dB_Manager.ListerRencontresDansBD(orderBy);
+                int idNouvelleSession = dB_Manager.AjouterRencontreDansBD(newRencontre);
+                if (idNouvelleSession >0 && noTable != 0)
+                {
+                    if (AjouterTable(idNouvelleSession, noTable, noPartie) > 0) 
+                    {
+                        MessageBox.Show("Ajout réussi");
+                        return dB_Manager.ListerRencontresDansBD(orderBy);
+                    }
+                }
+                else
+                {
+                    if (idNouvelleSession == 0)
+                    {
+                        MessageBox.Show("Exécution annulée");
+                    }
+                    return dB_Manager.ListerRencontresDansBD(orderBy);
+                }
             }
             if (newRencontre != null && ordre == supprimer)
             {
@@ -109,6 +122,26 @@ namespace WindowsFormsLigueScrabble
             return null;
         }
 
+        private int AjouterTable(int id_rencontre, int noTable, int noPartie)
+        {
+            int idTable = 0;
+            int idPartie = 0;
+
+            List<Table> tables = dB_Manager.ListerTablesDansBD("");
+            foreach (Table table in tables) { if (noTable == table.NoTable) { idTable = table.IDTable; } }
+
+            if (noPartie != 0)
+            {
+                List<Partie> parties = dB_Manager.ListerPartiesDansBD("");
+                foreach (Partie partie in parties) { if (noPartie == partie.NoPartie) { idPartie = partie.IdPartie; } }
+            }
+            // Crée des tables ou des nouvelles parties au besoin
+
+            // Ajouter des tables avec joutes
+            int lignesAffectees = dB_Manager.CreerLiens_Session_Table_Partie(id_rencontre, idTable, idPartie);
+            return lignesAffectees;
+        }
+
         internal List<LienTableSession> ListerLiens(string commande)
         {
             List<LienTableSession> liens = new List<LienTableSession>();
@@ -120,69 +153,86 @@ namespace WindowsFormsLigueScrabble
             return liens;
         }
 
-        internal bool VerifierLiens(DonneeRencontre nouvelledonneeRencontre)
+        internal bool VerifierLiens(DonneesRencontre nouvelledonneeRencontre)
         {
-            List<Rencontre> rencontresDansBD = dB_Manager.ListerRencontresDansBD("");
+            List<Rencontre> rencontresDansBD = dB_Manager.ListerRencontresSeules("");
             List<Table> tablesDansBD = dB_Manager.ListerTablesDansBD("");
             List<Partie> partiesDansBD = dB_Manager.ListerPartiesDansBD("");
             List<LiensSessionTablePartie> liensSessionTableParties = dB_Manager.ListerLiensSessionTablePartie("");
 
-
+            int idSessionDansBD = 0;
+            List<int> listeSessionsAvecMatch = new List<int>();
+            int idTableDansBD = 0;
+            List<int> listeTablesAvecMatch = new List<int>();
+            int idPartieDansBD = 0;
+            List<int> listePartiesAvecMatch = new List<int>();
             int idRencontre = 0;
             int idTable = 0;
             int idPartie = 0;
             bool trouveMatchRencontre = false;
             bool trouveMatchTable = false;
+            bool trouveMatchPartie = false;
 
             foreach (var rencontreAVerifier in rencontresDansBD)
             {
-                if (nouvelledonneeRencontre.DateEtHeure == rencontreAVerifier.DateNouvelle)
+                if (nouvelledonneeRencontre.DateEtHeure == rencontreAVerifier.DateDeJeu)
                 {
-                    ChercherMatchDansLiens(rencontreAVerifier, nouvelledonneeRencontre);
+                    idSessionDansBD = rencontreAVerifier.IdSession;
+                    listeSessionsAvecMatch.Add(idSessionDansBD);
                     trouveMatchRencontre = true;
                 }
-                else
-                {
-                    trouveMatchRencontre = true;
-                    //idRencontre = rencontreAVerifier.IdSession;
-                }
-                if (!trouveMatchRencontre) return false;
-
-                foreach (var tableAVerifier in tablesDansBD)
-                {
-                    if (nouvelledonneeRencontre.Table != tableAVerifier.NoTable)
-                    {
-                        return false;
-                    }
-                    else
-                    {
-                        idTable = tableAVerifier.IDTable;
-                    }
-
-                    foreach (var partieAVerifier in partiesDansBD)
-                    {
-                        if (nouvelledonneeRencontre.Partie != partieAVerifier.NoPartie)
-                        {
-                            return false;
-                        }
-                        else
-                        {
-                            idPartie = tableAVerifier.IDTable;
-                        }
-                    }
-                }
+                 
             }
-            foreach (var lienAVerifier in liensSessionTableParties)
+            foreach (var tableAVerifier in tablesDansBD)
             {
-                if (idRencontre == lienAVerifier.IdSession & idTable == lienAVerifier.IdTable && idPartie == lienAVerifier.IdPartie)
+                if (nouvelledonneeRencontre.Table == tableAVerifier.NoTable)
                 {
-                    return true;
+                    idTableDansBD = tableAVerifier.IDTable;
+                    listeTablesAvecMatch.Add(idTableDansBD);
+                    trouveMatchTable = true;
+                }
+                 
+            }
+            foreach (var partieAVerifier in partiesDansBD)
+            {
+                if (nouvelledonneeRencontre.Partie == partieAVerifier.NoPartie)
+                {
+                    idPartieDansBD = partieAVerifier.IdPartie;
+                    listePartiesAvecMatch.Add(idPartieDansBD);
+                    trouveMatchPartie = true;
+                }
+                
+            }
+            if (trouveMatchRencontre && trouveMatchTable && trouveMatchPartie)
+            {
+                foreach (var lienAVerifier in liensSessionTableParties)
+                {
+                    foreach (int sessionX in listeSessionsAvecMatch)
+                    {
+                        if (lienAVerifier.IdSession == sessionX)
+                        {
+                            foreach (int tableX in listeTablesAvecMatch)
+                            {
+                                if (lienAVerifier.IdTable == tableX)
+                                {
+                                    foreach (int partieX in listePartiesAvecMatch)
+                                    {
+                                        if (lienAVerifier.IdPartie == partieX)
+                                        {
+                                            return true;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    
                 }
             }
             return false;
         }
 
-        private void ChercherMatchDansLiens(Rencontre rencontreAVerifier, DonneeRencontre nouvelledonneeRencontre)
+        private void ChercherMatchDansLiens(Rencontre rencontreAVerifier, DonneesRencontre nouvellesdonneesRencontre)
         {
             throw new NotImplementedException();
         }

@@ -18,7 +18,7 @@ namespace WindowsFormsLigueScrabble
         Controleur controleur = new Controleur();
         
         string orderBy = "ORDER BY ID_Joueur";
-        List<Rencontre> rencontres= new List<Rencontre>();
+        List<RencontresDataGrid> rencontres= new List<RencontresDataGrid>();
         List<Joueur> listeJoueursOriginale = new List<Joueur>();
         List<Joueur> listeJoueur1 = new List<Joueur>();
         List<Joueur> listeJoueur2 = new List<Joueur>();
@@ -38,7 +38,7 @@ namespace WindowsFormsLigueScrabble
 
         private void EditionRencontreForm_Load(object sender, EventArgs e)
         {
-            rencontres = controleur.GererRencontres(null, controleur.lister, "");
+            rencontres = controleur.GererRencontres(null, 0, 0, null, controleur.lister, "");
             dateTimePickerNewSession.Value = TrouverMercrediProchain();
             comboBoxHeure.SelectedIndex = 1;
             InitialiserLesListesComboBoxJoueurs();
@@ -93,32 +93,46 @@ namespace WindowsFormsLigueScrabble
             MessageBox.Show("Veuillez confirmer les données suivantes :\n");
 
             //Vérifier si lien existe déjà
-            DonneeRencontre nouvelledonneeRencontre = new DonneeRencontre();
-            nouvelledonneeRencontre.DateEtHeure = dateTimePickerNewSession.Value.AddHours(heureNouvelle);
+            DonneesRencontre nouvellesDonneesRencontre = new DonneesRencontre();
+            nouvellesDonneesRencontre.DateEtHeure = dateTimePickerNewSession.Value.AddHours(heureNouvelle);
             int.TryParse((string)comboBoxPupitre.SelectedItem, out int result);
-            nouvelledonneeRencontre.Table = result;
+            nouvellesDonneesRencontre.Table = result;
             int.TryParse((string)comboBoxRonde.SelectedItem, out result);
-            nouvelledonneeRencontre.Partie = result;
+            nouvellesDonneesRencontre.Partie = result;
             LienTableSession lienTableSession = new LienTableSession();
             List<LienTableSession> liensTableSession = new List<LienTableSession>();
-            bool lienExiste = controleur.VerifierLiens(nouvelledonneeRencontre);
+            bool lienExiste = controleur.VerifierLiens(nouvellesDonneesRencontre);
 
-            // if liens n'existe pas :
-            controleur.rencontres = AjouterNouvelleSession(heureNouvelle);
-
+            if (!lienExiste)
+            {
+                rencontres = AjouterNouvelleSession(nouvellesDonneesRencontre);
+            }
 
         }
 
-        private List<Rencontre> AjouterNouvelleSession(int heureNouvelle)
+        private List<RencontresDataGrid> AjouterNouvelleSession(DonneesRencontre nouvellesDonneesRencontre)
         {
-            int nbSessionsAvantAjout = rencontres.Count;
             Rencontre nouvelleRencontre = new Rencontre();
-            nouvelleRencontre.DateNouvelle = dateTimePickerNewSession.Value.AddHours(heureNouvelle);
-            nouvelleRencontre.DateDeJeu = nouvelleRencontre.DateNouvelle;
-            List<Rencontre> rencontresApresAjout = controleur.GererRencontres(nouvelleRencontre, controleur.ajouter, "");
-            if (rencontresApresAjout.Count > nbSessionsAvantAjout)
-            { MessageBox.Show("Ajout réussi."); return rencontresApresAjout; }
-            else { MessageBox.Show("Ajout impossible."); return rencontres; }
+            nouvelleRencontre.DateNouvelle = nouvellesDonneesRencontre.DateEtHeure;
+            nouvelleRencontre.DateDeJeu = nouvellesDonneesRencontre.DateEtHeure;
+            int noTable = nouvellesDonneesRencontre.Table;
+            int noPartie = nouvellesDonneesRencontre.Partie;
+            List<Joueur> joueurs = new List<Joueur>();
+            int nbSessionsAvantAjout = rencontres.Count; 
+            List<RencontresDataGrid> sessions = new List<RencontresDataGrid>();
+            sessions = controleur.GererRencontres(nouvelleRencontre, noTable, noPartie, joueurs, controleur.ajouter, "");
+            if (!(sessions.Count > nbSessionsAvantAjout))
+            { MessageBox.Show("Ajout impossible."); return rencontres; }
+            else
+            {               // Créer une nouvelle partie avec joueurs au besoin
+
+
+
+                            // Créer un nouveau lien session_table_partie
+
+            }
+            { MessageBox.Show("Ajout réussi."); return sessions; }
+            
         }
 
         private int ConvertirComboBoxHeure()

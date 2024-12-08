@@ -10,7 +10,7 @@ namespace WindowsFormsLigueScrabble
     {
         int idSession;
         string jourRencontre;
-        Rencontre rencontreDataGrid;
+        Rencontre session;
         string heureRencontre;
         int ronde;
         int table;
@@ -19,16 +19,16 @@ namespace WindowsFormsLigueScrabble
         int scoreGagnant;
         bool homologation;
 
-        public Rencontre RencontreDataGrid { get => rencontreDataGrid; set => rencontreDataGrid = value; }
-        public string JourRencontre { get => rencontreDataGrid.DateDeJeu.ToString("ddd"); }
-        public string HeureRencontre { get => rencontreDataGrid.DateDeJeu.ToString("HH"); }
+        public Rencontre Session { get => session; set => session = value; }
+        public string JourRencontre { get => session.DateDeJeu.ToString("ddd"); }
+        public string HeureRencontre { get => session.DateDeJeu.ToString("HH") +"h"; }
         public int Ronde { get => ronde; set => ronde = value; }
         public int Table { get => table; set => table = value; }
         public int NombreJoueurs { get => nombreJoueurs; set => nombreJoueurs = value; }
         public string Gagnant { get => gagnant; set => gagnant = value; }
         public int ScoreGagnant { get => scoreGagnant; set => scoreGagnant = value; }
         public bool Homologation { get => homologation; set => homologation = value; }
-        public int IdSession { get => rencontreDataGrid.IdSession; }
+        public int IdSession { get => session.IdSession; }
 
         public override string ToString()
         {

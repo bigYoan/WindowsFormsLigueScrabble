@@ -13,7 +13,7 @@ namespace WindowsFormsLigueScrabble
     internal partial class RencontreForm : Form
     {
         Controleur controleur;
-        string orderBy = "ORDER BY Date_Rencontre DESC";
+        string orderBy = "ORDER BY session.Date_Rencontre DESC";
         public RencontreForm(Controleur controleurX)
         {
             InitializeComponent();
@@ -37,40 +37,30 @@ namespace WindowsFormsLigueScrabble
 
         private void RemplirDataGridViewRencontre()
         {
-            List<Rencontre> listeBidon = controleur.GererRencontres(null, controleur.lister, orderBy);
-            List<RencontresDataGrid> listeDataGrid = new List<RencontresDataGrid>();
-            foreach (var rencontreAAjouter in listeBidon)
-            {
-                RencontresDataGrid tess = new RencontresDataGrid();
-                tess.RencontreDataGrid = rencontreAAjouter;
-                tess.NombreJoueurs = 3;
-                tess.Table = 2;
-                tess.Homologation = true;
-                tess.ScoreGagnant = 345;
-                tess.Ronde = 1;
-                tess.Gagnant = "Marc";
-                listeDataGrid.Add(tess);
-            }
+            List<RencontresDataGrid> listeSessions = controleur.GererRencontres(null, 0, 0, null, controleur.lister, orderBy);
            
             dataGridViewSessions.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
             dataGridViewSessions.ColumnHeadersDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
             dataGridViewSessions.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-            dataGridViewSessions.DataSource = listeDataGrid;
-            dataGridViewSessions.Columns["RencontreDataGrid"].HeaderText = "Date";
+            dataGridViewSessions.DataSource = listeSessions;
+            //dataGridViewSessions.Columns["IdSession"].Visible = false; 
+            dataGridViewSessions.Columns["Session"].HeaderText = "Date";
             dataGridViewSessions.Columns["jourRencontre"].HeaderText = "Jour";
             dataGridViewSessions.Columns["heureRencontre"].HeaderText = "Heure";
             dataGridViewSessions.Columns["nombreJoueurs"].HeaderText = "Nombre\nJoueurs"; 
             dataGridViewSessions.Columns["scoreGagnant"].HeaderText = "Score";
             dataGridViewSessions.Columns["homologation"].HeaderText = "FQCSF\nhomologué";
+            dataGridViewSessions.Columns["nombreJoueurs"].DefaultCellStyle.Format = "###.##";
+            dataGridViewSessions.Columns["Table"].DefaultCellStyle.Format = "###.##";
+            dataGridViewSessions.Columns["Ronde"].DefaultCellStyle.Format = "###.##";
+            dataGridViewSessions.Columns["scoreGagnant"].DefaultCellStyle.Format = "###.##";
+
 
             dataGridViewSessions.RowHeadersVisible = false;
             dataGridViewSessions.ReadOnly = true;
-            
-
 
             comboBoxSession.DataSource = null;
-            //comboBoxSession.DataSource = listeDataGrid;
-            comboBoxSession.DataSource = controleur.GererRencontres(null, controleur.lister, orderBy);
+            comboBoxSession.DataSource = controleur.GererRencontres(null, 0, 0, null, controleur.lister, orderBy);
             comboBoxSession.SelectedIndex = 0;
             labelTotalSessions.Text = comboBoxSession.Items.Count.ToString() + " rencontres total.";
         }
@@ -80,17 +70,6 @@ namespace WindowsFormsLigueScrabble
             EditionRencontreForm editionRencontreForm = new EditionRencontreForm(controleur);
             editionRencontreForm.ShowDialog();
             RemplirDataGridViewRencontre();
-            //if (comboBoxSession.SelectedItem != null)
-            //{
-            //    dateTimePickerNewSession.Visible = true;
-
-            //    Rencontre nouvelleSession = new Rencontre();
-            //    nouvelleSession.DateDeJeu = dateTimePickerNewSession.Value;
-            //    nouvelleSession.DateNouvelle = dateTimePickerNewSession.Value;
-            //    controleur.GererRencontres(nouvelleSession, controleur.ajouter, orderBy);
-            //    RemplirComboBoxRencontre();
-            //    dateTimePickerNewSession.Visible = false;
-            //}
         }
 
         private void buttonSupprimerSession_Click(object sender, EventArgs e)
@@ -98,7 +77,7 @@ namespace WindowsFormsLigueScrabble
             Rencontre rencontreASupprimer = new Rencontre();
             rencontreASupprimer.IdSession = (int)dataGridViewSessions["IdSession", dataGridViewSessions.CurrentRow.Index].Value;
             int lignesAffectees = 0;
-            controleur.GererRencontres(rencontreASupprimer, controleur.supprimer, "");
+            controleur.GererRencontres(rencontreASupprimer, 0, 0, null, controleur.supprimer, "");
             RemplirDataGridViewRencontre();
 
         }

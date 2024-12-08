@@ -7,6 +7,9 @@ using Google.Protobuf.Collections;
 using Google.Protobuf.WellKnownTypes;
 using MySql.Data.MySqlClient;
 using Mysqlx.Crud;
+using MySqlX.XDevAPI.Relational;
+using MySqlX.XDevAPI;
+using Org.BouncyCastle.Asn1.X509;
 
 
 namespace WindowsFormsLigueScrabble
@@ -81,28 +84,29 @@ namespace WindowsFormsLigueScrabble
             try
             {
                 MySqlConnection sqlConnexion = new MySqlConnection(maConnexionString);
-                int lignesAffectees = 0;
+                int idNouvelleSession = 0;
                 using (sqlConnexion)
                 {
                     sqlConnexion.Open();
 
-                    using (MySqlCommand cmd = new MySqlCommand("INSERT INTO session (Date_Rencontre) VALUES (@Date_rencontre)", sqlConnexion))
+                    using (MySqlCommand cmd = new MySqlCommand("INSERT INTO session (Date_Rencontre) VALUES (@Date_rencontre); SELECT LAST_INSERT_ID();", sqlConnexion))
                     {
                         cmd.Parameters.Add(new MySqlParameter("@Date_rencontre", newRencontre.DateNouvelle));
-                        lignesAffectees = cmd.ExecuteNonQuery();
+                        var idCree = cmd.ExecuteScalar().ToString();
+                       bool ok = int.TryParse(idCree, out idNouvelleSession);
                     }
                     sqlConnexion.Close();
-                    return lignesAffectees;
+
+                    return idNouvelleSession;
                 }
             }
             catch (Exception) { throw; }
         }
-
-        internal List<Rencontre> ListerRencontresDansBD(string orderBy)
+        internal List<Rencontre> ListerRencontresSeules(string orderBy)
         {
             // Dans la BD :    rencontre -> session
 
-            List<Rencontre> sessions = new List<Rencontre>();
+            List<Rencontre> rencontres = new List<Rencontre>();
             try
             {
                 MySqlConnection sqlConnexion = new MySqlConnection(maConnexionString);
@@ -116,20 +120,63 @@ namespace WindowsFormsLigueScrabble
                         {
                             while (reader.Read())
                             {
-                                Rencontre maSession = new Rencontre();
-                                maSession.IdSession = (int)reader["Id_Rencontre"];
-                                maSession.DateDeJeu = (DateTime)reader["Date_Rencontre"];
+                                Rencontre maRencontre = new Rencontre();
+                                maRencontre.IdSession = (int)reader["Id_Rencontre"];
+                                maRencontre.DateNouvelle = (DateTime)reader["Date_Rencontre"];
+                                rencontres.Add(maRencontre);
+                            }
+                        }
+                        sqlConnexion.Close();
+                        return rencontres;
+                    }
+                }
+            }
+            catch (Exception) { throw; }
+        }
+        internal List<RencontresDataGrid> ListerRencontresDansBD(string orderBy)
+        {
+            // Dans la BD :    rencontre -> session
+
+            string commande_Lister_Session_Table_Game =
+            "SELECT Session.*, _Table.No_Table, Game.No_Partie " +
+            "FROM _Table " +
+            "LEFT OUTER JOIN Session_Table_Game ON _Table.ID_Table = Session_Table_Game.Id_Table " +
+            "RIGHT OUTER JOIN Game ON Session_Table_Game.Id_Joute = Game.Id_Joute " +
+            "RIGHT OUTER JOIN Session ON Session_Table_Game.Id_Rencontre = Session.Id_Rencontre ";/* +
+            "order by session.date_rencontre desc;";*/
+
+            List<RencontresDataGrid> sessions = new List<RencontresDataGrid>();
+            try
+            {
+                MySqlConnection sqlConnexion = new MySqlConnection(maConnexionString);
+                //int lignesAffectees = 0;
+                using (sqlConnexion)
+                {
+                    sqlConnexion.Open();
+                    using (MySqlCommand cmd = new MySqlCommand(commande_Lister_Session_Table_Game + orderBy, sqlConnexion))
+
+                    //using (MySqlCommand cmd = new MySqlCommand("SELECT * FROM Session LEFT JOIN " + orderBy, sqlConnexion))
+                    {
+                        using (MySqlDataReader reader = cmd.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                RencontresDataGrid maSession = new RencontresDataGrid();
+                                int idSession = (int)reader["Id_Rencontre"];
+                                DateTime dateSession = (DateTime)reader["Date_Rencontre"];
+                                Rencontre maRencontre = new Rencontre();
+                                maRencontre.IdSession = idSession;
+                                maRencontre.DateNouvelle = dateSession;
+                                maRencontre.DateDeJeu = dateSession;
+                                maSession.Session = maRencontre;
+                                maSession.Ronde = (reader["No_Partie"].GetType() == typeof(DBNull)) ? 0 : (int)reader["No_Partie"];
+                                maSession.Table = (reader["No_Table"].GetType() == typeof(DBNull)) ? 0 : (int)reader["No_Table"];
                                 sessions.Add(maSession);
                             }
                         }
+                        sqlConnexion.Close();
+                        return sessions;
                     }
-                    sqlConnexion.Close();
-                    Rencontre rencontreBidon = new Rencontre();
-                    rencontreBidon.DateNouvelle = DateTime.Now;
-                    rencontreBidon.DateDeJeu = DateTime.Now;
-                    
-
-                    return sessions;
                 }
             }
             catch (Exception) { throw; }
@@ -388,6 +435,30 @@ namespace WindowsFormsLigueScrabble
                     }
                     sqlConnexion.Close();
                     return liensExistants;
+                }
+            }
+            catch (Exception) { throw; }
+        }
+
+        internal int CreerLiens_Session_Table_Partie(int id_rencontre, int idTable, int idPartie)
+        {
+            try
+            {
+                MySqlConnection sqlConnexion = new MySqlConnection(maConnexionString);
+                int lignesAffectees = 0;
+                using (sqlConnexion)
+                {
+                    sqlConnexion.Open();
+
+                    using (MySqlCommand cmd = new MySqlCommand("INSERT INTO Session_Table_Game VALUES (@Id_Rencontre, @Id_Table, @Id_Partie)", sqlConnexion))
+                    {
+                        cmd.Parameters.Add(new MySqlParameter("@Id_Rencontre", id_rencontre));
+                        cmd.Parameters.Add(new MySqlParameter("@Id_Table", idTable));
+                        cmd.Parameters.Add(new MySqlParameter("@Id_Partie", idPartie));
+                        lignesAffectees = cmd.ExecuteNonQuery();
+                    }
+                    sqlConnexion.Close();
+                    return lignesAffectees;
                 }
             }
             catch (Exception) { throw; }
