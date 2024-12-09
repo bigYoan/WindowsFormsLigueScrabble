@@ -158,7 +158,7 @@
             this.dataGridViewSessions.Name = "dataGridViewSessions";
             this.dataGridViewSessions.RowHeadersWidth = 51;
             this.dataGridViewSessions.RowTemplate.Height = 24;
-            this.dataGridViewSessions.Size = new System.Drawing.Size(915, 355);
+            this.dataGridViewSessions.Size = new System.Drawing.Size(801, 355);
             this.dataGridViewSessions.TabIndex = 11;
             // 
             // groupBoxModifierDetruire
@@ -191,7 +191,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1285, 450);
+            this.ClientSize = new System.Drawing.Size(1205, 450);
             this.Controls.Add(this.groupBoxModifierDetruire);
             this.Controls.Add(this.dataGridViewSessions);
             this.Controls.Add(this.dateTimePickerNewSession);

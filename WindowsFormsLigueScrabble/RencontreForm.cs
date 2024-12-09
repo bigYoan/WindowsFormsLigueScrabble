@@ -37,20 +37,13 @@ namespace WindowsFormsLigueScrabble
 
         private void RemplirDataGridViewRencontre()
         {
-            List<RencontresDataGrid> listeSessions = new List<RencontresDataGrid>();
-            //if (listeRecue == null)
-            //{
-            //    listeSessions = controleur.GererRencontres(null, 0, 0, null, controleur.lister, orderBy);
-            //}
-            //else listeSessions = listeRecue;
-
-
-
             dataGridViewSessions.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
             dataGridViewSessions.ColumnHeadersDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
             dataGridViewSessions.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dataGridViewSessions.DataSource = controleur.rencontres;
-            //dataGridViewSessions.Columns["IdSession"].Visible = false; 
+            dataGridViewSessions.Columns["IdSession"].Visible = false;
+            dataGridViewSessions.Columns["Id_Table"].Visible = false;
+            dataGridViewSessions.Columns["Id_Ronde"].Visible = false;
             dataGridViewSessions.Columns["Session"].HeaderText = "Date";
             dataGridViewSessions.Columns["jourRencontre"].HeaderText = "Jour";
             dataGridViewSessions.Columns["heureRencontre"].HeaderText = "Heure";
@@ -68,7 +61,7 @@ namespace WindowsFormsLigueScrabble
 
             comboBoxSession.DataSource = null;
             comboBoxSession.DataSource = controleur.GererRencontres(null, 0, 0, null, controleur.lister, orderBy);
-            comboBoxSession.SelectedIndex = 0;
+            //comboBoxSession.SelectedIndex = 0;
             labelTotalSessions.Text = comboBoxSession.Items.Count.ToString() + " rencontres total.";
         }
 
@@ -82,13 +75,13 @@ namespace WindowsFormsLigueScrabble
         private void buttonSupprimerSession_Click(object sender, EventArgs e)
         {
             Rencontre rencontreASupprimer = new Rencontre();
+            if (controleur.rencontres.Count == 0) return;
             rencontreASupprimer.IdSession = (int)dataGridViewSessions["IdSession", dataGridViewSessions.CurrentRow.Index].Value;
             int partieASupprimer = (int)dataGridViewSessions["Id_Ronde", dataGridViewSessions.CurrentRow.Index].Value;
             int tableASupprimer = (int)dataGridViewSessions["Id_Table", dataGridViewSessions.CurrentRow.Index].Value;
             int lignesAffectees = 0;
             List<RencontresDataGrid> listeSessions = controleur.GererRencontres(rencontreASupprimer, tableASupprimer, partieASupprimer, null, controleur.supprimer, orderBy);
             RemplirDataGridViewRencontre();
-
         }
 
         private void buttonTerminer_Click(object sender, EventArgs e)

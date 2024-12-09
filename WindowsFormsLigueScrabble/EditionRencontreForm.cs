@@ -17,7 +17,8 @@ namespace WindowsFormsLigueScrabble
     {
         Controleur controleur = new Controleur();
         
-        string orderBy = "ORDER BY ID_Joueur";
+        string orderByJoueurs = "ORDER BY ID_Joueur";
+        string orderBySessions = "ORDER BY Session.Date_Session DESC, _Table.No_Table; ";
         List<RencontresDataGrid> rencontres= new List<RencontresDataGrid>();
         List<Joueur> listeJoueursOriginale = new List<Joueur>();
         List<Joueur> listeJoueur1 = new List<Joueur>();
@@ -38,7 +39,7 @@ namespace WindowsFormsLigueScrabble
 
         private void EditionRencontreForm_Load(object sender, EventArgs e)
         {
-            rencontres = controleur.GererRencontres(null, 0, 0, null, controleur.lister, "");
+            rencontres = controleur.GererRencontres(null, 0, 0, null, controleur.lister, orderBySessions);
             dateTimePickerNewSession.Value = TrouverMercrediProchain();
             comboBoxHeure.SelectedIndex = 1;
             InitialiserLesListesComboBoxJoueurs();
@@ -65,7 +66,7 @@ namespace WindowsFormsLigueScrabble
 
         private void InitialiserLesListesComboBoxJoueurs()
         {
-            listeJoueursOriginale = controleur.GererJoueur(null, controleur.lister, orderBy);
+            listeJoueursOriginale = controleur.GererJoueur(null, controleur.lister, orderByJoueurs);
             Joueur joueurBidon = new Joueur("","(vide)","(vide)");
             listeJoueur1.AddRange(listeJoueursOriginale); listeJoueur1.Add(joueurBidon);
             listeJoueur2.AddRange(listeJoueursOriginale); listeJoueur2.Add(joueurBidon);
@@ -75,7 +76,7 @@ namespace WindowsFormsLigueScrabble
 
         private void RemplirLesComboBoxJoueurs()
         {
-            //List<Joueur> joueurs = controleur.GererJoueur(null, controleur.lister, orderBy);
+            //List<Joueur> joueurs = controleur.GererJoueur(null, controleur.lister, orderByJoueurs);
             comboBoxJoueur1.DataSource = listeJoueur1;
             comboBoxJoueur1.SelectedIndex = -1; 
             comboBoxJoueur2.DataSource = listeJoueur2;
@@ -121,19 +122,19 @@ namespace WindowsFormsLigueScrabble
             List<Joueur> joueurs = new List<Joueur>();
             int nbSessionsAvantAjout = rencontres.Count; 
             List<RencontresDataGrid> sessions = new List<RencontresDataGrid>();
-            sessions = controleur.GererRencontres(nouvelleRencontre, noTable, noPartie, joueurs, controleur.ajouter, "");
-            if (!(sessions.Count > nbSessionsAvantAjout))
-            { MessageBox.Show("Ajout impossible."); return rencontres; }
-            else
-            {               // Créer une nouvelle partie avec joueurs au besoin
+            sessions = controleur.GererRencontres(nouvelleRencontre, noTable, noPartie, joueurs, controleur.ajouter, orderBySessions);
+            //if (!(sessions.Count > nbSessionsAvantAjout))
+            //{ MessageBox.Show("Ajout impossible."); return rencontres; }
+            //else
+            //{               // Créer une nouvelle partie avec joueurs au besoin
 
 
 
-                            // Créer un nouveau lien session_table_partie
+            //                // Créer un nouveau lien session_table_partie
 
-            }
-            { MessageBox.Show("Ajout réussi."); return sessions; }
-            
+            //}
+            //{ MessageBox.Show("Ajout réussi."); return sessions; }
+            return sessions;
         }
 
         private int ConvertirComboBoxHeure()

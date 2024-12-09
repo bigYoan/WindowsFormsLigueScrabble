@@ -17,11 +17,12 @@ namespace WindowsFormsLigueScrabble
         public int ajouter = 1;
         public int supprimer = 2;
         public int modifier = 3;
+        public string orderBy = "ORDER BY Session.Date_Session DESC, _Table.No_Table; ";
 
         public Controleur()
         {
             joueurs = dB_Manager.ListerJoueursDansBD("ORDER BY Nom");
-            rencontres = GererRencontres(null, 0, 0, null, lister, "ORDER BY Session.Date_Session DESC; ");
+            rencontres = GererRencontres(null, 0, 0, null, lister, orderBy);
         }
 
         internal List<Joueur> GererJoueur(Joueur nouveauJoueur, int ordre, string orderBy)
@@ -81,8 +82,8 @@ namespace WindowsFormsLigueScrabble
             if (newRencontre == null && ordre == lister)
             {
                 //Fait une liste des joueurs
-                rencontres = dB_Manager.ListerRencontresDansBD(orderBy);
-                return rencontres;
+                //rencontres = dB_Manager.ListerRencontresDansBD(orderBy);
+                //return rencontres;
             }
             if (newRencontre != null && ordre == ajouter)
             {
@@ -92,7 +93,7 @@ namespace WindowsFormsLigueScrabble
                     if (AjouterTable(idNouvelleSession, noTable, noPartie) > 0) 
                     {
                         MessageBox.Show("Ajout réussi");
-                        return dB_Manager.ListerRencontresDansBD(orderBy);
+                        //return dB_Manager.ListerRencontresDansBD(orderBy);
                     }
                 }
                 else
@@ -101,7 +102,7 @@ namespace WindowsFormsLigueScrabble
                     {
                         MessageBox.Show("Exécution annulée");
                     }
-                    return dB_Manager.ListerRencontresDansBD(orderBy);
+                    //return dB_Manager.ListerRencontresDansBD(orderBy);
                 }
             }
             if (newRencontre != null && ordre == supprimer)
@@ -109,18 +110,20 @@ namespace WindowsFormsLigueScrabble
                 // Supprimer joueur dans BD
                 lignesAffectees = dB_Manager.SupprimerRencontreDansBD(newRencontre.IdSession, noTable, noPartie);
                 if (lignesAffectees == 0) { MessageBox.Show("Exécution annulée"); }
-                rencontres = dB_Manager.ListerRencontresDansBD(orderBy);
-                return rencontres;
+                //rencontres = dB_Manager.ListerRencontresDansBD(orderBy);
+                //return rencontres;
             }
             if (newRencontre != null && ordre == modifier)
             {
                 //Modifier joueur dans BD
                 lignesAffectees = dB_Manager.ModifierRencontreDansBD(newRencontre, modifier);
                 if (lignesAffectees == 0) { MessageBox.Show("Exécution annulée"); }
-                rencontres = dB_Manager.ListerRencontresDansBD(orderBy);
-                return rencontres;
+                //rencontres = dB_Manager.ListerRencontresDansBD(orderBy);
+                //return rencontres;
             }
-            return null;
+            //return null;
+            rencontres = dB_Manager.ListerRencontresDansBD(orderBy);
+            return rencontres;
         }
 
         private int AjouterTable(int id_rencontre, int noTable, int noPartie)
@@ -131,16 +134,21 @@ namespace WindowsFormsLigueScrabble
             List<Table> tables = dB_Manager.ListerTablesDansBD("");
             foreach (Table table in tables) { if (noTable == table.NoTable) { idTable = table.IDTable; } }
 
-            if (noPartie != 0)
+            if (idTable == 0)
             {
-                List<Partie> parties = dB_Manager.ListerPartiesDansBD("");
-                foreach (Partie partie in parties) { if (noPartie == partie.NoPartie) { idPartie = partie.IdPartie; } }
+                idTable = dB_Manager.AjouterNouvelleTable(noTable, "Sans ODS");
             }
+
+            //if (noPartie != 0)
+            //{
+            //    List<Partie> parties = dB_Manager.ListerPartiesDansBD("");
+            //    foreach (Partie partie in parties) { if (noPartie == partie.NoPartie) { idPartie = partie.IdPartie; } }
+            //}
             // Crée des tables ou des nouvelles parties au besoin
-            if (idPartie == 0)
-            {
+            //if (idPartie == 0)
+            //{
                 idPartie = dB_Manager.CreerNouvellePartie(noPartie);
-            }
+            //}
             // Ajouter des tables avec joutes
             int lignesAffectees = dB_Manager.CreerLiens_Session_Table_Partie(id_rencontre, idTable, idPartie);
             return lignesAffectees;

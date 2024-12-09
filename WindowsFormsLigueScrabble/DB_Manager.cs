@@ -338,7 +338,7 @@ namespace WindowsFormsLigueScrabble
                     {
                         if(id == Id_Rencontre) nbMatch++;
                     }
-                    if (nbMatch < 1)                    
+                    if (nbMatch == 0)                    
                     {
                         using (MySqlCommand cmd = new MySqlCommand("DELETE FROM Session WHERE ID_Session = @ID_Session", sqlConnexion))
                         {
@@ -559,6 +559,30 @@ namespace WindowsFormsLigueScrabble
                     }
                     sqlConnexion.Close();
                     return idPartieCree;
+                }
+            }
+            catch (Exception) { throw; }
+        }
+
+        internal int AjouterNouvelleTable(int noTable, string regles)
+        {
+            try
+            {
+                MySqlConnection sqlConnexion = new MySqlConnection(maConnexionString);
+                int idTableCree;
+                using (sqlConnexion)
+                {
+                    sqlConnexion.Open();
+
+                    using (MySqlCommand cmd = new MySqlCommand("INSERT INTO _Table (No_Table, Regles) VALUES (@No_Table, @Regles); SELECT LAST_INSERT_ID();", sqlConnexion))
+                    {
+                        cmd.Parameters.Add(new MySqlParameter("@No_Table", noTable)); 
+                        cmd.Parameters.Add(new MySqlParameter("@Regles", regles));
+                        var idCree = cmd.ExecuteScalar().ToString();
+                        bool ok = int.TryParse(idCree, out idTableCree);
+                    }
+                    sqlConnexion.Close();
+                    return idTableCree;
                 }
             }
             catch (Exception) { throw; }
