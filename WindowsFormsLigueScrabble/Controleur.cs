@@ -21,6 +21,7 @@ namespace WindowsFormsLigueScrabble
         public Controleur()
         {
             joueurs = dB_Manager.ListerJoueursDansBD("ORDER BY Nom");
+            rencontres = GererRencontres(null, 0, 0, null, lister, "ORDER BY Session.Date_Session DESC; ");
         }
 
         internal List<Joueur> GererJoueur(Joueur nouveauJoueur, int ordre, string orderBy)
@@ -106,7 +107,7 @@ namespace WindowsFormsLigueScrabble
             if (newRencontre != null && ordre == supprimer)
             {
                 // Supprimer joueur dans BD
-                lignesAffectees = dB_Manager.SupprimerRencontreDansBD(newRencontre.IdSession);
+                lignesAffectees = dB_Manager.SupprimerRencontreDansBD(newRencontre.IdSession, noTable, noPartie);
                 if (lignesAffectees == 0) { MessageBox.Show("Exécution annulée"); }
                 rencontres = dB_Manager.ListerRencontresDansBD(orderBy);
                 return rencontres;
@@ -136,7 +137,10 @@ namespace WindowsFormsLigueScrabble
                 foreach (Partie partie in parties) { if (noPartie == partie.NoPartie) { idPartie = partie.IdPartie; } }
             }
             // Crée des tables ou des nouvelles parties au besoin
-
+            if (idPartie == 0)
+            {
+                idPartie = dB_Manager.CreerNouvellePartie(noPartie);
+            }
             // Ajouter des tables avec joutes
             int lignesAffectees = dB_Manager.CreerLiens_Session_Table_Partie(id_rencontre, idTable, idPartie);
             return lignesAffectees;

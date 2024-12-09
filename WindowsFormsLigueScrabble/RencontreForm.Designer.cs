@@ -42,6 +42,7 @@
             this.groupBoxAjouter = new System.Windows.Forms.GroupBox();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewSessions)).BeginInit();
             this.groupBoxModifierDetruire.SuspendLayout();
+            this.groupBoxAjouter.SuspendLayout();
             this.SuspendLayout();
             // 
             // comboBoxSession
@@ -125,7 +126,7 @@
             this.buttonAjouterSession.FlatAppearance.BorderSize = 0;
             this.buttonAjouterSession.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonAjouterSession.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonAjouterSession.Location = new System.Drawing.Point(39, 275);
+            this.buttonAjouterSession.Location = new System.Drawing.Point(12, 71);
             this.buttonAjouterSession.Name = "buttonAjouterSession";
             this.buttonAjouterSession.Size = new System.Drawing.Size(45, 44);
             this.buttonAjouterSession.TabIndex = 8;
@@ -157,7 +158,7 @@
             this.dataGridViewSessions.Name = "dataGridViewSessions";
             this.dataGridViewSessions.RowHeadersWidth = 51;
             this.dataGridViewSessions.RowTemplate.Height = 24;
-            this.dataGridViewSessions.Size = new System.Drawing.Size(811, 355);
+            this.dataGridViewSessions.Size = new System.Drawing.Size(915, 355);
             this.dataGridViewSessions.TabIndex = 11;
             // 
             // groupBoxModifierDetruire
@@ -177,6 +178,7 @@
             // groupBoxAjouter
             // 
             this.groupBoxAjouter.BackColor = System.Drawing.Color.Transparent;
+            this.groupBoxAjouter.Controls.Add(this.buttonAjouterSession);
             this.groupBoxAjouter.Font = new System.Drawing.Font("Verdana", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupBoxAjouter.Location = new System.Drawing.Point(27, 194);
             this.groupBoxAjouter.Name = "groupBoxAjouter";
@@ -189,12 +191,11 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1176, 450);
+            this.ClientSize = new System.Drawing.Size(1285, 450);
             this.Controls.Add(this.groupBoxModifierDetruire);
             this.Controls.Add(this.dataGridViewSessions);
             this.Controls.Add(this.dateTimePickerNewSession);
             this.Controls.Add(this.buttonTerminer);
-            this.Controls.Add(this.buttonAjouterSession);
             this.Controls.Add(this.labelTotalSessions);
             this.Controls.Add(this.labelSessions);
             this.Controls.Add(this.groupBoxAjouter);
@@ -203,6 +204,7 @@
             this.Load += new System.EventHandler(this.RencontreForm_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewSessions)).EndInit();
             this.groupBoxModifierDetruire.ResumeLayout(false);
+            this.groupBoxAjouter.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 

@@ -107,6 +107,7 @@ namespace WindowsFormsLigueScrabble
             {
                 rencontres = AjouterNouvelleSession(nouvellesDonneesRencontre);
             }
+            else MessageBox.Show("Existe déjà");
 
         }
 

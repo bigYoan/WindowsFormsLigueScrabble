@@ -12,7 +12,9 @@ namespace WindowsFormsLigueScrabble
         string jourRencontre;
         Rencontre session;
         string heureRencontre;
+        int id_Ronde;
         int ronde;
+        int id_Table;
         int table;
         int nombreJoueurs;
         string gagnant;
@@ -29,6 +31,8 @@ namespace WindowsFormsLigueScrabble
         public int ScoreGagnant { get => scoreGagnant; set => scoreGagnant = value; }
         public bool Homologation { get => homologation; set => homologation = value; }
         public int IdSession { get => session.IdSession; }
+        public int Id_Ronde { get => id_Ronde; set => id_Ronde = value; }
+        public int Id_Table { get => id_Table; set => id_Table = value; }
 
         public override string ToString()
         {

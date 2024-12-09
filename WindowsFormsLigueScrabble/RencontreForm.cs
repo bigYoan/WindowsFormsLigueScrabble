@@ -13,7 +13,7 @@ namespace WindowsFormsLigueScrabble
     internal partial class RencontreForm : Form
     {
         Controleur controleur;
-        string orderBy = "ORDER BY session.Date_Rencontre DESC";
+        string orderBy = "ORDER BY session.Date_Session DESC";
         public RencontreForm(Controleur controleurX)
         {
             InitializeComponent();
@@ -37,12 +37,19 @@ namespace WindowsFormsLigueScrabble
 
         private void RemplirDataGridViewRencontre()
         {
-            List<RencontresDataGrid> listeSessions = controleur.GererRencontres(null, 0, 0, null, controleur.lister, orderBy);
-           
+            List<RencontresDataGrid> listeSessions = new List<RencontresDataGrid>();
+            //if (listeRecue == null)
+            //{
+            //    listeSessions = controleur.GererRencontres(null, 0, 0, null, controleur.lister, orderBy);
+            //}
+            //else listeSessions = listeRecue;
+
+
+
             dataGridViewSessions.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
             dataGridViewSessions.ColumnHeadersDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
             dataGridViewSessions.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-            dataGridViewSessions.DataSource = listeSessions;
+            dataGridViewSessions.DataSource = controleur.rencontres;
             //dataGridViewSessions.Columns["IdSession"].Visible = false; 
             dataGridViewSessions.Columns["Session"].HeaderText = "Date";
             dataGridViewSessions.Columns["jourRencontre"].HeaderText = "Jour";
@@ -76,8 +83,10 @@ namespace WindowsFormsLigueScrabble
         {
             Rencontre rencontreASupprimer = new Rencontre();
             rencontreASupprimer.IdSession = (int)dataGridViewSessions["IdSession", dataGridViewSessions.CurrentRow.Index].Value;
+            int partieASupprimer = (int)dataGridViewSessions["Id_Ronde", dataGridViewSessions.CurrentRow.Index].Value;
+            int tableASupprimer = (int)dataGridViewSessions["Id_Table", dataGridViewSessions.CurrentRow.Index].Value;
             int lignesAffectees = 0;
-            controleur.GererRencontres(rencontreASupprimer, 0, 0, null, controleur.supprimer, "");
+            List<RencontresDataGrid> listeSessions = controleur.GererRencontres(rencontreASupprimer, tableASupprimer, partieASupprimer, null, controleur.supprimer, orderBy);
             RemplirDataGridViewRencontre();
 
         }
