@@ -27,7 +27,7 @@ namespace WindowsFormsLigueScrabble
                 {
                     sqlConnexion.Open();
 
-                        using (MySqlCommand cmd = new MySqlCommand("INSERT INTO Joueur (ID_Joueur, nom, pseudo, noFqcsf, cacherNom) VALUES (@Code_Joueur, @Nom, @Pseudo, @NoFqcsf, @CacherNom)", sqlConnexion))
+                        using (MySqlCommand cmd = new MySqlCommand("INSERT INTO Joueur (Code_Joueur, nom, pseudo, Fqcsf, Hide_Name) VALUES (@Code_Joueur, @Nom, @Pseudo, @NoFqcsf, @CacherNom)", sqlConnexion))
                         {
                             cmd.Parameters.Add(new MySqlParameter("@Code_Joueur", nouveauJoueur.CodeJoueur));
                             cmd.Parameters.Add(new MySqlParameter("@Nom", nouveauJoueur.Nom));
@@ -65,8 +65,8 @@ namespace WindowsFormsLigueScrabble
                                 monJoueur.Nom = (string)reader["Nom"];
                                 monJoueur.Pseudo = (reader["Pseudo"].GetType() == typeof(DBNull)) ? " " : (string)reader["Pseudo"];
                                 monJoueur.Fqcsf = (reader["FQCSF"].GetType() == typeof(DBNull)) ? " " : (string)reader["FQCSF"];
-                                monJoueur.CacherNom = (reader["hide_Name"].GetType() == typeof(DBNull)) ? false : (bool)reader["hide_Name"];
-
+                                int cacherNom = (reader["hide_Name"].GetType() == typeof(DBNull)) ? 0 : (int)reader["hide_Name"];
+                                monJoueur.CacherNom = cacherNom == 0 ? false : true;
                                 joueurs.Add(monJoueur);
                             }
                         }
@@ -242,14 +242,15 @@ namespace WindowsFormsLigueScrabble
                 {
                     sqlConnexion.Open();
 
-                    using (MySqlCommand cmd = new MySqlCommand("UPDATE Joueur SET CodeJoueur = @Code_Joueur Nom = @Nom, Pseudo = @Pseudo, FQCSF = @FQCSF, hide_Name = @CacherNom  " +
+                    using (MySqlCommand cmd = new MySqlCommand("UPDATE Joueur SET Code_Joueur = @Code_Joueur, Nom = @Nom, Pseudo = @Pseudo, FQCSF = @FQCSF, hide_Name = @CacherNom  " +
                         "WHERE ID_Joueur = @Id_joueur", sqlConnexion))
                     {
                         cmd.Parameters.Add(new MySqlParameter("@Id_Joueur", nouveauJoueur.IdJoueur));
                         cmd.Parameters.Add(new MySqlParameter("@Code_Joueur", nouveauJoueur.CodeJoueur));
                         cmd.Parameters.Add(new MySqlParameter("@Nom", nouveauJoueur.Nom));
                         cmd.Parameters.Add(new MySqlParameter("@Pseudo", nouveauJoueur.Pseudo));
-                        cmd.Parameters.Add(new MySqlParameter("@FQCSF", nouveauJoueur.Fqcsf));
+                        if (nouveauJoueur.Fqcsf.Replace(" ", "") == "" || nouveauJoueur.Fqcsf == null) cmd.Parameters.Add(new MySqlParameter("@FQCSF", DBNull.Value));
+                        else cmd.Parameters.Add(new MySqlParameter("@FQCSF", nouveauJoueur.Fqcsf));
                         cmd.Parameters.Add(new MySqlParameter("@CacherNom", nouveauJoueur.CacherNom));
 
                         lignesAffectees = cmd.ExecuteNonQuery();

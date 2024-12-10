@@ -44,6 +44,8 @@ namespace WindowsFormsLigueScrabble
                 string nom = textBoxNom.Text;
                 string pseudo = textBoxPseudo.Text;
                 Joueur nouveauJoueur = new Joueur(IdCode, nom, pseudo);
+                nouveauJoueur.CacherNom = checkBoxCacherNom.Checked;
+                nouveauJoueur.Fqcsf = textBoxNoFqcsf.Text;
                 controleur.GererJoueur(nouveauJoueur, controleur.ajouter, orderBy);
                 MettreAJourDataGridView();
                 AjusterFocusDataGridView(nouveauJoueur.CodeJoueur);
@@ -120,16 +122,21 @@ namespace WindowsFormsLigueScrabble
                     bool idOK = textBoxIdCode.Text == ancienJoueurAModifier.CodeJoueur;
                     bool nomChange = textBoxNom.Text != "" && textBoxNom.Text != ancienJoueurAModifier.Nom;
                     bool pseudoChange = textBoxPseudo.Text != ancienJoueurAModifier.Pseudo;
-                    if (!(idOK && (nomChange || pseudoChange)))
+                    bool cacherNomChange = checkBoxCacherNom.Checked != ancienJoueurAModifier.CacherNom;
+                    bool FqcsfChange = textBoxNoFqcsf.Text != ancienJoueurAModifier.Fqcsf;
+                    if (!(idOK && (nomChange || pseudoChange || cacherNomChange || FqcsfChange)))
                     {
                         MessageBox.Show("le ID Code ne peut pas être changé ou\nIl n'y a aucun changement apporté.");
                         return false;
                     }
                     else
                     {
+                        nouveauJoueurAModifier.IdJoueur = dataGridViewJoueurs.
                         nouveauJoueurAModifier.CodeJoueur = textBoxIdCode.Text;
                         nouveauJoueurAModifier.Nom = textBoxNom.Text;
                         nouveauJoueurAModifier.Pseudo = textBoxPseudo.Text;
+                        nouveauJoueurAModifier.CacherNom = checkBoxCacherNom.Checked;
+                        nouveauJoueurAModifier.Fqcsf = textBoxNoFqcsf.Text;
                     }
                 }
             }
@@ -157,7 +164,7 @@ namespace WindowsFormsLigueScrabble
             int rangeeTrouvee = 0;
             for (int rangee = 0; rangee < dataGridViewJoueurs.Rows.Count; rangee++)
             {
-                if (dataGridViewJoueurs["IdCode", rangee].Value.ToString() == idCode) rangeeTrouvee = rangee;
+                if (dataGridViewJoueurs["CodeJoueur", rangee].Value.ToString() == idCode) rangeeTrouvee = rangee;
             }
             return rangeeTrouvee;
         }
@@ -165,22 +172,27 @@ namespace WindowsFormsLigueScrabble
         private void MettreAJourDataGridView()
         {
             dataGridViewJoueurs.DataSource = null;
+            dataGridViewJoueurs.ReadOnly = true;
             dataGridViewJoueurs.DataSource = controleur.joueurs;
             dataGridViewJoueurs.RowHeadersVisible = false;
             dataGridViewJoueurs.Columns["IdJoueur"].Visible = false;
             dataGridViewJoueurs.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
             dataGridViewJoueurs.ColumnHeadersDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
             dataGridViewJoueurs.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            dataGridViewJoueurs.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dataGridViewJoueurs.Columns["CodeJoueur"].HeaderText = "Code\nClub";
             dataGridViewJoueurs.Columns["Nom"].HeaderText = "Prenom";
             dataGridViewJoueurs.Columns["Pseudo"].HeaderText = "Pseudo\n(ou Nom)";
-            dataGridViewJoueurs.Columns["CacherNom"].HeaderText = "Cacher\nprénom";
+            dataGridViewJoueurs.Columns["CacherNom"].HeaderText = "Masquer\nprénom";
+            dataGridViewJoueurs.Columns["Fqcsf"].HeaderText = "FQCSF";
             dataGridViewJoueurs.ClearSelection();
             labelNombreJoueurs.Text = "Nombre de joueurs : ";
             labelNombreJoueurs.Text += (controleur.joueurs.Count).ToString();
             textBoxIdCode.Text = string.Empty;
             textBoxNom.Text = string.Empty;
             textBoxPseudo.Text = string.Empty;
+            checkBoxCacherNom.Checked = false;
+            textBoxNoFqcsf.Text = string.Empty;
         }
 
         private void textBoxIdCode_KeyUp(object sender, KeyEventArgs e)
@@ -217,6 +229,7 @@ namespace WindowsFormsLigueScrabble
             textBoxNom.Text = ancienJoueurAModifier.Nom;
             textBoxPseudo.Text = ancienJoueurAModifier.Pseudo;
             textBoxNoFqcsf.Text = ancienJoueurAModifier.Fqcsf;
+            checkBoxCacherNom.Checked = cacherNom;
             
         }
         private void buttonConfirmMouseHover(object sender, EventArgs e)
