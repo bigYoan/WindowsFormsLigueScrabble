@@ -167,6 +167,14 @@ namespace WindowsFormsLigueScrabble
             dataGridViewJoueurs.DataSource = null;
             dataGridViewJoueurs.DataSource = controleur.joueurs;
             dataGridViewJoueurs.RowHeadersVisible = false;
+            dataGridViewJoueurs.Columns["IdJoueur"].Visible = false;
+            dataGridViewJoueurs.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewJoueurs.ColumnHeadersDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewJoueurs.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            dataGridViewJoueurs.Columns["CodeJoueur"].HeaderText = "Code\nClub";
+            dataGridViewJoueurs.Columns["Nom"].HeaderText = "Prenom";
+            dataGridViewJoueurs.Columns["Pseudo"].HeaderText = "Pseudo\n(ou Nom)";
+            dataGridViewJoueurs.Columns["CacherNom"].HeaderText = "Cacher\nprénom";
             dataGridViewJoueurs.ClearSelection();
             labelNombreJoueurs.Text = "Nombre de joueurs : ";
             labelNombreJoueurs.Text += (controleur.joueurs.Count).ToString();
@@ -202,9 +210,14 @@ namespace WindowsFormsLigueScrabble
             ancienJoueurAModifier.CodeJoueur = dataGridViewJoueurs["CodeJoueur", dataGridViewJoueurs.CurrentRow.Index].Value.ToString();
             ancienJoueurAModifier.Nom = dataGridViewJoueurs["Nom", dataGridViewJoueurs.CurrentRow.Index].Value.ToString();
             ancienJoueurAModifier.Pseudo = dataGridViewJoueurs["Pseudo", dataGridViewJoueurs.CurrentRow.Index].Value.ToString();
+            ancienJoueurAModifier.Fqcsf = dataGridViewJoueurs["FQCSF", dataGridViewJoueurs.CurrentRow.Index ].Value.ToString();
+            bool cacherNom = (bool)dataGridViewJoueurs["CacherNom", dataGridViewJoueurs.CurrentRow.Index ].Value;
+            ancienJoueurAModifier.CacherNom = cacherNom;
             textBoxIdCode.Text = ancienJoueurAModifier.CodeJoueur;
             textBoxNom.Text = ancienJoueurAModifier.Nom;
             textBoxPseudo.Text = ancienJoueurAModifier.Pseudo;
+            textBoxNoFqcsf.Text = ancienJoueurAModifier.Fqcsf;
+            
         }
         private void buttonConfirmMouseHover(object sender, EventArgs e)
         {

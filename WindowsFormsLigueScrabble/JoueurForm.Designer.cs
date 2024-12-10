@@ -45,6 +45,9 @@
             this.radioButtonPseudo = new System.Windows.Forms.RadioButton();
             this.radioButtonNom = new System.Windows.Forms.RadioButton();
             this.radioButtonIDCode = new System.Windows.Forms.RadioButton();
+            this.textBoxNoFqcsf = new System.Windows.Forms.TextBox();
+            this.labelNoFqcfs = new System.Windows.Forms.Label();
+            this.checkBoxCacherNom = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewJoueurs)).BeginInit();
             this.groupBoxTriage.SuspendLayout();
             this.SuspendLayout();
@@ -54,11 +57,11 @@
             this.dataGridViewJoueurs.BackgroundColor = System.Drawing.Color.DeepSkyBlue;
             this.dataGridViewJoueurs.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.dataGridViewJoueurs.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridViewJoueurs.Location = new System.Drawing.Point(37, 80);
+            this.dataGridViewJoueurs.Location = new System.Drawing.Point(18, 80);
             this.dataGridViewJoueurs.Name = "dataGridViewJoueurs";
             this.dataGridViewJoueurs.RowHeadersWidth = 51;
             this.dataGridViewJoueurs.RowTemplate.Height = 24;
-            this.dataGridViewJoueurs.Size = new System.Drawing.Size(487, 275);
+            this.dataGridViewJoueurs.Size = new System.Drawing.Size(529, 275);
             this.dataGridViewJoueurs.TabIndex = 0;
             this.dataGridViewJoueurs.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewJoueurs_CellClick);
             // 
@@ -66,10 +69,10 @@
             // 
             this.textBoxIdCode.BackColor = System.Drawing.Color.DeepSkyBlue;
             this.textBoxIdCode.Font = new System.Drawing.Font("Verdana", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBoxIdCode.Location = new System.Drawing.Point(44, 38);
+            this.textBoxIdCode.Location = new System.Drawing.Point(22, 38);
             this.textBoxIdCode.MaxLength = 1;
             this.textBoxIdCode.Name = "textBoxIdCode";
-            this.textBoxIdCode.Size = new System.Drawing.Size(65, 36);
+            this.textBoxIdCode.Size = new System.Drawing.Size(50, 36);
             this.textBoxIdCode.TabIndex = 1;
             this.textBoxIdCode.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.textBoxIdCode.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBoxIdCode_KeyPress);
@@ -79,7 +82,7 @@
             // 
             this.textBoxNom.BackColor = System.Drawing.Color.DeepSkyBlue;
             this.textBoxNom.Font = new System.Drawing.Font("Verdana", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBoxNom.Location = new System.Drawing.Point(135, 38);
+            this.textBoxNom.Location = new System.Drawing.Point(95, 38);
             this.textBoxNom.Name = "textBoxNom";
             this.textBoxNom.Size = new System.Drawing.Size(163, 36);
             this.textBoxNom.TabIndex = 1;
@@ -88,7 +91,7 @@
             // 
             this.textBoxPseudo.BackColor = System.Drawing.Color.DeepSkyBlue;
             this.textBoxPseudo.Font = new System.Drawing.Font("Verdana", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBoxPseudo.Location = new System.Drawing.Point(319, 38);
+            this.textBoxPseudo.Location = new System.Drawing.Point(338, 38);
             this.textBoxPseudo.Name = "textBoxPseudo";
             this.textBoxPseudo.Size = new System.Drawing.Size(163, 36);
             this.textBoxPseudo.TabIndex = 1;
@@ -96,7 +99,7 @@
             // labelIDCode
             // 
             this.labelIDCode.AutoSize = true;
-            this.labelIDCode.Location = new System.Drawing.Point(47, 15);
+            this.labelIDCode.Location = new System.Drawing.Point(21, 15);
             this.labelIDCode.Name = "labelIDCode";
             this.labelIDCode.Size = new System.Drawing.Size(62, 16);
             this.labelIDCode.TabIndex = 2;
@@ -105,7 +108,7 @@
             // labelNom
             // 
             this.labelNom.AutoSize = true;
-            this.labelNom.Location = new System.Drawing.Point(132, 15);
+            this.labelNom.Location = new System.Drawing.Point(96, 15);
             this.labelNom.Name = "labelNom";
             this.labelNom.Size = new System.Drawing.Size(60, 16);
             this.labelNom.TabIndex = 2;
@@ -114,7 +117,7 @@
             // labelPseudo
             // 
             this.labelPseudo.AutoSize = true;
-            this.labelPseudo.Location = new System.Drawing.Point(316, 15);
+            this.labelPseudo.Location = new System.Drawing.Point(340, 15);
             this.labelPseudo.Name = "labelPseudo";
             this.labelPseudo.Size = new System.Drawing.Size(93, 16);
             this.labelPseudo.TabIndex = 2;
@@ -131,7 +134,7 @@
             this.buttonAjouterJoueur.FlatAppearance.BorderSize = 0;
             this.buttonAjouterJoueur.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonAjouterJoueur.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonAjouterJoueur.Location = new System.Drawing.Point(618, 31);
+            this.buttonAjouterJoueur.Location = new System.Drawing.Point(618, 95);
             this.buttonAjouterJoueur.Name = "buttonAjouterJoueur";
             this.buttonAjouterJoueur.Size = new System.Drawing.Size(45, 44);
             this.buttonAjouterJoueur.TabIndex = 3;
@@ -146,7 +149,7 @@
             this.buttonTerminer.FlatAppearance.BorderSize = 0;
             this.buttonTerminer.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonTerminer.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonTerminer.Location = new System.Drawing.Point(618, 96);
+            this.buttonTerminer.Location = new System.Drawing.Point(618, 160);
             this.buttonTerminer.Name = "buttonTerminer";
             this.buttonTerminer.Size = new System.Drawing.Size(147, 52);
             this.buttonTerminer.TabIndex = 4;
@@ -165,7 +168,7 @@
             this.buttonSupprimerJoueur.FlatAppearance.BorderSize = 0;
             this.buttonSupprimerJoueur.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonSupprimerJoueur.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonSupprimerJoueur.Location = new System.Drawing.Point(669, 31);
+            this.buttonSupprimerJoueur.Location = new System.Drawing.Point(669, 95);
             this.buttonSupprimerJoueur.Name = "buttonSupprimerJoueur";
             this.buttonSupprimerJoueur.Size = new System.Drawing.Size(45, 44);
             this.buttonSupprimerJoueur.TabIndex = 3;
@@ -185,7 +188,7 @@
             this.buttonModifierJoueur.FlatAppearance.BorderSize = 0;
             this.buttonModifierJoueur.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonModifierJoueur.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonModifierJoueur.Location = new System.Drawing.Point(720, 30);
+            this.buttonModifierJoueur.Location = new System.Drawing.Point(720, 94);
             this.buttonModifierJoueur.Name = "buttonModifierJoueur";
             this.buttonModifierJoueur.Size = new System.Drawing.Size(45, 44);
             this.buttonModifierJoueur.TabIndex = 3;
@@ -210,9 +213,9 @@
             this.groupBoxTriage.Controls.Add(this.radioButtonNom);
             this.groupBoxTriage.Controls.Add(this.radioButtonIDCode);
             this.groupBoxTriage.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.groupBoxTriage.Location = new System.Drawing.Point(574, 193);
+            this.groupBoxTriage.Location = new System.Drawing.Point(574, 246);
             this.groupBoxTriage.Name = "groupBoxTriage";
-            this.groupBoxTriage.Size = new System.Drawing.Size(191, 205);
+            this.groupBoxTriage.Size = new System.Drawing.Size(191, 186);
             this.groupBoxTriage.TabIndex = 5;
             this.groupBoxTriage.TabStop = false;
             this.groupBoxTriage.Text = "Trier par ...";
@@ -253,6 +256,37 @@
             this.radioButtonIDCode.UseVisualStyleBackColor = true;
             this.radioButtonIDCode.CheckedChanged += new System.EventHandler(this.radioButtonAny_CheckedChanged);
             // 
+            // textBoxNoFqcsf
+            // 
+            this.textBoxNoFqcsf.BackColor = System.Drawing.Color.DeepSkyBlue;
+            this.textBoxNoFqcsf.Font = new System.Drawing.Font("Verdana", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textBoxNoFqcsf.Location = new System.Drawing.Point(514, 38);
+            this.textBoxNoFqcsf.MaxLength = 5;
+            this.textBoxNoFqcsf.Name = "textBoxNoFqcsf";
+            this.textBoxNoFqcsf.Size = new System.Drawing.Size(105, 36);
+            this.textBoxNoFqcsf.TabIndex = 1;
+            this.textBoxNoFqcsf.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
+            // labelNoFqcfs
+            // 
+            this.labelNoFqcfs.AutoSize = true;
+            this.labelNoFqcfs.Location = new System.Drawing.Point(513, 15);
+            this.labelNoFqcfs.Name = "labelNoFqcfs";
+            this.labelNoFqcfs.Size = new System.Drawing.Size(64, 16);
+            this.labelNoFqcfs.TabIndex = 2;
+            this.labelNoFqcfs.Text = "#FQCSF :";
+            // 
+            // checkBoxCacherNom
+            // 
+            this.checkBoxCacherNom.AutoSize = true;
+            this.checkBoxCacherNom.CheckAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.checkBoxCacherNom.Location = new System.Drawing.Point(268, 11);
+            this.checkBoxCacherNom.Name = "checkBoxCacherNom";
+            this.checkBoxCacherNom.Size = new System.Drawing.Size(57, 53);
+            this.checkBoxCacherNom.TabIndex = 6;
+            this.checkBoxCacherNom.Text = "Cacher\r\nprénom";
+            this.checkBoxCacherNom.UseVisualStyleBackColor = true;
+            // 
             // JoueurForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -267,11 +301,14 @@
             this.Controls.Add(this.labelPseudo);
             this.Controls.Add(this.labelNom);
             this.Controls.Add(this.labelNombreJoueurs);
+            this.Controls.Add(this.labelNoFqcfs);
             this.Controls.Add(this.labelIDCode);
             this.Controls.Add(this.textBoxNom);
+            this.Controls.Add(this.textBoxNoFqcsf);
             this.Controls.Add(this.textBoxPseudo);
             this.Controls.Add(this.textBoxIdCode);
             this.Controls.Add(this.dataGridViewJoueurs);
+            this.Controls.Add(this.checkBoxCacherNom);
             this.Name = "JoueurForm";
             this.Text = "Joueurs";
             this.Load += new System.EventHandler(this.JoueurForm_Load);
@@ -301,5 +338,8 @@
         private System.Windows.Forms.RadioButton radioButtonPseudo;
         private System.Windows.Forms.RadioButton radioButtonNom;
         private System.Windows.Forms.RadioButton radioButtonIDCode;
+        private System.Windows.Forms.TextBox textBoxNoFqcsf;
+        private System.Windows.Forms.Label labelNoFqcfs;
+        private System.Windows.Forms.CheckBox checkBoxCacherNom;
     }
 }

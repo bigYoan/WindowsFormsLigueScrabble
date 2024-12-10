@@ -13,6 +13,7 @@ namespace WindowsFormsLigueScrabble
     internal partial class RencontreForm : Form
     {
         Controleur controleur;
+        public static ToolTip toolTipActionne = new ToolTip();
         string orderBy = "ORDER BY session.Date_Session DESC";
         public RencontreForm(Controleur controleurX)
         {
@@ -23,7 +24,6 @@ namespace WindowsFormsLigueScrabble
         private void RencontreForm_Load(object sender, EventArgs e)
         {
             RemplirDataGridViewRencontre();
-            dateTimePickerNewSession.Value = TrouverProchainMercredi();
         }
 
         private DateTime TrouverProchainMercredi()
@@ -54,20 +54,14 @@ namespace WindowsFormsLigueScrabble
             dataGridViewSessions.Columns["Table"].DefaultCellStyle.Format = "###.##";
             dataGridViewSessions.Columns["Ronde"].DefaultCellStyle.Format = "###.##";
             dataGridViewSessions.Columns["scoreGagnant"].DefaultCellStyle.Format = "###.##";
-
-
             dataGridViewSessions.RowHeadersVisible = false;
             dataGridViewSessions.ReadOnly = true;
-
-            comboBoxSession.DataSource = null;
-            comboBoxSession.DataSource = controleur.GererRencontres(null, 0, 0, null, controleur.lister, orderBy);
-            //comboBoxSession.SelectedIndex = 0;
-            labelTotalSessions.Text = comboBoxSession.Items.Count.ToString() + " rencontres total.";
+            labelTotalSessions.Text = controleur.rencontres.Count.ToString() + " rencontres total.";
         }
 
         private void buttonAjouterSession_Click(object sender, EventArgs e)
         {
-            EditionRencontreForm editionRencontreForm = new EditionRencontreForm(controleur);
+            EditionRencontreForm editionRencontreForm = new EditionRencontreForm(controleur, null);
             editionRencontreForm.ShowDialog();
             RemplirDataGridViewRencontre();
         }
@@ -79,14 +73,45 @@ namespace WindowsFormsLigueScrabble
             rencontreASupprimer.IdSession = (int)dataGridViewSessions["IdSession", dataGridViewSessions.CurrentRow.Index].Value;
             int partieASupprimer = (int)dataGridViewSessions["Id_Ronde", dataGridViewSessions.CurrentRow.Index].Value;
             int tableASupprimer = (int)dataGridViewSessions["Id_Table", dataGridViewSessions.CurrentRow.Index].Value;
-            int lignesAffectees = 0;
             List<RencontresDataGrid> listeSessions = controleur.GererRencontres(rencontreASupprimer, tableASupprimer, partieASupprimer, null, controleur.supprimer, orderBy);
             RemplirDataGridViewRencontre();
         }
 
+        private void buttonModifierSession_Click(object sender, EventArgs e)
+        {
+            Rencontre rencontreAModifier = new Rencontre();
+            if (controleur.rencontres.Count == 0) return;
+            rencontreAModifier.IdSession = (int)dataGridViewSessions["IdSession", dataGridViewSessions.CurrentRow.Index].Value;
+            rencontreAModifier.Id_Joute = (int)dataGridViewSessions["Id_Ronde", dataGridViewSessions.CurrentRow.Index].Value;
+            rencontreAModifier.Id_Table = (int)dataGridViewSessions["Id_Table", dataGridViewSessions.CurrentRow.Index].Value;
+            rencontreAModifier.NoTable = (int)dataGridViewSessions["table", dataGridViewSessions.CurrentRow.Index].Value;
+            rencontreAModifier.NoJoute = (int)dataGridViewSessions["ronde", dataGridViewSessions.CurrentRow.Index].Value;
+            EditionRencontreForm editionRencontreForm = new EditionRencontreForm(controleur, rencontreAModifier);
+            editionRencontreForm.ShowDialog();
+            RemplirDataGridViewRencontre();
+
+        }
         private void buttonTerminer_Click(object sender, EventArgs e)
         {
             this.Close();
         }
+
+        private void radioButtonAny_CheckedChanged(object sender, EventArgs e)
+        {
+            if (radioButtonSessionDecroissant.Checked) orderBy = "ORDER BY session.Date_Session DESC";
+            if (radioButtonSessionCroissant.Checked) orderBy = "ORDER BY session.Date_Session";
+            if (radioButtonFQCSF.Checked) orderBy = "";
+            dataGridViewSessions.DataSource = null;
+            dataGridViewSessions.DataSource = controleur.GererRencontres(null, 0, 0, null, controleur.lister, orderBy);
+            RemplirDataGridViewRencontre ();
+        }
+
+        private void buttonConfirmMouseHover(object sender, EventArgs e)
+        {
+            toolTipActionne.SetToolTip(buttonAjouterSession, "Ajouter");
+            toolTipActionne.SetToolTip(buttonSupprimerSession, "Supprimer");
+            toolTipActionne.SetToolTip(buttonModifierSession, "Modifier");
+        }
+
     }
 }

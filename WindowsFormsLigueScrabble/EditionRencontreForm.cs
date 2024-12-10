@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Net.Sockets;
@@ -16,7 +17,9 @@ namespace WindowsFormsLigueScrabble
     internal partial class EditionRencontreForm : Form
     {
         Controleur controleur = new Controleur();
-        
+        Rencontre rencontreAModifier = new Rencontre();
+        bool modeAjoutSession = false;
+        bool modeAjoutJoueursSeulement = false;
         string orderByJoueurs = "ORDER BY ID_Joueur";
         string orderBySessions = "ORDER BY Session.Date_Session DESC, _Table.No_Table; ";
         List<RencontresDataGrid> rencontres= new List<RencontresDataGrid>();
@@ -31,20 +34,33 @@ namespace WindowsFormsLigueScrabble
         Joueur ancienJoueur3;
         Joueur ancienJoueur4;
 
-        public EditionRencontreForm(Controleur controleurX)
+        public EditionRencontreForm(Controleur controleurX, Rencontre rencontreAModifierX)
         {
             InitializeComponent();
             controleur = controleurX;
+            rencontreAModifier = rencontreAModifierX;
+            if (rencontreAModifier != null) modeAjoutJoueursSeulement = true;
+            else modeAjoutJoueursSeulement = false;
+            modeAjoutSession = !modeAjoutJoueursSeulement;
         }
 
         private void EditionRencontreForm_Load(object sender, EventArgs e)
         {
             rencontres = controleur.GererRencontres(null, 0, 0, null, controleur.lister, orderBySessions);
-            dateTimePickerNewSession.Value = TrouverMercrediProchain();
-            comboBoxHeure.SelectedIndex = 1;
-            InitialiserLesListesComboBoxJoueurs();
-            RemplirLesComboBoxJoueurs();
-            MettreAJourAnciensJoueurs();
+            ReglerAffichageEtControles();
+        }
+
+        private void ReglerAffichageEtControles()
+        {
+            if (modeAjoutSession)
+            {
+                dateTimePickerNewSession.Value = TrouverMercrediProchain();
+                comboBoxHeure.SelectedIndex = 1;
+                InitialiserLesListesComboBoxJoueurs();
+                RemplirLesComboBoxJoueurs();
+                MettreAJourAnciensJoueurs();
+            }
+
         }
 
         private DateTime TrouverMercrediProchain()
@@ -89,52 +105,50 @@ namespace WindowsFormsLigueScrabble
 
         private void buttonConfirmerAjout_Click(object sender, EventArgs e)
         {
-            if (!VérifierLesDonnees()) return;
-            int heureNouvelle = ConvertirComboBoxHeure();
-            MessageBox.Show("Veuillez confirmer les données suivantes :\n");
-
-            //Vérifier si lien existe déjà
-            DonneesRencontre nouvellesDonneesRencontre = new DonneesRencontre();
-            nouvellesDonneesRencontre.DateEtHeure = dateTimePickerNewSession.Value.AddHours(heureNouvelle);
-            int.TryParse((string)comboBoxPupitre.SelectedItem, out int result);
-            nouvellesDonneesRencontre.Table = result;
-            int.TryParse((string)comboBoxRonde.SelectedItem, out result);
-            nouvellesDonneesRencontre.Partie = result;
-            LienTableSession lienTableSession = new LienTableSession();
-            List<LienTableSession> liensTableSession = new List<LienTableSession>();
-            bool lienExiste = controleur.VerifierLiens(nouvellesDonneesRencontre);
-
-            if (!lienExiste)
+            if (modeAjoutSession)
             {
-                rencontres = AjouterNouvelleSession(nouvellesDonneesRencontre);
+                if (!VérifierLesDonnees()) return;
+                int heureNouvelle = ConvertirComboBoxHeure();
+                MessageBox.Show("Veuillez confirmer les données suivantes :\n");
+
+                //Vérifier si lien existe déjà
+                DonneesRencontre nouvellesDonneesRencontre = new DonneesRencontre();
+                nouvellesDonneesRencontre.DateEtHeure = dateTimePickerNewSession.Value.AddHours(heureNouvelle);
+                int.TryParse((string)comboBoxPupitre.SelectedItem, out int result);
+                nouvellesDonneesRencontre.Table = result;
+                int.TryParse((string)comboBoxRonde.SelectedItem, out result);
+                nouvellesDonneesRencontre.Partie = result;
+                LienTableSession lienTableSession = new LienTableSession();
+                List<LienTableSession> liensTableSession = new List<LienTableSession>();
+                bool lienExiste = controleur.VerifierLiens(nouvellesDonneesRencontre);
+
+                if (!lienExiste)
+                {
+                    rencontres = AjouterNouvelleSession(nouvellesDonneesRencontre);
+                }
+                else MessageBox.Show("Existe déjà");
             }
-            else MessageBox.Show("Existe déjà");
+            
 
         }
 
         private List<RencontresDataGrid> AjouterNouvelleSession(DonneesRencontre nouvellesDonneesRencontre)
         {
-            Rencontre nouvelleRencontre = new Rencontre();
-            nouvelleRencontre.DateNouvelle = nouvellesDonneesRencontre.DateEtHeure;
-            nouvelleRencontre.DateDeJeu = nouvellesDonneesRencontre.DateEtHeure;
-            int noTable = nouvellesDonneesRencontre.Table;
-            int noPartie = nouvellesDonneesRencontre.Partie;
-            List<Joueur> joueurs = new List<Joueur>();
-            int nbSessionsAvantAjout = rencontres.Count; 
-            List<RencontresDataGrid> sessions = new List<RencontresDataGrid>();
-            sessions = controleur.GererRencontres(nouvelleRencontre, noTable, noPartie, joueurs, controleur.ajouter, orderBySessions);
-            //if (!(sessions.Count > nbSessionsAvantAjout))
-            //{ MessageBox.Show("Ajout impossible."); return rencontres; }
-            //else
-            //{               // Créer une nouvelle partie avec joueurs au besoin
-
-
-
-            //                // Créer un nouveau lien session_table_partie
-
-            //}
-            //{ MessageBox.Show("Ajout réussi."); return sessions; }
-            return sessions;
+            if (modeAjoutSession)
+            {
+                Rencontre nouvelleRencontre = new Rencontre();
+                nouvelleRencontre.DateNouvelle = nouvellesDonneesRencontre.DateEtHeure;
+                nouvelleRencontre.DateDeJeu = nouvellesDonneesRencontre.DateEtHeure;
+                int noTable = nouvellesDonneesRencontre.Table;
+                int noPartie = nouvellesDonneesRencontre.Partie;
+                List<Joueur> joueurs = new List<Joueur>();
+                int nbSessionsAvantAjout = rencontres.Count;
+                List<RencontresDataGrid> sessions = new List<RencontresDataGrid>();
+                sessions = controleur.GererRencontres(nouvelleRencontre, noTable, noPartie, joueurs, controleur.ajouter, orderBySessions);
+                return sessions;
+            }
+            return null;
+           
         }
 
         private int ConvertirComboBoxHeure()
@@ -173,21 +187,24 @@ namespace WindowsFormsLigueScrabble
 
         private void buttonEffacer_Click(object sender, EventArgs e)
         {
-            DialogResult approuveChangement = MessageBox.Show("Effacer toutes les données ?\nConfirmer...", "Attention!", MessageBoxButtons.OKCancel);
-            if (approuveChangement == DialogResult.Cancel) return;
-            dateTimePickerNewSession.Value = TrouverMercrediProchain();
-            comboBoxHeure.SelectedIndex = 1;
-            comboBoxRonde.SelectedIndex = -1;
-            comboBoxPupitre.SelectedIndex = -1;
-            comboBoxJoueur1.SelectedIndex = -1;
-            comboBoxJoueur3.SelectedIndex = -1;
-            comboBoxJoueur2.SelectedIndex = -1;
-            comboBoxJoueur4.SelectedIndex = -1;
-            RemplirLesComboBoxJoueurs();
-            labelPlace1.Text = string.Empty; 
-            labelPlace2.Text = string.Empty; 
-            labelPlace3.Text = string.Empty;
-            labelPlace4.Text = string.Empty;
+            if (modeAjoutSession)
+            {
+                DialogResult approuveChangement = MessageBox.Show("Effacer toutes les données ?\nConfirmer...", "Attention!", MessageBoxButtons.OKCancel);
+                if (approuveChangement == DialogResult.Cancel) return;
+                dateTimePickerNewSession.Value = TrouverMercrediProchain();
+                comboBoxHeure.SelectedIndex = 1;
+                comboBoxRonde.SelectedIndex = -1;
+                comboBoxPupitre.SelectedIndex = -1;
+                comboBoxJoueur1.SelectedIndex = -1;
+                comboBoxJoueur3.SelectedIndex = -1;
+                comboBoxJoueur2.SelectedIndex = -1;
+                comboBoxJoueur4.SelectedIndex = -1;
+                RemplirLesComboBoxJoueurs();
+                labelPlace1.Text = string.Empty;
+                labelPlace2.Text = string.Empty;
+                labelPlace3.Text = string.Empty;
+                labelPlace4.Text = string.Empty;
+            }
         }
 
         private void MettreAJourPlacesAuPupitre()
@@ -246,6 +263,7 @@ namespace WindowsFormsLigueScrabble
             ancienJoueur = comboBoxChoisie.SelectedItem as Joueur;
             MettreAJourPlacesAuPupitre();
         }
+        
 
     }
 }

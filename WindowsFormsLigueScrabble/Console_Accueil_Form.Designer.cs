@@ -44,77 +44,94 @@
             // 
             // buttonJoueurs
             // 
+            this.buttonJoueurs.BackColor = System.Drawing.Color.Orange;
+            this.buttonJoueurs.Font = new System.Drawing.Font("Verdana", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.buttonJoueurs.Location = new System.Drawing.Point(984, 85);
             this.buttonJoueurs.Name = "buttonJoueurs";
             this.buttonJoueurs.Size = new System.Drawing.Size(235, 46);
             this.buttonJoueurs.TabIndex = 1;
             this.buttonJoueurs.Text = "Joueurs";
-            this.buttonJoueurs.UseVisualStyleBackColor = true;
+            this.buttonJoueurs.UseVisualStyleBackColor = false;
             this.buttonJoueurs.Click += new System.EventHandler(this.buttonJoueurs_Click);
             // 
             // buttonRencontres
             // 
+            this.buttonRencontres.BackColor = System.Drawing.Color.Orange;
+            this.buttonRencontres.Font = new System.Drawing.Font("Verdana", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.buttonRencontres.Location = new System.Drawing.Point(984, 33);
             this.buttonRencontres.Name = "buttonRencontres";
             this.buttonRencontres.Size = new System.Drawing.Size(235, 46);
             this.buttonRencontres.TabIndex = 1;
             this.buttonRencontres.Text = "Rencontres";
-            this.buttonRencontres.UseVisualStyleBackColor = true;
+            this.buttonRencontres.UseVisualStyleBackColor = false;
             this.buttonRencontres.Click += new System.EventHandler(this.buttonRencontres_Click);
             // 
             // buttonParties
             // 
+            this.buttonParties.BackColor = System.Drawing.Color.Orange;
+            this.buttonParties.Font = new System.Drawing.Font("Verdana", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.buttonParties.Location = new System.Drawing.Point(984, 137);
             this.buttonParties.Name = "buttonParties";
             this.buttonParties.Size = new System.Drawing.Size(235, 46);
             this.buttonParties.TabIndex = 1;
             this.buttonParties.Text = "Parties";
-            this.buttonParties.UseVisualStyleBackColor = true;
+            this.buttonParties.UseVisualStyleBackColor = false;
             // 
             // buttonTables
             // 
+            this.buttonTables.BackColor = System.Drawing.Color.Orange;
+            this.buttonTables.Font = new System.Drawing.Font("Verdana", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.buttonTables.Location = new System.Drawing.Point(984, 189);
             this.buttonTables.Name = "buttonTables";
             this.buttonTables.Size = new System.Drawing.Size(235, 46);
             this.buttonTables.TabIndex = 1;
             this.buttonTables.Text = "Tables";
-            this.buttonTables.UseVisualStyleBackColor = true;
+            this.buttonTables.UseVisualStyleBackColor = false;
             // 
             // buttonScores
             // 
+            this.buttonScores.BackColor = System.Drawing.Color.Orange;
+            this.buttonScores.Font = new System.Drawing.Font("Verdana", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.buttonScores.Location = new System.Drawing.Point(984, 241);
             this.buttonScores.Name = "buttonScores";
             this.buttonScores.Size = new System.Drawing.Size(235, 46);
             this.buttonScores.TabIndex = 1;
             this.buttonScores.Text = "Scores";
-            this.buttonScores.UseVisualStyleBackColor = true;
+            this.buttonScores.UseVisualStyleBackColor = false;
             // 
             // buttonStats
             // 
+            this.buttonStats.BackColor = System.Drawing.Color.Orange;
+            this.buttonStats.Font = new System.Drawing.Font("Verdana", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.buttonStats.Location = new System.Drawing.Point(984, 293);
             this.buttonStats.Name = "buttonStats";
             this.buttonStats.Size = new System.Drawing.Size(235, 46);
             this.buttonStats.TabIndex = 1;
             this.buttonStats.Text = "Stats";
-            this.buttonStats.UseVisualStyleBackColor = true;
+            this.buttonStats.UseVisualStyleBackColor = false;
             // 
             // buttonFutur
             // 
+            this.buttonFutur.BackColor = System.Drawing.Color.Orange;
+            this.buttonFutur.Font = new System.Drawing.Font("Verdana", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.buttonFutur.Location = new System.Drawing.Point(984, 345);
             this.buttonFutur.Name = "buttonFutur";
             this.buttonFutur.Size = new System.Drawing.Size(235, 46);
             this.buttonFutur.TabIndex = 1;
             this.buttonFutur.Text = "?????";
-            this.buttonFutur.UseVisualStyleBackColor = true;
+            this.buttonFutur.UseVisualStyleBackColor = false;
             // 
             // buttonQuitter
             // 
+            this.buttonQuitter.BackColor = System.Drawing.Color.Orange;
+            this.buttonQuitter.Font = new System.Drawing.Font("Verdana", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.buttonQuitter.Location = new System.Drawing.Point(984, 397);
             this.buttonQuitter.Name = "buttonQuitter";
             this.buttonQuitter.Size = new System.Drawing.Size(235, 46);
             this.buttonQuitter.TabIndex = 1;
             this.buttonQuitter.Text = "Quitter";
-            this.buttonQuitter.UseVisualStyleBackColor = true;
+            this.buttonQuitter.UseVisualStyleBackColor = false;
+            this.buttonQuitter.Click += new System.EventHandler(this.buttonQuitter_Click);
             // 
             // labelConnexion
             // 

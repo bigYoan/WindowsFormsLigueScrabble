@@ -37,7 +37,7 @@
             this.labelHeure = new System.Windows.Forms.Label();
             this.labelJoueur4 = new System.Windows.Forms.Label();
             this.panelPupitre = new System.Windows.Forms.Panel();
-            this.labelPupitrePanel = new System.Windows.Forms.Label();
+            this.labelTablePanel = new System.Windows.Forms.Label();
             this.labelPlayer1 = new System.Windows.Forms.Label();
             this.labelPlayer3 = new System.Windows.Forms.Label();
             this.labelPlayer2 = new System.Windows.Forms.Label();
@@ -58,6 +58,7 @@
             this.comboBoxJoueur4 = new System.Windows.Forms.ComboBox();
             this.comboBoxJoueur2 = new System.Windows.Forms.ComboBox();
             this.buttonQuitterTout = new System.Windows.Forms.Button();
+            this.labelSession = new System.Windows.Forms.Label();
             this.panelPupitre.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -144,22 +145,22 @@
             // panelPupitre
             // 
             this.panelPupitre.BackColor = System.Drawing.Color.Maroon;
-            this.panelPupitre.Controls.Add(this.labelPupitrePanel);
+            this.panelPupitre.Controls.Add(this.labelTablePanel);
             this.panelPupitre.Location = new System.Drawing.Point(545, 58);
             this.panelPupitre.Name = "panelPupitre";
             this.panelPupitre.Size = new System.Drawing.Size(303, 100);
             this.panelPupitre.TabIndex = 16;
             // 
-            // labelPupitrePanel
+            // labelTablePanel
             // 
-            this.labelPupitrePanel.AutoSize = true;
-            this.labelPupitrePanel.Font = new System.Drawing.Font("Verdana", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelPupitrePanel.ForeColor = System.Drawing.Color.SeaShell;
-            this.labelPupitrePanel.Location = new System.Drawing.Point(89, 42);
-            this.labelPupitrePanel.Name = "labelPupitrePanel";
-            this.labelPupitrePanel.Size = new System.Drawing.Size(78, 20);
-            this.labelPupitrePanel.TabIndex = 17;
-            this.labelPupitrePanel.Text = "Pupitre";
+            this.labelTablePanel.AutoSize = true;
+            this.labelTablePanel.Font = new System.Drawing.Font("Verdana", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelTablePanel.ForeColor = System.Drawing.Color.SeaShell;
+            this.labelTablePanel.Location = new System.Drawing.Point(98, 42);
+            this.labelTablePanel.Name = "labelTablePanel";
+            this.labelTablePanel.Size = new System.Drawing.Size(74, 20);
+            this.labelTablePanel.TabIndex = 17;
+            this.labelTablePanel.Text = "Table :";
             // 
             // labelPlayer1
             // 
@@ -431,6 +432,16 @@
             this.buttonQuitterTout.UseVisualStyleBackColor = false;
             this.buttonQuitterTout.Click += new System.EventHandler(this.buttonQuitter_Click);
             // 
+            // labelSession
+            // 
+            this.labelSession.AutoSize = true;
+            this.labelSession.Font = new System.Drawing.Font("Verdana", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelSession.Location = new System.Drawing.Point(249, 28);
+            this.labelSession.Name = "labelSession";
+            this.labelSession.Size = new System.Drawing.Size(89, 25);
+            this.labelSession.TabIndex = 1;
+            this.labelSession.Text = "Session";
+            // 
             // EditionRencontreForm
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Inherit;
@@ -464,9 +475,10 @@
             this.Controls.Add(this.labelJoueur3);
             this.Controls.Add(this.labelJoueur2);
             this.Controls.Add(this.labelJoueur1);
+            this.Controls.Add(this.labelSession);
             this.Controls.Add(this.labelDateSession);
             this.Name = "EditionRencontreForm";
-            this.Text = "EditionRencontreForm";
+            this.Text = "Edition/Modification Rencontres";
             this.Load += new System.EventHandler(this.EditionRencontreForm_Load);
             this.panelPupitre.ResumeLayout(false);
             this.panelPupitre.PerformLayout();
@@ -486,7 +498,7 @@
         private System.Windows.Forms.Label labelJoueur4;
         private System.Windows.Forms.Panel panelPupitre;
         private System.Windows.Forms.Label labelPlayer1;
-        private System.Windows.Forms.Label labelPupitrePanel;
+        private System.Windows.Forms.Label labelTablePanel;
         private System.Windows.Forms.Label labelPlayer3;
         private System.Windows.Forms.Label labelPlayer2;
         private System.Windows.Forms.Label labelPlayer4;
@@ -506,5 +518,6 @@
         private System.Windows.Forms.ComboBox comboBoxJoueur4;
         private System.Windows.Forms.ComboBox comboBoxJoueur2;
         private System.Windows.Forms.Button buttonQuitterTout;
+        private System.Windows.Forms.Label labelSession;
     }
 }

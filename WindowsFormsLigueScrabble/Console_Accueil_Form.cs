@@ -83,5 +83,10 @@ namespace WindowsFormsLigueScrabble
             RencontreForm rencontreForm = new RencontreForm(controleur);
             rencontreForm.ShowDialog();
         }
+
+        private void buttonQuitter_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
     }
 }
