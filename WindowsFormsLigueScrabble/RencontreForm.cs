@@ -14,7 +14,7 @@ namespace WindowsFormsLigueScrabble
     {
         Controleur controleur;
         public static ToolTip toolTipActionne = new ToolTip();
-        string orderBy = "ORDER BY session.Date_Session DESC";
+        string orderBy = "ORDER BY session.Date_Session DESC, _Table.No_Table";
         public RencontreForm(Controleur controleurX)
         {
             InitializeComponent();
@@ -73,8 +73,17 @@ namespace WindowsFormsLigueScrabble
             Rencontre rencontreASupprimer = new Rencontre();
             if (controleur.rencontres.Count == 0) return;
             rencontreASupprimer.IdSession = (int)dataGridViewSessions["IdSession", dataGridViewSessions.CurrentRow.Index].Value;
+            Rencontre dateSessionASupprimer = (Rencontre)dataGridViewSessions["Session", dataGridViewSessions.CurrentRow.Index].Value;
             int partieASupprimer = (int)dataGridViewSessions["Id_Ronde", dataGridViewSessions.CurrentRow.Index].Value;
+            int rondeASupprimer = (int)dataGridViewSessions["Ronde", dataGridViewSessions.CurrentRow.Index].Value;
+            int noTableASupprimer = (int)dataGridViewSessions["Table", dataGridViewSessions.CurrentRow.Index].Value;
             int tableASupprimer = (int)dataGridViewSessions["Id_Table", dataGridViewSessions.CurrentRow.Index].Value;
+            string rubrique = "Supprimer la session du " + dateSessionASupprimer.DateNouvelle.ToString("M") 
+                                + ", Ronde : " + rondeASupprimer
+                                + ", Table : " + tableASupprimer
+                                + " ?\n";
+            bool supprimerOk = controleur.DemandeDeConfirmation(rubrique);
+            if (!supprimerOk) { return; }
             List<RencontresDataGrid> listeSessions = controleur.GererRencontres(rencontreASupprimer, tableASupprimer, partieASupprimer, null, controleur.supprimer, orderBy);
             RemplirDataGridViewRencontre();
         }
@@ -100,8 +109,8 @@ namespace WindowsFormsLigueScrabble
 
         private void radioButtonAny_CheckedChanged(object sender, EventArgs e)
         {
-            if (radioButtonSessionDecroissant.Checked) orderBy = "ORDER BY session.Date_Session DESC";
-            if (radioButtonSessionCroissant.Checked) orderBy = "ORDER BY session.Date_Session";
+            if (radioButtonSessionDecroissant.Checked) orderBy = "ORDER BY session.Date_Session DESC, _Table.No_Table";
+            if (radioButtonSessionCroissant.Checked) orderBy = "ORDER BY session.Date_Session, _Table.No_Table";
             if (radioButtonFQCSF.Checked) orderBy = "";
             dataGridViewSessions.DataSource = null;
             dataGridViewSessions.DataSource = controleur.GererRencontres(null, 0, 0, null, controleur.lister, orderBy);

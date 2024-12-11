@@ -71,7 +71,7 @@ namespace WindowsFormsLigueScrabble
         public bool DemandeDeConfirmation(string rubriqueAModifier)
         {
             {
-                DialogResult approuveChangement = MessageBox.Show(rubriqueAModifier + "\nCette modification va influencer\ntoutes les données connexes.\nConfirmer...", "Attention!", MessageBoxButtons.OKCancel);
+                DialogResult approuveChangement = MessageBox.Show(rubriqueAModifier + "\nCette modification pourrait influencer toute donnée connexe.\nConfirmer...", "Attention!", MessageBoxButtons.OKCancel);
                 return (approuveChangement != DialogResult.Cancel);
             }
         }
@@ -103,9 +103,10 @@ namespace WindowsFormsLigueScrabble
                     {
                         MessageBox.Show("Exécution annulée");
                     }
-                    //return dB_Manager.ListerRencontresDansBD(orderBy);
+                    else MessageBox.Show("Ajout réussi");
                 }
             }
+
             if (newRencontre != null && ordre == supprimer)
             {
                 // Supprimer joueur dans BD
@@ -248,6 +249,13 @@ namespace WindowsFormsLigueScrabble
         private void ChercherMatchDansLiens(Rencontre rencontreAVerifier, DonneesRencontre nouvellesdonneesRencontre)
         {
             throw new NotImplementedException();
+        }
+
+        internal Rencontre TrouverRencontre(int idSession)
+        {
+            Rencontre rencontreTrouvee = new Rencontre();
+            rencontreTrouvee = dB_Manager.ListerRencontreSeule(idSession);
+            return rencontreTrouvee;
         }
     }
 }

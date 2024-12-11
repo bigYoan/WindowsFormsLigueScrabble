@@ -60,7 +60,15 @@ namespace WindowsFormsLigueScrabble
                 RemplirLesComboBoxJoueurs();
                 MettreAJourAnciensJoueurs();
             }
-
+            if (modeAjoutJoueursSeulement) 
+            {
+                dateTimePickerNewSession.Enabled = false;
+                comboBoxHeure.Enabled = false;
+                Rencontre rencontreAAfficher = new Rencontre();
+                rencontreAAfficher = controleur.TrouverRencontre(rencontreAModifier.IdSession);
+                dateTimePickerNewSession.Value = rencontreAAfficher.DateDeJeu;
+                comboBoxHeure.Text = Convert.ToString(rencontreAAfficher.DateDeJeu.Hour) + "h";
+            }
         }
 
         private DateTime TrouverMercrediProchain()
@@ -108,20 +116,21 @@ namespace WindowsFormsLigueScrabble
             if (modeAjoutSession)
             {
                 if (!VérifierLesDonnees()) return;
-                int heureNouvelle = ConvertirComboBoxHeure();
-                MessageBox.Show("Veuillez confirmer les données suivantes :\n");
 
-                //Vérifier si lien existe déjà
                 DonneesRencontre nouvellesDonneesRencontre = new DonneesRencontre();
+
+                int heureNouvelle = ConvertirComboBoxHeure();
                 nouvellesDonneesRencontre.DateEtHeure = dateTimePickerNewSession.Value.AddHours(heureNouvelle);
                 int.TryParse((string)comboBoxPupitre.SelectedItem, out int result);
                 nouvellesDonneesRencontre.Table = result;
                 int.TryParse((string)comboBoxRonde.SelectedItem, out result);
                 nouvellesDonneesRencontre.Partie = result;
+
                 LienTableSession lienTableSession = new LienTableSession();
                 List<LienTableSession> liensTableSession = new List<LienTableSession>();
-                bool lienExiste = controleur.VerifierLiens(nouvellesDonneesRencontre);
 
+                //Vérifier si lien existe déjà
+                bool lienExiste = controleur.VerifierLiens(nouvellesDonneesRencontre);
                 if (!lienExiste)
                 {
                     rencontres = AjouterNouvelleSession(nouvellesDonneesRencontre);

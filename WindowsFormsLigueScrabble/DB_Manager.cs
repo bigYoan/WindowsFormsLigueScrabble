@@ -590,5 +590,36 @@ namespace WindowsFormsLigueScrabble
             }
             catch (Exception) { throw; }
         }
+
+        internal Rencontre ListerRencontreSeule(int idSession)
+        {
+            Rencontre rencontreTrouvee = new Rencontre();
+            try
+            {
+                MySqlConnection sqlConnexion = new MySqlConnection(maConnexionString);
+                //int lignesAffectees = 0;
+                using (sqlConnexion)
+                {
+                    sqlConnexion.Open();
+                    using (MySqlCommand cmd = new MySqlCommand("SELECT * FROM Session WHERE ID_Session = @ID_Session" , sqlConnexion))
+                    {
+                        cmd.Parameters.Add(new MySqlParameter("@ID_Session", idSession));
+
+                        using (MySqlDataReader reader = cmd.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                rencontreTrouvee.IdSession = (int)reader["Id_Session"];
+                                rencontreTrouvee.DateNouvelle = (DateTime)reader["Date_Session"];
+                                rencontreTrouvee.DateDeJeu = rencontreTrouvee.DateNouvelle;
+                            }
+                        }
+                    }
+                    sqlConnexion.Close();
+                    return rencontreTrouvee;
+                }
+            }
+            catch (Exception) { throw; }
+        }
     }
 }
