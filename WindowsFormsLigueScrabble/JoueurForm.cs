@@ -106,11 +106,12 @@ namespace WindowsFormsLigueScrabble
                 if (textBoxIdCode.Text.Replace(" ", "").Length == 0)
                 {
                     couleurDepartTextBoxIDCode = textBoxIdCode.BackColor;
+                    
+                    MessageBox.Show("Un nouveau code de club est requis.");
                     timerDuree.Enabled = true;
                     timerDuree.Start();
                     timerFlash.Enabled = true;
                     timerFlash.Start();
-                    MessageBox.Show("Un nouveau code de club est requis.");
                     return false;
                 }
                 foreach (var joueurDejaInscrit in controleur.joueurs)

@@ -148,7 +148,7 @@
             this.dataGridViewSessions.Name = "dataGridViewSessions";
             this.dataGridViewSessions.RowHeadersWidth = 51;
             this.dataGridViewSessions.RowTemplate.Height = 24;
-            this.dataGridViewSessions.Size = new System.Drawing.Size(801, 355);
+            this.dataGridViewSessions.Size = new System.Drawing.Size(997, 355);
             this.dataGridViewSessions.TabIndex = 11;
             // 
             // groupBoxModifierDetruire
@@ -217,13 +217,15 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.DeepSkyBlue;
-            this.ClientSize = new System.Drawing.Size(1205, 450);
+            this.ClientSize = new System.Drawing.Size(1369, 450);
             this.Controls.Add(this.groupBoxModifierDetruire);
             this.Controls.Add(this.dataGridViewSessions);
             this.Controls.Add(this.buttonTerminer);
             this.Controls.Add(this.labelTotalSessions);
             this.Controls.Add(this.labelSessions);
             this.Controls.Add(this.groupBoxTriage);
+            this.MaximumSize = new System.Drawing.Size(1387, 497);
+            this.MinimumSize = new System.Drawing.Size(1387, 497);
             this.Name = "RencontreForm";
             this.Text = "Rencontres";
             this.Load += new System.EventHandler(this.RencontreForm_Load);

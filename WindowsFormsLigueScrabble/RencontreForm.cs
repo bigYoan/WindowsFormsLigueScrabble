@@ -37,9 +37,11 @@ namespace WindowsFormsLigueScrabble
 
         private void RemplirDataGridViewRencontre()
         {
+            dataGridViewSessions.ColumnHeadersDefaultCellStyle.Font = new Font("Verdana", 9);
+            dataGridViewSessions.DefaultCellStyle.Font = new Font("Verdana", 12);
             dataGridViewSessions.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
             dataGridViewSessions.ColumnHeadersDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewSessions.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            dataGridViewSessions.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.DisplayedCells;
             dataGridViewSessions.DataSource = controleur.rencontres;
             dataGridViewSessions.Columns["IdSession"].Visible = false;
             dataGridViewSessions.Columns["Id_Table"].Visible = false;
