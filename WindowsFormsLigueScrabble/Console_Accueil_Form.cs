@@ -87,7 +87,28 @@ namespace WindowsFormsLigueScrabble
 
         private void buttonParties_Click(object sender, EventArgs e)
         {
+            PartieForm partieForm = new PartieForm();
+            partieForm.ShowDialog();
+        }
 
+        private void buttonTables_Click(object sender, EventArgs e)
+        {
+            AfficherMessageNonDisponible();
+        }
+
+        private void AfficherMessageNonDisponible()
+        {
+            MessageBox.Show("Cette fonctionnalité n'est pas disponible...", "En construction.", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+        }
+
+        private void buttonStats_Click(object sender, EventArgs e)
+        {
+            AfficherMessageNonDisponible();
+        }
+
+        private void buttonScores_Click(object sender, EventArgs e)
+        {
+            AfficherMessageNonDisponible();
         }
     }
 }

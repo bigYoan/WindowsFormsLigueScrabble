@@ -89,6 +89,7 @@
             this.buttonTables.TabIndex = 1;
             this.buttonTables.Text = "Tables";
             this.buttonTables.UseVisualStyleBackColor = false;
+            this.buttonTables.Click += new System.EventHandler(this.buttonTables_Click);
             // 
             // buttonScores
             // 
@@ -100,6 +101,7 @@
             this.buttonScores.TabIndex = 1;
             this.buttonScores.Text = "Scores";
             this.buttonScores.UseVisualStyleBackColor = false;
+            this.buttonScores.Click += new System.EventHandler(this.buttonScores_Click);
             // 
             // buttonStats
             // 
@@ -111,6 +113,7 @@
             this.buttonStats.TabIndex = 1;
             this.buttonStats.Text = "Stats";
             this.buttonStats.UseVisualStyleBackColor = false;
+            this.buttonStats.Click += new System.EventHandler(this.buttonStats_Click);
             // 
             // buttonFutur
             // 
@@ -120,7 +123,6 @@
             this.buttonFutur.Name = "buttonFutur";
             this.buttonFutur.Size = new System.Drawing.Size(235, 46);
             this.buttonFutur.TabIndex = 1;
-            this.buttonFutur.Text = "?????";
             this.buttonFutur.UseVisualStyleBackColor = false;
             // 
             // buttonQuitter
