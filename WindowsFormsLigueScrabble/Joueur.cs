@@ -13,7 +13,8 @@ namespace WindowsFormsLigueScrabble
         string nom;
         bool cacherNom;
         string pseudo;
-        string fqcsf;  // numéro de membre  Fédération Québécoise des Clubs de Scrabble Francophones,  
+        string fqcsf;  // numéro de membre  Fédération Québécoise des Clubs de Scrabble Francophones,
+        int noFqscf;
         public Joueur(string codeJoueur, string nom, string pseudo)
         {
             this.CodeJoueur = codeJoueur;
@@ -31,12 +32,13 @@ namespace WindowsFormsLigueScrabble
         public int IdJoueur { get => idJoueur; set => idJoueur = value; }
         public string CodeJoueur { get => codeJoueur; set => codeJoueur = value; }
         public string Fqcsf { get => fqcsf; set => fqcsf = value; }
+        public int NoFqcsf { get { bool no = int.TryParse(fqcsf, out noFqscf); return noFqscf; } }
 
-        public override string ToString()
-        {
-            if (pseudo == "(vide)") return "".ToString();
-            else return CodeJoueur + " :  " + nom.ToString();
+        //public override string ToString()
+        //{
+        //    //if (pseudo == "(vide)") return "".ToString();
+        //    //else return CodeJoueur + " :  " + nom.ToString();
 
-        }
+        //}
     }
 }

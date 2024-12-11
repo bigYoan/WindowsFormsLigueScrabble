@@ -47,10 +47,6 @@ namespace WindowsFormsLigueScrabble
             
         }
 
-        private void buttonAjouterJoueur_Click(object sender, EventArgs e)
-        {
-            
-        }
 
         private void buttonJoueurs_Click(object sender, EventArgs e)
         {
@@ -87,6 +83,11 @@ namespace WindowsFormsLigueScrabble
         private void buttonQuitter_Click(object sender, EventArgs e)
         {
             this.Close();
+        }
+
+        private void buttonParties_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

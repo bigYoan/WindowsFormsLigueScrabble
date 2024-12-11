@@ -27,12 +27,14 @@ namespace WindowsFormsLigueScrabble
                 {
                     sqlConnexion.Open();
 
-                        using (MySqlCommand cmd = new MySqlCommand("INSERT INTO Joueur (Code_Joueur, nom, pseudo, Fqcsf, Hide_Name) VALUES (@Code_Joueur, @Nom, @Pseudo, @NoFqcsf, @CacherNom)", sqlConnexion))
+                        using (MySqlCommand cmd = new MySqlCommand("INSERT INTO Joueur (Code_Joueur, nom, pseudo, Fqcsf, Hide_Name) VALUES (@Code_Joueur, @Nom, @Pseudo, @Fqcsf, @CacherNom)", sqlConnexion))
                         {
                             cmd.Parameters.Add(new MySqlParameter("@Code_Joueur", nouveauJoueur.CodeJoueur));
                             cmd.Parameters.Add(new MySqlParameter("@Nom", nouveauJoueur.Nom));
                             cmd.Parameters.Add(new MySqlParameter("@Pseudo", nouveauJoueur.Pseudo));
-                            cmd.Parameters.Add(new MySqlParameter("@NoFqcsf", nouveauJoueur.Fqcsf));
+                            if (nouveauJoueur.Fqcsf.Replace(" ", "") == "" || nouveauJoueur.Fqcsf == null) cmd.Parameters.Add(new MySqlParameter("@FQCSF", DBNull.Value));
+                            else cmd.Parameters.Add(new MySqlParameter("@FQCSF", nouveauJoueur.Fqcsf));
+                            //cmd.Parameters.Add(new MySqlParameter("@NoFqcsf", nouveauJoueur.Fqcsf));
                             cmd.Parameters.Add(new MySqlParameter("@CacherNom", nouveauJoueur.CacherNom));
 
                         lignesAffectees = cmd.ExecuteNonQuery();

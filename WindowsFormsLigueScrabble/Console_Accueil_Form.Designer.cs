@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormConsole));
             this.buttonJoueurs = new System.Windows.Forms.Button();
             this.buttonRencontres = new System.Windows.Forms.Button();
             this.buttonParties = new System.Windows.Forms.Button();
@@ -46,7 +47,7 @@
             // 
             this.buttonJoueurs.BackColor = System.Drawing.Color.Orange;
             this.buttonJoueurs.Font = new System.Drawing.Font("Verdana", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonJoueurs.Location = new System.Drawing.Point(984, 85);
+            this.buttonJoueurs.Location = new System.Drawing.Point(32, 384);
             this.buttonJoueurs.Name = "buttonJoueurs";
             this.buttonJoueurs.Size = new System.Drawing.Size(235, 46);
             this.buttonJoueurs.TabIndex = 1;
@@ -58,7 +59,7 @@
             // 
             this.buttonRencontres.BackColor = System.Drawing.Color.Orange;
             this.buttonRencontres.Font = new System.Drawing.Font("Verdana", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonRencontres.Location = new System.Drawing.Point(984, 33);
+            this.buttonRencontres.Location = new System.Drawing.Point(32, 332);
             this.buttonRencontres.Name = "buttonRencontres";
             this.buttonRencontres.Size = new System.Drawing.Size(235, 46);
             this.buttonRencontres.TabIndex = 1;
@@ -70,18 +71,19 @@
             // 
             this.buttonParties.BackColor = System.Drawing.Color.Orange;
             this.buttonParties.Font = new System.Drawing.Font("Verdana", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonParties.Location = new System.Drawing.Point(984, 137);
+            this.buttonParties.Location = new System.Drawing.Point(307, 332);
             this.buttonParties.Name = "buttonParties";
             this.buttonParties.Size = new System.Drawing.Size(235, 46);
             this.buttonParties.TabIndex = 1;
             this.buttonParties.Text = "Parties";
             this.buttonParties.UseVisualStyleBackColor = false;
+            this.buttonParties.Click += new System.EventHandler(this.buttonParties_Click);
             // 
             // buttonTables
             // 
             this.buttonTables.BackColor = System.Drawing.Color.Orange;
             this.buttonTables.Font = new System.Drawing.Font("Verdana", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonTables.Location = new System.Drawing.Point(984, 189);
+            this.buttonTables.Location = new System.Drawing.Point(307, 384);
             this.buttonTables.Name = "buttonTables";
             this.buttonTables.Size = new System.Drawing.Size(235, 46);
             this.buttonTables.TabIndex = 1;
@@ -92,7 +94,7 @@
             // 
             this.buttonScores.BackColor = System.Drawing.Color.Orange;
             this.buttonScores.Font = new System.Drawing.Font("Verdana", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonScores.Location = new System.Drawing.Point(984, 241);
+            this.buttonScores.Location = new System.Drawing.Point(578, 332);
             this.buttonScores.Name = "buttonScores";
             this.buttonScores.Size = new System.Drawing.Size(235, 46);
             this.buttonScores.TabIndex = 1;
@@ -103,7 +105,7 @@
             // 
             this.buttonStats.BackColor = System.Drawing.Color.Orange;
             this.buttonStats.Font = new System.Drawing.Font("Verdana", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonStats.Location = new System.Drawing.Point(984, 293);
+            this.buttonStats.Location = new System.Drawing.Point(578, 384);
             this.buttonStats.Name = "buttonStats";
             this.buttonStats.Size = new System.Drawing.Size(235, 46);
             this.buttonStats.TabIndex = 1;
@@ -114,7 +116,7 @@
             // 
             this.buttonFutur.BackColor = System.Drawing.Color.Orange;
             this.buttonFutur.Font = new System.Drawing.Font("Verdana", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonFutur.Location = new System.Drawing.Point(984, 345);
+            this.buttonFutur.Location = new System.Drawing.Point(844, 332);
             this.buttonFutur.Name = "buttonFutur";
             this.buttonFutur.Size = new System.Drawing.Size(235, 46);
             this.buttonFutur.TabIndex = 1;
@@ -125,7 +127,7 @@
             // 
             this.buttonQuitter.BackColor = System.Drawing.Color.Orange;
             this.buttonQuitter.Font = new System.Drawing.Font("Verdana", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonQuitter.Location = new System.Drawing.Point(984, 397);
+            this.buttonQuitter.Location = new System.Drawing.Point(844, 384);
             this.buttonQuitter.Name = "buttonQuitter";
             this.buttonQuitter.Size = new System.Drawing.Size(235, 46);
             this.buttonQuitter.TabIndex = 1;
@@ -136,9 +138,10 @@
             // labelConnexion
             // 
             this.labelConnexion.AutoSize = true;
-            this.labelConnexion.Location = new System.Drawing.Point(21, 423);
+            this.labelConnexion.Font = new System.Drawing.Font("Verdana", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelConnexion.Location = new System.Drawing.Point(807, 484);
             this.labelConnexion.Name = "labelConnexion";
-            this.labelConnexion.Size = new System.Drawing.Size(79, 16);
+            this.labelConnexion.Size = new System.Drawing.Size(142, 25);
             this.labelConnexion.TabIndex = 2;
             this.labelConnexion.Text = "Connexion : ";
             // 
@@ -157,7 +160,9 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Khaki;
-            this.ClientSize = new System.Drawing.Size(1262, 473);
+            this.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("$this.BackgroundImage")));
+            this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.ClientSize = new System.Drawing.Size(1222, 528);
             this.Controls.Add(this.labelConnexion);
             this.Controls.Add(this.buttonQuitter);
             this.Controls.Add(this.buttonFutur);

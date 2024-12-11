@@ -17,7 +17,10 @@ namespace WindowsFormsLigueScrabble
         Joueur ancienJoueurAModifier = new Joueur();
         Joueur nouveauJoueurAModifier = new Joueur();
         string orderBy = "ORDER BY Nom";
-        
+        string erreurDeTextBox = string.Empty;
+        Color couleurDepartTextBoxIDCode;
+
+
 
         public JoueurForm(Controleur controleurX)
         {
@@ -54,6 +57,11 @@ namespace WindowsFormsLigueScrabble
 
         private void buttonRetirerJoueur_Click(object sender, EventArgs e)
         {
+            if (textBoxIdCode.Text.Replace(" ", "").Length == 0)
+            {
+                MessageBox.Show("Choisir un joueur dans la liste.");
+                return;
+            }
             Joueur joueurARetirer = new Joueur();
             joueurARetirer.IdJoueur = (int)dataGridViewJoueurs["IDJoueur", dataGridViewJoueurs.CurrentRow.Index].Value;
             joueurARetirer.Nom = dataGridViewJoueurs["Nom", dataGridViewJoueurs.CurrentRow.Index].Value.ToString();
@@ -95,51 +103,136 @@ namespace WindowsFormsLigueScrabble
         {
             if (ordre == 1) //Pour ajouter un nouveau joueur
             {
-                if (textBoxIdCode.Text.Length == 0 || textBoxNom.Text.Length == 0)
+                if (textBoxIdCode.Text.Replace(" ", "").Length == 0)
                 {
-                    MessageBox.Show("ID code et Nom invalides");
+                    couleurDepartTextBoxIDCode = textBoxIdCode.BackColor;
+                    timerDuree.Enabled = true;
+                    timerDuree.Start();
+                    timerFlash.Enabled = true;
+                    timerFlash.Start();
+                    MessageBox.Show("Un nouveau code de club est requis.");
                     return false;
                 }
                 foreach (var joueurDejaInscrit in controleur.joueurs)
                 {
-                    if ((joueurDejaInscrit.Nom == textBoxNom.Text && joueurDejaInscrit.Pseudo.Length == 0) || (joueurDejaInscrit.Pseudo.Length != 0 && joueurDejaInscrit.Pseudo == textBoxPseudo.Text))
+                    bool codeJoueurValide = VerifierValiditeCodeJoueur(joueurDejaInscrit);
+                    bool pseudoValide = VerifierValiditeDuPseudo(joueurDejaInscrit);
+                    bool nomValide = VerifierValiditeDuNom(joueurDejaInscrit);
+                    bool noFqcsfValide = VerifierValiditeFqcsf(joueurDejaInscrit);
+                    if (!codeJoueurValide || !pseudoValide || !nomValide || !noFqcsfValide)
                     {
-                        MessageBox.Show("Erreur : Noms et/ou Pseudos déjà utilisés");
+                        MessageBox.Show(erreurDeTextBox);
                         return false;
                     }
                 }
+                return true;
+               
+
             }
             if (ordre == 2) //Pour modifier un nouveau joueur
             {
-
-                if (textBoxIdCode.Text == "")
+                if (textBoxIdCode.Text.Replace(" ", "").Length == 0)
                 {
                     MessageBox.Show("Choisir un joueur dans la liste.");
                     return false;
                 }
                 else
                 {
-                    bool idOK = textBoxIdCode.Text == ancienJoueurAModifier.CodeJoueur;
+                    bool codeJoueurOK = textBoxIdCode.Text == ancienJoueurAModifier.CodeJoueur;
                     bool nomChange = textBoxNom.Text != "" && textBoxNom.Text != ancienJoueurAModifier.Nom;
                     bool pseudoChange = textBoxPseudo.Text != ancienJoueurAModifier.Pseudo;
+                    bool pseudoVide = textBoxPseudo.Text.Replace(" ", "").Length == 0; 
                     bool cacherNomChange = checkBoxCacherNom.Checked != ancienJoueurAModifier.CacherNom;
                     bool FqcsfChange = textBoxNoFqcsf.Text != ancienJoueurAModifier.Fqcsf;
-                    if (!(idOK && (nomChange || pseudoChange || cacherNomChange || FqcsfChange)))
+
+                    if (!(codeJoueurOK && (nomChange || pseudoChange || cacherNomChange || FqcsfChange)))
                     {
-                        MessageBox.Show("le ID Code ne peut pas être changé ou\nIl n'y a aucun changement apporté.");
+                        MessageBox.Show("le ID Code ne doit pas être changé ou\nAucun changement apporté.");
                         return false;
                     }
-                    else
+
+                    foreach (var joueurDejaInscrit in controleur.joueurs)
                     {
-                        nouveauJoueurAModifier.IdJoueur = dataGridViewJoueurs.
-                        nouveauJoueurAModifier.CodeJoueur = textBoxIdCode.Text;
-                        nouveauJoueurAModifier.Nom = textBoxNom.Text;
-                        nouveauJoueurAModifier.Pseudo = textBoxPseudo.Text;
-                        nouveauJoueurAModifier.CacherNom = checkBoxCacherNom.Checked;
-                        nouveauJoueurAModifier.Fqcsf = textBoxNoFqcsf.Text;
+                        bool pseudoValide = true;
+                        if (pseudoChange) pseudoValide = VerifierValiditeDuPseudo(joueurDejaInscrit);
+
+                        bool nomValide = true;
+                        if (nomChange) nomValide = VerifierValiditeDuNom(joueurDejaInscrit);
+
+                        bool noFqcsfValide = true;
+                        if (FqcsfChange) noFqcsfValide = VerifierValiditeFqcsf(joueurDejaInscrit);
+
+                        if (!pseudoValide || !nomValide || !noFqcsfValide)
+                        {
+                            MessageBox.Show(erreurDeTextBox);
+                            return false;
+                        }
                     }
+                    // Tout est validé :
+                    nouveauJoueurAModifier.IdJoueur = (int)dataGridViewJoueurs["IdJoueur", dataGridViewJoueurs.CurrentRow.Index].Value;
+                    nouveauJoueurAModifier.CodeJoueur = textBoxIdCode.Text;
+                    nouveauJoueurAModifier.Nom = textBoxNom.Text;
+                    nouveauJoueurAModifier.Pseudo = textBoxPseudo.Text;
+                    nouveauJoueurAModifier.CacherNom = checkBoxCacherNom.Checked;
+                    nouveauJoueurAModifier.Fqcsf = textBoxNoFqcsf.Text;
                 }
             }
+            return true;
+        }
+
+        private bool VerifierValiditeFqcsf(Joueur joueurDejaInscrit)
+        {
+            bool memesFqcsf = false;
+            int sizeFQ = textBoxNoFqcsf.Text.Replace(" ","").Length;
+            if (sizeFQ != 4 && sizeFQ !=0) { erreurDeTextBox = "Le # FQCSF doit être de 4 caractères."; return false; }
+            if (textBoxNoFqcsf.Text.Length != 0) memesFqcsf = textBoxNoFqcsf.Text == joueurDejaInscrit.Fqcsf;
+            if (memesFqcsf) { erreurDeTextBox = "Le numéro FQCSF est déjà utilisé."; return false; }
+
+            return true;
+        }
+
+        private bool VerifierValiditeDuNom(Joueur joueurDejaInscrit)
+        {
+            bool nomVide = textBoxNom.Text.Length == 0;
+            if (nomVide) { erreurDeTextBox = "Il faut un prénom."; return false; }
+
+            bool nomsDifferents = textBoxNom.Text != textBoxPseudo.Text;
+            if (!nomsDifferents) { erreurDeTextBox = "Le prénom et le pseudo doivent être différents."; return false; }
+
+            bool nomDejaUtilise = textBoxNom.Text == joueurDejaInscrit.Nom;
+            bool pseudoDejaUtilise = textBoxPseudo.Text == joueurDejaInscrit.Pseudo;
+            if (nomDejaUtilise && pseudoDejaUtilise) { erreurDeTextBox = "Le prénom et le pseudo sont déjà utilisés.\nIl faut un autre prénom ou pseudo."; return false; }
+            
+
+            if (nomDejaUtilise && !pseudoDejaUtilise) { erreurDeTextBox = "Avertissement : le prénom du joueur est utilisé plusieurs fois.\nUtiliser le pseudo pour différencier."; return true; }
+            return true;
+        }
+
+        private bool VerifierValiditeDuPseudo(Joueur joueurDejaInscrit)
+        {
+            bool pseudoDejaUtilise = false;
+            if (textBoxPseudo.Text.Length != 0) pseudoDejaUtilise = textBoxPseudo.Text == joueurDejaInscrit.Pseudo;
+            if (pseudoDejaUtilise) { erreurDeTextBox = "Ce pseudo est déjà utilisé."; return false; }
+
+            bool textesPareils = textBoxPseudo.Text == textBoxNom.Text;
+            if (textesPareils) { erreurDeTextBox = "Le prénom et le pseudo doivent être différents."; return false; }
+
+            bool nomCache = checkBoxCacherNom.Checked == true;
+            bool pseudoVide = textBoxPseudo.Text.Length == 0;
+            if (nomCache && pseudoVide) { erreurDeTextBox = "Il faut un pseudo pour l'option \"Prénom Caché\"."; return false; }
+            
+            return true;
+        }
+
+
+        private bool VerifierValiditeCodeJoueur(Joueur joueurAVerifier)
+        {
+            bool codeValide = textBoxIdCode.Text.Length != 0 && textBoxIdCode.Text != joueurAVerifier.CodeJoueur;
+            if (!codeValide) 
+            { 
+
+                erreurDeTextBox = "Le code de club est déjà utilisé.";
+                return false; }
             return true;
         }
 
@@ -176,6 +269,7 @@ namespace WindowsFormsLigueScrabble
             dataGridViewJoueurs.DataSource = controleur.joueurs;
             dataGridViewJoueurs.RowHeadersVisible = false;
             dataGridViewJoueurs.Columns["IdJoueur"].Visible = false;
+            dataGridViewJoueurs.Columns["noFqcsf"].Visible = false;
             dataGridViewJoueurs.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
             dataGridViewJoueurs.ColumnHeadersDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
             dataGridViewJoueurs.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
@@ -245,9 +339,23 @@ namespace WindowsFormsLigueScrabble
             if (radioButtonIDCode.Checked) orderBy = "ORDER BY ID_Joueur";
             if (radioButtonNom.Checked) orderBy = "ORDER BY Nom";
             if (radioButtonPseudo.Checked) orderBy = "ORDER By Pseudo";
+            if (radioButtonFqcsf.Checked) orderBy = "ORDER By FQCSF Desc";
             dataGridViewJoueurs.DataSource = null;
             dataGridViewJoueurs.DataSource = controleur.GererJoueur(null, controleur.lister, orderBy);
             MettreAJourDataGridView();
+        }
+
+        private void timerDuree_Tick(object sender, EventArgs e)
+        {
+            timerFlash.Enabled = false;
+            textBoxIdCode.BackColor = couleurDepartTextBoxIDCode;
+            timerDuree.Enabled = false;
+        }
+
+        private void timerFlash_Tick(object sender, EventArgs e)
+        {
+            if (textBoxIdCode.BackColor == couleurDepartTextBoxIDCode) textBoxIdCode.BackColor = Color.Red;
+            else textBoxIdCode.BackColor = couleurDepartTextBoxIDCode;
         }
     }
 

@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(JoueurForm));
             this.dataGridViewJoueurs = new System.Windows.Forms.DataGridView();
             this.textBoxIdCode = new System.Windows.Forms.TextBox();
@@ -42,12 +43,15 @@
             this.buttonModifierJoueur = new System.Windows.Forms.Button();
             this.labelNombreJoueurs = new System.Windows.Forms.Label();
             this.groupBoxTriage = new System.Windows.Forms.GroupBox();
+            this.radioButtonFqcsf = new System.Windows.Forms.RadioButton();
             this.radioButtonPseudo = new System.Windows.Forms.RadioButton();
             this.radioButtonNom = new System.Windows.Forms.RadioButton();
             this.radioButtonIDCode = new System.Windows.Forms.RadioButton();
-            this.textBoxNoFqcsf = new System.Windows.Forms.TextBox();
             this.labelNoFqcfs = new System.Windows.Forms.Label();
             this.checkBoxCacherNom = new System.Windows.Forms.CheckBox();
+            this.timerDuree = new System.Windows.Forms.Timer(this.components);
+            this.timerFlash = new System.Windows.Forms.Timer(this.components);
+            this.textBoxNoFqcsf = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewJoueurs)).BeginInit();
             this.groupBoxTriage.SuspendLayout();
             this.SuspendLayout();
@@ -101,9 +105,9 @@
             this.labelIDCode.AutoSize = true;
             this.labelIDCode.Location = new System.Drawing.Point(21, 15);
             this.labelIDCode.Name = "labelIDCode";
-            this.labelIDCode.Size = new System.Drawing.Size(62, 16);
+            this.labelIDCode.Size = new System.Drawing.Size(46, 16);
             this.labelIDCode.TabIndex = 2;
-            this.labelIDCode.Text = "ID Code :";
+            this.labelIDCode.Text = "Code :";
             // 
             // labelNom
             // 
@@ -134,7 +138,7 @@
             this.buttonAjouterJoueur.FlatAppearance.BorderSize = 0;
             this.buttonAjouterJoueur.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonAjouterJoueur.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonAjouterJoueur.Location = new System.Drawing.Point(618, 95);
+            this.buttonAjouterJoueur.Location = new System.Drawing.Point(641, 34);
             this.buttonAjouterJoueur.Name = "buttonAjouterJoueur";
             this.buttonAjouterJoueur.Size = new System.Drawing.Size(45, 44);
             this.buttonAjouterJoueur.TabIndex = 3;
@@ -149,7 +153,7 @@
             this.buttonTerminer.FlatAppearance.BorderSize = 0;
             this.buttonTerminer.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonTerminer.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonTerminer.Location = new System.Drawing.Point(618, 160);
+            this.buttonTerminer.Location = new System.Drawing.Point(641, 93);
             this.buttonTerminer.Name = "buttonTerminer";
             this.buttonTerminer.Size = new System.Drawing.Size(147, 52);
             this.buttonTerminer.TabIndex = 4;
@@ -168,7 +172,7 @@
             this.buttonSupprimerJoueur.FlatAppearance.BorderSize = 0;
             this.buttonSupprimerJoueur.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonSupprimerJoueur.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonSupprimerJoueur.Location = new System.Drawing.Point(669, 95);
+            this.buttonSupprimerJoueur.Location = new System.Drawing.Point(692, 34);
             this.buttonSupprimerJoueur.Name = "buttonSupprimerJoueur";
             this.buttonSupprimerJoueur.Size = new System.Drawing.Size(45, 44);
             this.buttonSupprimerJoueur.TabIndex = 3;
@@ -188,7 +192,7 @@
             this.buttonModifierJoueur.FlatAppearance.BorderSize = 0;
             this.buttonModifierJoueur.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonModifierJoueur.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonModifierJoueur.Location = new System.Drawing.Point(720, 94);
+            this.buttonModifierJoueur.Location = new System.Drawing.Point(743, 33);
             this.buttonModifierJoueur.Name = "buttonModifierJoueur";
             this.buttonModifierJoueur.Size = new System.Drawing.Size(45, 44);
             this.buttonModifierJoueur.TabIndex = 3;
@@ -209,16 +213,29 @@
             // groupBoxTriage
             // 
             this.groupBoxTriage.BackColor = System.Drawing.Color.Transparent;
+            this.groupBoxTriage.Controls.Add(this.radioButtonFqcsf);
             this.groupBoxTriage.Controls.Add(this.radioButtonPseudo);
             this.groupBoxTriage.Controls.Add(this.radioButtonNom);
             this.groupBoxTriage.Controls.Add(this.radioButtonIDCode);
             this.groupBoxTriage.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.groupBoxTriage.Location = new System.Drawing.Point(574, 246);
+            this.groupBoxTriage.Location = new System.Drawing.Point(574, 198);
             this.groupBoxTriage.Name = "groupBoxTriage";
-            this.groupBoxTriage.Size = new System.Drawing.Size(191, 186);
+            this.groupBoxTriage.Size = new System.Drawing.Size(191, 234);
             this.groupBoxTriage.TabIndex = 5;
             this.groupBoxTriage.TabStop = false;
             this.groupBoxTriage.Text = "Trier par ...";
+            // 
+            // radioButtonFqcsf
+            // 
+            this.radioButtonFqcsf.AutoSize = true;
+            this.radioButtonFqcsf.Location = new System.Drawing.Point(19, 176);
+            this.radioButtonFqcsf.Name = "radioButtonFqcsf";
+            this.radioButtonFqcsf.Size = new System.Drawing.Size(118, 29);
+            this.radioButtonFqcsf.TabIndex = 3;
+            this.radioButtonFqcsf.TabStop = true;
+            this.radioButtonFqcsf.Text = "# FQCSF";
+            this.radioButtonFqcsf.UseVisualStyleBackColor = true;
+            this.radioButtonFqcsf.CheckedChanged += new System.EventHandler(this.radioButtonAny_CheckedChanged);
             // 
             // radioButtonPseudo
             // 
@@ -256,17 +273,6 @@
             this.radioButtonIDCode.UseVisualStyleBackColor = true;
             this.radioButtonIDCode.CheckedChanged += new System.EventHandler(this.radioButtonAny_CheckedChanged);
             // 
-            // textBoxNoFqcsf
-            // 
-            this.textBoxNoFqcsf.BackColor = System.Drawing.Color.DeepSkyBlue;
-            this.textBoxNoFqcsf.Font = new System.Drawing.Font("Verdana", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBoxNoFqcsf.Location = new System.Drawing.Point(514, 38);
-            this.textBoxNoFqcsf.MaxLength = 5;
-            this.textBoxNoFqcsf.Name = "textBoxNoFqcsf";
-            this.textBoxNoFqcsf.Size = new System.Drawing.Size(105, 36);
-            this.textBoxNoFqcsf.TabIndex = 1;
-            this.textBoxNoFqcsf.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            // 
             // labelNoFqcfs
             // 
             this.labelNoFqcfs.AutoSize = true;
@@ -287,12 +293,32 @@
             this.checkBoxCacherNom.Text = "Cacher\r\nprénom";
             this.checkBoxCacherNom.UseVisualStyleBackColor = true;
             // 
+            // timerDuree
+            // 
+            this.timerDuree.Interval = 2000;
+            this.timerDuree.Tick += new System.EventHandler(this.timerDuree_Tick);
+            // 
+            // timerFlash
+            // 
+            this.timerFlash.Interval = 250;
+            this.timerFlash.Tick += new System.EventHandler(this.timerFlash_Tick);
+            // 
+            // textBoxNoFqcsf
+            // 
+            this.textBoxNoFqcsf.BackColor = System.Drawing.Color.DeepSkyBlue;
+            this.textBoxNoFqcsf.Font = new System.Drawing.Font("Verdana", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textBoxNoFqcsf.Location = new System.Drawing.Point(516, 38);
+            this.textBoxNoFqcsf.Name = "textBoxNoFqcsf";
+            this.textBoxNoFqcsf.Size = new System.Drawing.Size(105, 36);
+            this.textBoxNoFqcsf.TabIndex = 7;
+            // 
             // JoueurForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.DeepSkyBlue;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.textBoxNoFqcsf);
             this.Controls.Add(this.groupBoxTriage);
             this.Controls.Add(this.buttonTerminer);
             this.Controls.Add(this.buttonModifierJoueur);
@@ -304,7 +330,6 @@
             this.Controls.Add(this.labelNoFqcfs);
             this.Controls.Add(this.labelIDCode);
             this.Controls.Add(this.textBoxNom);
-            this.Controls.Add(this.textBoxNoFqcsf);
             this.Controls.Add(this.textBoxPseudo);
             this.Controls.Add(this.textBoxIdCode);
             this.Controls.Add(this.dataGridViewJoueurs);
@@ -338,8 +363,11 @@
         private System.Windows.Forms.RadioButton radioButtonPseudo;
         private System.Windows.Forms.RadioButton radioButtonNom;
         private System.Windows.Forms.RadioButton radioButtonIDCode;
-        private System.Windows.Forms.TextBox textBoxNoFqcsf;
         private System.Windows.Forms.Label labelNoFqcfs;
         private System.Windows.Forms.CheckBox checkBoxCacherNom;
+        private System.Windows.Forms.Timer timerDuree;
+        private System.Windows.Forms.Timer timerFlash;
+        private System.Windows.Forms.RadioButton radioButtonFqcsf;
+        private System.Windows.Forms.TextBox textBoxNoFqcsf;
     }
 }

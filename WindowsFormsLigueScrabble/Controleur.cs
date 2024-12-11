@@ -40,7 +40,8 @@ namespace WindowsFormsLigueScrabble
                 lignesAffectees = dB_Manager.AjouterJoueurDansBD(nouveauJoueur);
                 joueurs.Add(nouveauJoueur);
                 if (lignesAffectees == 0) { MessageBox.Show("Exécution annulée"); }
-                return dB_Manager.ListerJoueursDansBD(orderBy);
+                joueurs = dB_Manager.ListerJoueursDansBD(orderBy);
+                return joueurs; 
             }
             if (nouveauJoueur !=null && ordre == supprimer)
             {
