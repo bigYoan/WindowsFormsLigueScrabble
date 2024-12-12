@@ -111,8 +111,8 @@ namespace WindowsFormsLigueScrabble
             List<RencontresDataGrid> rencontresDansDataGrid = new List<RencontresDataGrid>();
             foreach (var rencontreAVerifier in rencontres)
             {
-                if (rencontreAVerifier.Session.DateDeJeu == rencontreAVerifier.Session.DateDeJeu &&
-                    rencontreAVerifier.Session.DateNouvelle == rencontreAVerifier.Session.DateNouvelle)
+                if (rencontreAVerifier.Session.DateDeJeu == rencontreAModifier.DateDeJeu &&
+                    rencontreAVerifier.Session.DateNouvelle == rencontreAModifier.DateNouvelle)
                 {
                     rencontresDansDataGrid.Add(rencontreAVerifier);
                 }
