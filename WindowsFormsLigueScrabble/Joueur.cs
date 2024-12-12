@@ -34,11 +34,11 @@ namespace WindowsFormsLigueScrabble
         public string Fqcsf { get => fqcsf; set => fqcsf = value; }
         public int NoFqcsf { get { bool no = int.TryParse(fqcsf, out noFqscf); return noFqscf; } }
 
-        //public override string ToString()
-        //{
-        //    //if (pseudo == "(vide)") return "".ToString();
-        //    //else return CodeJoueur + " :  " + nom.ToString();
+        public override string ToString()
+        {
+            if (pseudo == "(vide)") return "".ToString();
+            else return CodeJoueur + " :  " + nom.ToString();
 
-        //}
+        }
     }
 }

@@ -37,6 +37,7 @@ namespace WindowsFormsLigueScrabble
 
         private void RemplirDataGridViewRencontre()
         {
+            dataGridViewSessions.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dataGridViewSessions.ColumnHeadersDefaultCellStyle.Font = new Font("Verdana", 9);
             dataGridViewSessions.DefaultCellStyle.Font = new Font("Verdana", 12);
             dataGridViewSessions.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;

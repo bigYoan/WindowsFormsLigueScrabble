@@ -171,7 +171,7 @@ namespace WindowsFormsLigueScrabble
         {
             List<Rencontre> rencontresDansBD = dB_Manager.ListerRencontresSeules("");
             List<Table> tablesDansBD = dB_Manager.ListerTablesDansBD("");
-            List<Partie> partiesDansBD = dB_Manager.ListerPartiesDansBD("");
+            List<Partie> partiesDansBD = dB_Manager.ListerPartiesDansBD(null, "");
             List<LiensSessionTablePartie> liensSessionTableParties = dB_Manager.ListerLiensSessionTablePartie("");
 
             int idSessionDansBD = 0;
@@ -256,6 +256,17 @@ namespace WindowsFormsLigueScrabble
             Rencontre rencontreTrouvee = new Rencontre();
             rencontreTrouvee = dB_Manager.ListerRencontreSeule(idSession);
             return rencontreTrouvee;
+        }
+
+        internal int ModifierRencontrePartieJoueur(DonneesRencontre donneesRencontreAModifier, List<Joueur> joueursAJouter)
+        {
+            // Vérifier si on peut modifier la partie (ou joute)
+            Partie partieAModifier = new Partie();
+            partieAModifier.IdPartie = donneesRencontreAModifier.IdJoute;
+            List<Partie> partiesDansBD = dB_Manager.ListerPartiesDansBD(partieAModifier, "");
+            if (partiesDansBD.Count == 0) return 0;
+
+            return 1;
         }
     }
 }

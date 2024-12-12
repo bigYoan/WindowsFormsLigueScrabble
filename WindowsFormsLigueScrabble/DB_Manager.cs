@@ -457,22 +457,29 @@ namespace WindowsFormsLigueScrabble
             catch (Exception) { throw; }
         }
 
-        internal List<Partie> ListerPartiesDansBD(string orderBy)
+        internal List<Partie> ListerPartiesDansBD(Partie partie, string orderBy)
         {
             List<Partie> parties = new List<Partie>();
             try
             {
+                string maCommandeCRUD;
+                if (partie == null) maCommandeCRUD = "SELECT * FROM game ";
+                else maCommandeCRUD = "SELECT * FROM game WHERE Id_Joute = @Id_Joute ";
                 MySqlConnection sqlConnexion = new MySqlConnection(maConnexionString);
                 //int lignesAffectees = 0;
                 using (sqlConnexion)
                 {
                     sqlConnexion.Open();
-                    using (MySqlCommand cmd = new MySqlCommand("SELECT * FROM game " + orderBy, sqlConnexion))
+
+                    using (MySqlCommand cmd = new MySqlCommand(maCommandeCRUD + orderBy, sqlConnexion))
                     {
+                        if (partie != null) cmd.Parameters.Add(new MySqlParameter("@Id_Joute", partie.IdPartie));
+
                         using (MySqlDataReader reader = cmd.ExecuteReader())
                         {
                             while (reader.Read())
                             {
+
                                 Partie maPartie = new Partie();
                                 maPartie.IdPartie = (int)reader["Id_Joute"];
                                 maPartie.NoPartie = (int)reader["No_Ronde"];

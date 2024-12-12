@@ -10,8 +10,12 @@ namespace WindowsFormsLigueScrabble
     {
         int idPartie;
         int noPartie;
+        List<Joueur> joueurs;
+        int partieCompletee;
 
         public int IdPartie { get => idPartie; set => idPartie = value; }
         public int NoPartie { get => noPartie; set => noPartie = value; }
+        public int PartieCompletee { get => partieCompletee; set => partieCompletee = value; }
+        internal List<Joueur> Joueurs { get => joueurs; set => joueurs = value; }
     }
 }

@@ -10,6 +10,8 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Mysqlx.Session;
+using MySqlX.XDevAPI.Common;
 using Org.BouncyCastle.Tls;
 
 namespace WindowsFormsLigueScrabble
@@ -52,23 +54,46 @@ namespace WindowsFormsLigueScrabble
 
         private void ReglerAffichageEtControles()
         {
+            InitialiserLesListesComboBoxJoueurs();
+            RemplirLesComboBoxJoueurs();
+            MettreAJourAnciensJoueurs();
+
             if (modeAjoutSession)
             {
+                dateTimePickerNewSession.Enabled = true;
+                comboBoxHeure.Enabled = true;
+                comboBoxRonde.Enabled = true;
+                comboBoxPupitre.Enabled = true;
                 dateTimePickerNewSession.Value = TrouverMercrediProchain();
                 comboBoxHeure.SelectedIndex = 1;
-                InitialiserLesListesComboBoxJoueurs();
-                RemplirLesComboBoxJoueurs();
-                MettreAJourAnciensJoueurs();
             }
             if (modeAjoutJoueursSeulement) 
             {
+                AfficherLesDonneesDeRencontreAModifier(rencontreAModifier);
                 dateTimePickerNewSession.Enabled = false;
                 comboBoxHeure.Enabled = false;
-                Rencontre rencontreAAfficher = new Rencontre();
-                rencontreAAfficher = controleur.TrouverRencontre(rencontreAModifier.IdSession);
-                dateTimePickerNewSession.Value = rencontreAAfficher.DateDeJeu;
-                comboBoxHeure.Text = Convert.ToString(rencontreAAfficher.DateDeJeu.Hour) + "h";
+                //if (rencontreAModifier.Id_Joute != 0) comboBoxRonde.Enabled = false;
+                //if (rencontreAModifier.Id_Table != 0) comboBoxPupitre.Enabled = false;
             }
+        }
+
+        private void AfficherLesDonneesDeRencontreAModifier(Rencontre rencontreAModifier)
+        {
+            Rencontre rencontreAAfficher = controleur.TrouverRencontre(rencontreAModifier.IdSession);
+            dateTimePickerNewSession.Value = rencontreAAfficher.DateDeJeu;
+            comboBoxHeure.Text = Convert.ToString(rencontreAAfficher.DateDeJeu.Hour) + "h";
+            if (rencontreAModifier.Id_Joute != 0) comboBoxRonde.Text = rencontreAModifier.NoJoute.ToString();
+            if (rencontreAModifier.Id_Table != 0) comboBoxPupitre.Text = rencontreAModifier.NoTable.ToString();
+            //if (rencontreAModifier.Id_Joute != 0 && rencontreAModifier.Id_Table != 0)
+            //{
+            //    MessageBox.Show("Ajouter des joueurs seulement.\n\nPour créer de nouvelles parties :\n" +
+            //        "Quitter cette page et créer une nouvelle session.");
+            //}
+            //if (rencontreAModifier.Id_Joute == 0)
+            //{
+            //    MessageBox.Show("Ajouter/Modifier des tables, des parties et des joueurs.\n\nPour modifier la date se session :" +
+            //        " \n\nQuitter cette page et créer une nouvelle session.");
+            //}
         }
 
         private DateTime TrouverMercrediProchain()
@@ -137,8 +162,52 @@ namespace WindowsFormsLigueScrabble
                 }
                 else MessageBox.Show("Existe déjà");
             }
-            
+            if (modeAjoutJoueursSeulement)  //Pour modifier seulement, on ne touche pas à la date et heure
+            {
+                int tableAChanger = VerifierSiChangementDeTable(rencontreAModifier);
+                int jouteAChanger = VerifierSiChangementDeJoute(rencontreAModifier);
+                
+                DonneesRencontre donneesRencontreAModifier = new DonneesRencontre();
+                donneesRencontreAModifier.DateEtHeure = rencontreAModifier.DateDeJeu;
+                donneesRencontreAModifier.IdTable = rencontreAModifier.Id_Table;
+                donneesRencontreAModifier.IdJoute = rencontreAModifier.Id_Joute;
 
+                List<Joueur> joueursAJouter = AjouterJoueursDansPartie();
+                int rencontreAffectee = controleur.ModifierRencontrePartieJoueur(donneesRencontreAModifier, joueursAJouter);
+                if (rencontreAffectee == 0) { MessageBox.Show("Créer nouvelle partie"); }
+                else MessageBox.Show("Partie déjà créée");
+
+                // verifier si on doit créer un nouveau lien session_table_game
+
+            }
+        }
+
+        private int VerifierSiChangementDeJoute(Rencontre rencontreAModifier)
+        {
+            int.TryParse((string)comboBoxRonde.SelectedItem, out int result);
+            int rondeDansComboBox = result;
+            int rondeDansRencontreAModifier = rencontreAModifier.Id_Joute;
+            if (rondeDansComboBox != rondeDansRencontreAModifier) return rondeDansComboBox;
+            else return rondeDansRencontreAModifier;
+        }
+
+        private int VerifierSiChangementDeTable(Rencontre rencontreAModifier)
+        {
+            int.TryParse((string)comboBoxPupitre.SelectedItem, out int result);
+            int tableDansComboBox = result;
+            int tableDansRencontreAModifier = rencontreAModifier.Id_Table;
+            if (tableDansComboBox != tableDansRencontreAModifier) return tableDansComboBox;
+            else return tableDansRencontreAModifier;
+        }
+
+        private List<Joueur> AjouterJoueursDansPartie()
+        {
+            List<Joueur> joueurs = new List<Joueur>();
+            joueurs.Add(comboBoxJoueur1.SelectedItem as Joueur);
+            joueurs.Add(comboBoxJoueur2.SelectedItem as Joueur);
+            joueurs.Add(comboBoxJoueur3.SelectedItem as Joueur);
+            joueurs.Add(comboBoxJoueur4.SelectedItem as Joueur);
+            return joueurs;
         }
 
         private List<RencontresDataGrid> AjouterNouvelleSession(DonneesRencontre nouvellesDonneesRencontre)
