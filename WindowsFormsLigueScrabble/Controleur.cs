@@ -199,7 +199,7 @@ namespace WindowsFormsLigueScrabble
             }
             foreach (var tableAVerifier in tablesDansBD)
             {
-                if (nouvelledonneeRencontre.Table == tableAVerifier.NoTable)
+                if (nouvelledonneeRencontre.NoTable == tableAVerifier.NoTable)
                 {
                     idTableDansBD = tableAVerifier.IDTable;
                     listeTablesAvecMatch.Add(idTableDansBD);
@@ -209,7 +209,7 @@ namespace WindowsFormsLigueScrabble
             }
             foreach (var partieAVerifier in partiesDansBD)
             {
-                if (nouvelledonneeRencontre.Partie == partieAVerifier.NoPartie)
+                if (nouvelledonneeRencontre.NoPartie == partieAVerifier.NoPartie)
                 {
                     idPartieDansBD = partieAVerifier.IdPartie;
                     listePartiesAvecMatch.Add(idPartieDansBD);

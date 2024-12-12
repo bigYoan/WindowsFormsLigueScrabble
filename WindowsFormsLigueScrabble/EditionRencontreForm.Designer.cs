@@ -59,14 +59,16 @@
             this.comboBoxJoueur2 = new System.Windows.Forms.ComboBox();
             this.buttonQuitterTout = new System.Windows.Forms.Button();
             this.labelSession = new System.Windows.Forms.Label();
+            this.dataGridViewRencontres = new System.Windows.Forms.DataGridView();
             this.panelPupitre.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewRencontres)).BeginInit();
             this.SuspendLayout();
             // 
             // labelDateSession
             // 
             this.labelDateSession.AutoSize = true;
             this.labelDateSession.Font = new System.Drawing.Font("Verdana", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelDateSession.Location = new System.Drawing.Point(38, 64);
+            this.labelDateSession.Location = new System.Drawing.Point(44, 263);
             this.labelDateSession.Name = "labelDateSession";
             this.labelDateSession.Size = new System.Drawing.Size(75, 25);
             this.labelDateSession.TabIndex = 1;
@@ -76,7 +78,7 @@
             // 
             this.labelJoueur1.AutoSize = true;
             this.labelJoueur1.Font = new System.Drawing.Font("Verdana", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelJoueur1.Location = new System.Drawing.Point(38, 242);
+            this.labelJoueur1.Location = new System.Drawing.Point(44, 441);
             this.labelJoueur1.Name = "labelJoueur1";
             this.labelJoueur1.Size = new System.Drawing.Size(134, 25);
             this.labelJoueur1.TabIndex = 3;
@@ -86,7 +88,7 @@
             // 
             this.labelJoueur2.AutoSize = true;
             this.labelJoueur2.Font = new System.Drawing.Font("Verdana", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelJoueur2.Location = new System.Drawing.Point(473, 242);
+            this.labelJoueur2.Location = new System.Drawing.Point(479, 441);
             this.labelJoueur2.Name = "labelJoueur2";
             this.labelJoueur2.Size = new System.Drawing.Size(134, 25);
             this.labelJoueur2.TabIndex = 5;
@@ -96,7 +98,7 @@
             // 
             this.labelJoueur3.AutoSize = true;
             this.labelJoueur3.Font = new System.Drawing.Font("Verdana", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelJoueur3.Location = new System.Drawing.Point(38, 291);
+            this.labelJoueur3.Location = new System.Drawing.Point(44, 490);
             this.labelJoueur3.Name = "labelJoueur3";
             this.labelJoueur3.Size = new System.Drawing.Size(134, 25);
             this.labelJoueur3.TabIndex = 7;
@@ -106,7 +108,7 @@
             // 
             this.labelPupitre.AutoSize = true;
             this.labelPupitre.Font = new System.Drawing.Font("Verdana", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelPupitre.Location = new System.Drawing.Point(38, 178);
+            this.labelPupitre.Location = new System.Drawing.Point(44, 377);
             this.labelPupitre.Name = "labelPupitre";
             this.labelPupitre.Size = new System.Drawing.Size(175, 25);
             this.labelPupitre.TabIndex = 9;
@@ -116,7 +118,7 @@
             // 
             this.labelRonde.AutoSize = true;
             this.labelRonde.Font = new System.Drawing.Font("Verdana", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelRonde.Location = new System.Drawing.Point(38, 140);
+            this.labelRonde.Location = new System.Drawing.Point(44, 339);
             this.labelRonde.Name = "labelRonde";
             this.labelRonde.Size = new System.Drawing.Size(207, 25);
             this.labelRonde.TabIndex = 11;
@@ -126,7 +128,7 @@
             // 
             this.labelHeure.AutoSize = true;
             this.labelHeure.Font = new System.Drawing.Font("Verdana", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelHeure.Location = new System.Drawing.Point(38, 102);
+            this.labelHeure.Location = new System.Drawing.Point(44, 301);
             this.labelHeure.Name = "labelHeure";
             this.labelHeure.Size = new System.Drawing.Size(89, 25);
             this.labelHeure.TabIndex = 13;
@@ -136,7 +138,7 @@
             // 
             this.labelJoueur4.AutoSize = true;
             this.labelJoueur4.Font = new System.Drawing.Font("Verdana", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelJoueur4.Location = new System.Drawing.Point(473, 291);
+            this.labelJoueur4.Location = new System.Drawing.Point(479, 490);
             this.labelJoueur4.Name = "labelJoueur4";
             this.labelJoueur4.Size = new System.Drawing.Size(134, 25);
             this.labelJoueur4.TabIndex = 15;
@@ -146,7 +148,7 @@
             // 
             this.panelPupitre.BackColor = System.Drawing.Color.Maroon;
             this.panelPupitre.Controls.Add(this.labelTablePanel);
-            this.panelPupitre.Location = new System.Drawing.Point(545, 58);
+            this.panelPupitre.Location = new System.Drawing.Point(551, 257);
             this.panelPupitre.Name = "panelPupitre";
             this.panelPupitre.Size = new System.Drawing.Size(303, 100);
             this.panelPupitre.TabIndex = 16;
@@ -168,7 +170,7 @@
             this.labelPlayer1.BackColor = System.Drawing.Color.Maroon;
             this.labelPlayer1.Font = new System.Drawing.Font("Verdana", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelPlayer1.ForeColor = System.Drawing.Color.SeaShell;
-            this.labelPlayer1.Location = new System.Drawing.Point(577, 61);
+            this.labelPlayer1.Location = new System.Drawing.Point(583, 260);
             this.labelPlayer1.Name = "labelPlayer1";
             this.labelPlayer1.Size = new System.Drawing.Size(95, 20);
             this.labelPlayer1.TabIndex = 17;
@@ -180,7 +182,7 @@
             this.labelPlayer3.BackColor = System.Drawing.Color.Maroon;
             this.labelPlayer3.Font = new System.Drawing.Font("Verdana", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelPlayer3.ForeColor = System.Drawing.Color.SeaShell;
-            this.labelPlayer3.Location = new System.Drawing.Point(577, 136);
+            this.labelPlayer3.Location = new System.Drawing.Point(583, 335);
             this.labelPlayer3.Name = "labelPlayer3";
             this.labelPlayer3.Size = new System.Drawing.Size(95, 20);
             this.labelPlayer3.TabIndex = 17;
@@ -192,7 +194,7 @@
             this.labelPlayer2.BackColor = System.Drawing.Color.Maroon;
             this.labelPlayer2.Font = new System.Drawing.Font("Verdana", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelPlayer2.ForeColor = System.Drawing.Color.SeaShell;
-            this.labelPlayer2.Location = new System.Drawing.Point(722, 61);
+            this.labelPlayer2.Location = new System.Drawing.Point(728, 260);
             this.labelPlayer2.Name = "labelPlayer2";
             this.labelPlayer2.Size = new System.Drawing.Size(95, 20);
             this.labelPlayer2.TabIndex = 17;
@@ -204,7 +206,7 @@
             this.labelPlayer4.BackColor = System.Drawing.Color.Maroon;
             this.labelPlayer4.Font = new System.Drawing.Font("Verdana", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelPlayer4.ForeColor = System.Drawing.Color.SeaShell;
-            this.labelPlayer4.Location = new System.Drawing.Point(722, 136);
+            this.labelPlayer4.Location = new System.Drawing.Point(728, 335);
             this.labelPlayer4.Name = "labelPlayer4";
             this.labelPlayer4.Size = new System.Drawing.Size(95, 20);
             this.labelPlayer4.TabIndex = 17;
@@ -216,7 +218,7 @@
             this.labelPlace2.BackColor = System.Drawing.Color.IndianRed;
             this.labelPlace2.Font = new System.Drawing.Font("Verdana", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelPlace2.ForeColor = System.Drawing.Color.Yellow;
-            this.labelPlace2.Location = new System.Drawing.Point(735, 28);
+            this.labelPlace2.Location = new System.Drawing.Point(741, 227);
             this.labelPlace2.Name = "labelPlace2";
             this.labelPlace2.Size = new System.Drawing.Size(0, 20);
             this.labelPlace2.TabIndex = 18;
@@ -228,7 +230,7 @@
             this.labelPlace4.BackColor = System.Drawing.Color.IndianRed;
             this.labelPlace4.Font = new System.Drawing.Font("Verdana", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelPlace4.ForeColor = System.Drawing.Color.Yellow;
-            this.labelPlace4.Location = new System.Drawing.Point(735, 171);
+            this.labelPlace4.Location = new System.Drawing.Point(741, 370);
             this.labelPlace4.Name = "labelPlace4";
             this.labelPlace4.Size = new System.Drawing.Size(0, 20);
             this.labelPlace4.TabIndex = 19;
@@ -239,7 +241,7 @@
             this.labelPlace3.BackColor = System.Drawing.Color.IndianRed;
             this.labelPlace3.Font = new System.Drawing.Font("Verdana", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelPlace3.ForeColor = System.Drawing.Color.Yellow;
-            this.labelPlace3.Location = new System.Drawing.Point(562, 168);
+            this.labelPlace3.Location = new System.Drawing.Point(568, 367);
             this.labelPlace3.Name = "labelPlace3";
             this.labelPlace3.Size = new System.Drawing.Size(0, 20);
             this.labelPlace3.TabIndex = 20;
@@ -250,7 +252,7 @@
             this.labelPlace1.BackColor = System.Drawing.Color.IndianRed;
             this.labelPlace1.Font = new System.Drawing.Font("Verdana", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelPlace1.ForeColor = System.Drawing.Color.Yellow;
-            this.labelPlace1.Location = new System.Drawing.Point(562, 28);
+            this.labelPlace1.Location = new System.Drawing.Point(568, 227);
             this.labelPlace1.Name = "labelPlace1";
             this.labelPlace1.Size = new System.Drawing.Size(0, 20);
             this.labelPlace1.TabIndex = 21;
@@ -259,7 +261,7 @@
             // 
             this.buttonConfirmerAjout.BackColor = System.Drawing.Color.Yellow;
             this.buttonConfirmerAjout.Font = new System.Drawing.Font("Verdana", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonConfirmerAjout.Location = new System.Drawing.Point(43, 390);
+            this.buttonConfirmerAjout.Location = new System.Drawing.Point(34, 544);
             this.buttonConfirmerAjout.Name = "buttonConfirmerAjout";
             this.buttonConfirmerAjout.Size = new System.Drawing.Size(185, 48);
             this.buttonConfirmerAjout.TabIndex = 22;
@@ -271,7 +273,7 @@
             // 
             this.buttonEffacer.BackColor = System.Drawing.Color.Lime;
             this.buttonEffacer.Font = new System.Drawing.Font("Verdana", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonEffacer.Location = new System.Drawing.Point(265, 390);
+            this.buttonEffacer.Location = new System.Drawing.Point(256, 544);
             this.buttonEffacer.Name = "buttonEffacer";
             this.buttonEffacer.Size = new System.Drawing.Size(185, 48);
             this.buttonEffacer.TabIndex = 22;
@@ -283,7 +285,7 @@
             // 
             this.buttonQuitter.BackColor = System.Drawing.Color.Red;
             this.buttonQuitter.Font = new System.Drawing.Font("Verdana", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonQuitter.Location = new System.Drawing.Point(488, 390);
+            this.buttonQuitter.Location = new System.Drawing.Point(479, 544);
             this.buttonQuitter.Name = "buttonQuitter";
             this.buttonQuitter.Size = new System.Drawing.Size(185, 48);
             this.buttonQuitter.TabIndex = 22;
@@ -299,10 +301,11 @@
             this.dateTimePickerNewSession.CustomFormat = "dd MMM";
             this.dateTimePickerNewSession.Font = new System.Drawing.Font("Verdana", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.dateTimePickerNewSession.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.dateTimePickerNewSession.Location = new System.Drawing.Point(254, 61);
+            this.dateTimePickerNewSession.Location = new System.Drawing.Point(260, 260);
             this.dateTimePickerNewSession.Name = "dateTimePickerNewSession";
             this.dateTimePickerNewSession.Size = new System.Drawing.Size(133, 32);
             this.dateTimePickerNewSession.TabIndex = 23;
+            this.dateTimePickerNewSession.Value = new System.DateTime(2024, 11, 1, 0, 0, 0, 0);
             // 
             // comboBoxHeure
             // 
@@ -315,7 +318,7 @@
             "15h",
             "14h",
             "13h"});
-            this.comboBoxHeure.Location = new System.Drawing.Point(254, 99);
+            this.comboBoxHeure.Location = new System.Drawing.Point(260, 298);
             this.comboBoxHeure.Name = "comboBoxHeure";
             this.comboBoxHeure.Size = new System.Drawing.Size(59, 33);
             this.comboBoxHeure.TabIndex = 24;
@@ -328,7 +331,7 @@
             "1",
             "2",
             "3"});
-            this.comboBoxRonde.Location = new System.Drawing.Point(254, 137);
+            this.comboBoxRonde.Location = new System.Drawing.Point(260, 336);
             this.comboBoxRonde.Name = "comboBoxRonde";
             this.comboBoxRonde.Size = new System.Drawing.Size(59, 33);
             this.comboBoxRonde.TabIndex = 25;
@@ -346,7 +349,7 @@
             "6",
             "7",
             "8"});
-            this.comboBoxPupitre.Location = new System.Drawing.Point(254, 175);
+            this.comboBoxPupitre.Location = new System.Drawing.Point(260, 374);
             this.comboBoxPupitre.Name = "comboBoxPupitre";
             this.comboBoxPupitre.Size = new System.Drawing.Size(59, 33);
             this.comboBoxPupitre.TabIndex = 26;
@@ -362,7 +365,7 @@
             "15h",
             "14h",
             "13h"});
-            this.comboBoxJoueur1.Location = new System.Drawing.Point(190, 239);
+            this.comboBoxJoueur1.Location = new System.Drawing.Point(196, 438);
             this.comboBoxJoueur1.Name = "comboBoxJoueur1";
             this.comboBoxJoueur1.Size = new System.Drawing.Size(227, 33);
             this.comboBoxJoueur1.TabIndex = 27;
@@ -379,7 +382,7 @@
             "15h",
             "14h",
             "13h"});
-            this.comboBoxJoueur3.Location = new System.Drawing.Point(190, 288);
+            this.comboBoxJoueur3.Location = new System.Drawing.Point(196, 487);
             this.comboBoxJoueur3.Name = "comboBoxJoueur3";
             this.comboBoxJoueur3.Size = new System.Drawing.Size(227, 33);
             this.comboBoxJoueur3.TabIndex = 28;
@@ -396,7 +399,7 @@
             "15h",
             "14h",
             "13h"});
-            this.comboBoxJoueur4.Location = new System.Drawing.Point(638, 288);
+            this.comboBoxJoueur4.Location = new System.Drawing.Point(644, 487);
             this.comboBoxJoueur4.Name = "comboBoxJoueur4";
             this.comboBoxJoueur4.Size = new System.Drawing.Size(227, 33);
             this.comboBoxJoueur4.TabIndex = 30;
@@ -413,7 +416,7 @@
             "15h",
             "14h",
             "13h"});
-            this.comboBoxJoueur2.Location = new System.Drawing.Point(638, 239);
+            this.comboBoxJoueur2.Location = new System.Drawing.Point(644, 438);
             this.comboBoxJoueur2.Name = "comboBoxJoueur2";
             this.comboBoxJoueur2.Size = new System.Drawing.Size(227, 33);
             this.comboBoxJoueur2.TabIndex = 29;
@@ -424,7 +427,7 @@
             this.buttonQuitterTout.BackColor = System.Drawing.Color.DarkRed;
             this.buttonQuitterTout.Font = new System.Drawing.Font("Verdana", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.buttonQuitterTout.ForeColor = System.Drawing.Color.Yellow;
-            this.buttonQuitterTout.Location = new System.Drawing.Point(708, 390);
+            this.buttonQuitterTout.Location = new System.Drawing.Point(699, 544);
             this.buttonQuitterTout.Name = "buttonQuitterTout";
             this.buttonQuitterTout.Size = new System.Drawing.Size(185, 48);
             this.buttonQuitterTout.TabIndex = 22;
@@ -436,17 +439,30 @@
             // 
             this.labelSession.AutoSize = true;
             this.labelSession.Font = new System.Drawing.Font("Verdana", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelSession.Location = new System.Drawing.Point(249, 28);
+            this.labelSession.Location = new System.Drawing.Point(255, 227);
             this.labelSession.Name = "labelSession";
             this.labelSession.Size = new System.Drawing.Size(89, 25);
             this.labelSession.TabIndex = 1;
             this.labelSession.Text = "Session";
             // 
+            // dataGridViewRencontres
+            // 
+            this.dataGridViewRencontres.BackgroundColor = System.Drawing.Color.IndianRed;
+            this.dataGridViewRencontres.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.dataGridViewRencontres.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridViewRencontres.Location = new System.Drawing.Point(26, 12);
+            this.dataGridViewRencontres.Name = "dataGridViewRencontres";
+            this.dataGridViewRencontres.RowHeadersWidth = 51;
+            this.dataGridViewRencontres.RowTemplate.Height = 24;
+            this.dataGridViewRencontres.Size = new System.Drawing.Size(885, 190);
+            this.dataGridViewRencontres.TabIndex = 31;
+            // 
             // EditionRencontreForm
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Inherit;
             this.BackColor = System.Drawing.Color.IndianRed;
-            this.ClientSize = new System.Drawing.Size(925, 450);
+            this.ClientSize = new System.Drawing.Size(925, 622);
+            this.Controls.Add(this.dataGridViewRencontres);
             this.Controls.Add(this.comboBoxJoueur4);
             this.Controls.Add(this.comboBoxJoueur2);
             this.Controls.Add(this.comboBoxJoueur3);
@@ -482,6 +498,7 @@
             this.Load += new System.EventHandler(this.EditionRencontreForm_Load);
             this.panelPupitre.ResumeLayout(false);
             this.panelPupitre.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewRencontres)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -519,5 +536,6 @@
         private System.Windows.Forms.ComboBox comboBoxJoueur2;
         private System.Windows.Forms.Button buttonQuitterTout;
         private System.Windows.Forms.Label labelSession;
+        private System.Windows.Forms.DataGridView dataGridViewRencontres;
     }
 }

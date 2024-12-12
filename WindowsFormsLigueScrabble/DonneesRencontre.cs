@@ -10,15 +10,15 @@ namespace WindowsFormsLigueScrabble
     {
         DateTime dateEtHeure;
         int idSession;
-        int table;
-        int partie;
+        int noTable;
+        int noPartie;
         int idTable;
         int idJoute;
         List<Joueur> joueurs;
 
         public DateTime DateEtHeure { get => dateEtHeure; set => dateEtHeure = value; }
-        public int Table { get => table; set => table = value; }
-        public int Partie { get => partie; set => partie = value; }
+        public int NoTable { get => noTable; set => noTable = value; }
+        public int NoPartie { get => noPartie; set => noPartie = value; }
         public int IdTable { get => idTable; set => idTable = value; }
         public int IdJoute { get => idJoute; set => idJoute = value; }
         public int IdSession { get => idSession; set => idSession = value; }

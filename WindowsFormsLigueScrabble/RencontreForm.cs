@@ -93,6 +93,8 @@ namespace WindowsFormsLigueScrabble
         {
             Rencontre rencontreAModifier = new Rencontre();
             if (controleur.rencontres.Count == 0) return;
+            rencontreAModifier = (Rencontre)dataGridViewSessions["Session", dataGridViewSessions.CurrentRow.Index].Value;
+            //rencontreAModifier.DateDeJeu = (DateTime)dataGridViewSessions["Session", dataGridViewSessions.CurrentRow.Index].Value;
             rencontreAModifier.IdSession = (int)dataGridViewSessions["IdSession", dataGridViewSessions.CurrentRow.Index].Value;
             rencontreAModifier.Id_Joute = (int)dataGridViewSessions["Id_Ronde", dataGridViewSessions.CurrentRow.Index].Value;
             rencontreAModifier.Id_Table = (int)dataGridViewSessions["Id_Table", dataGridViewSessions.CurrentRow.Index].Value;

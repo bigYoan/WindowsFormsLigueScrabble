@@ -98,6 +98,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ChangementDeJoute.cs" />
+    <Compile Include="ChangementDeTable.cs" />
     <Compile Include="DonneesRencontre.cs" />
     <Compile Include="EditionRencontreForm.cs">
       <SubType>Form</SubType>

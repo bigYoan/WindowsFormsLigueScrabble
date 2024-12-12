@@ -67,7 +67,7 @@
             this.buttonTerminer.Name = "buttonTerminer";
             this.buttonTerminer.Size = new System.Drawing.Size(147, 52);
             this.buttonTerminer.TabIndex = 9;
-            this.buttonTerminer.Text = "Terminé";
+            this.buttonTerminer.Text = "Fermer";
             this.buttonTerminer.UseVisualStyleBackColor = true;
             this.buttonTerminer.Click += new System.EventHandler(this.buttonTerminer_Click);
             // 
@@ -82,7 +82,7 @@
             this.buttonModifierSession.FlatAppearance.BorderSize = 0;
             this.buttonModifierSession.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonModifierSession.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonModifierSession.Location = new System.Drawing.Point(112, 37);
+            this.buttonModifierSession.Location = new System.Drawing.Point(107, 37);
             this.buttonModifierSession.Name = "buttonModifierSession";
             this.buttonModifierSession.Size = new System.Drawing.Size(45, 44);
             this.buttonModifierSession.TabIndex = 6;
@@ -101,7 +101,7 @@
             this.buttonSupprimerSession.FlatAppearance.BorderSize = 0;
             this.buttonSupprimerSession.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonSupprimerSession.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonSupprimerSession.Location = new System.Drawing.Point(186, 37);
+            this.buttonSupprimerSession.Location = new System.Drawing.Point(189, 37);
             this.buttonSupprimerSession.Name = "buttonSupprimerSession";
             this.buttonSupprimerSession.Size = new System.Drawing.Size(45, 44);
             this.buttonSupprimerSession.TabIndex = 7;
@@ -121,7 +121,7 @@
             this.buttonAjouterSession.FlatAppearance.BorderSize = 0;
             this.buttonAjouterSession.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonAjouterSession.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonAjouterSession.Location = new System.Drawing.Point(37, 37);
+            this.buttonAjouterSession.Location = new System.Drawing.Point(26, 37);
             this.buttonAjouterSession.Name = "buttonAjouterSession";
             this.buttonAjouterSession.Size = new System.Drawing.Size(45, 44);
             this.buttonAjouterSession.TabIndex = 8;
@@ -157,13 +157,13 @@
             this.groupBoxModifierDetruire.Controls.Add(this.buttonAjouterSession);
             this.groupBoxModifierDetruire.Controls.Add(this.buttonSupprimerSession);
             this.groupBoxModifierDetruire.Controls.Add(this.buttonModifierSession);
-            this.groupBoxModifierDetruire.Font = new System.Drawing.Font("Verdana", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.groupBoxModifierDetruire.Font = new System.Drawing.Font("Verdana", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupBoxModifierDetruire.Location = new System.Drawing.Point(27, 26);
             this.groupBoxModifierDetruire.Name = "groupBoxModifierDetruire";
             this.groupBoxModifierDetruire.Size = new System.Drawing.Size(272, 110);
             this.groupBoxModifierDetruire.TabIndex = 12;
             this.groupBoxModifierDetruire.TabStop = false;
-            this.groupBoxModifierDetruire.Text = "Éditer une session";
+            this.groupBoxModifierDetruire.Text = "Ajouter Modifier Détruire";
             // 
             // groupBoxTriage
             // 
