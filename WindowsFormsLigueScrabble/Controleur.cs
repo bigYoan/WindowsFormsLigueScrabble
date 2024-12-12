@@ -268,5 +268,28 @@ namespace WindowsFormsLigueScrabble
 
             return 1;
         }
+
+        internal LiensSessionTablePartie TrouverLiens(DonneesRencontre donneesRencontreAModifier)
+        {
+            List<LiensSessionTablePartie> liensTrouves = dB_Manager.ListerLiensSessionTablePartie("");
+            int id_Joute = donneesRencontreAModifier.IdJoute;
+            foreach (var LienAVerifier in liensTrouves)
+            {
+                if (id_Joute == LienAVerifier.IdPartie)
+                {
+                    return LienAVerifier;
+                }
+            }
+            return null;
+        }
+
+        internal int CreerLienSession_Table_Game(DonneesRencontre donneesRencontreAModifier)
+        {
+            int id_Session = donneesRencontreAModifier.IdSession;
+            int id_Table = donneesRencontreAModifier.IdTable;
+            int id_Joute = donneesRencontreAModifier.IdJoute;
+            int lienCree = dB_Manager.CreerLiens_Session_Table_Partie(id_Session, id_Table, id_Joute);
+            return lienCree;
+        }
     }
 }

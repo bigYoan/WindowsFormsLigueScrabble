@@ -9,6 +9,7 @@ namespace WindowsFormsLigueScrabble
     internal class DonneesRencontre
     {
         DateTime dateEtHeure;
+        int idSession;
         int table;
         int partie;
         int idTable;
@@ -20,6 +21,7 @@ namespace WindowsFormsLigueScrabble
         public int Partie { get => partie; set => partie = value; }
         public int IdTable { get => idTable; set => idTable = value; }
         public int IdJoute { get => idJoute; set => idJoute = value; }
+        public int IdSession { get => idSession; set => idSession = value; }
         internal List<Joueur> Joueurs { get => joueurs; set => joueurs = value; }
     }
 }

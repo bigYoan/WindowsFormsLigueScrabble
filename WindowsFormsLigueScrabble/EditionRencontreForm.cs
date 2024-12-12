@@ -178,7 +178,11 @@ namespace WindowsFormsLigueScrabble
                 else MessageBox.Show("Partie déjà créée");
 
                 // verifier si on doit créer un nouveau lien session_table_game
-
+                LiensSessionTablePartie lienExistant = controleur.TrouverLiens(donneesRencontreAModifier);
+                if (lienExistant == null)
+                {
+                    int lienCree = controleur.CreerLienSession_Table_Game(donneesRencontreAModifier);
+                }
             }
         }
 
