@@ -32,6 +32,7 @@ namespace WindowsFormsLigueScrabble
             buttonAjouterJoueur.Enabled = false;
             buttonModifierJoueur.Enabled = false;
             buttonSupprimerJoueur.Enabled = false;
+            ChangerImageBoutons();
         }
 
         private void buttonAjouterJoueur_Click(object sender, EventArgs e)
@@ -337,6 +338,7 @@ namespace WindowsFormsLigueScrabble
             buttonModifierJoueur.Enabled = true;
             buttonSupprimerJoueur.Enabled = true;
             buttonAjouterJoueur.Enabled = false;
+            ChangerImageBoutons();
             
         }
         private void buttonConfirmMouseHover(object sender, EventArgs e)
@@ -379,9 +381,12 @@ namespace WindowsFormsLigueScrabble
 
             if (!VerifierDuplicationID(codeJoueur))
             {
-                string prenomJoueur = textBoxNom.Text; ;
-                if (prenomJoueur.Length > 0) { buttonAjouterJoueur.Enabled = true; }
-                else buttonAjouterJoueur.Enabled = false;
+                //string prenomJoueur = textBoxNom.Text;
+                //if (prenomJoueur.Length > 0)
+                { buttonAjouterJoueur.Enabled = true; }
+                ChangerImageBoutons();
+                //else
+                //{ buttonAjouterJoueur.Enabled = false; }
             }
             else
             {
@@ -396,12 +401,34 @@ namespace WindowsFormsLigueScrabble
                         textBoxNoFqcsf.Text = joueurAVerifier.Fqcsf;
                         buttonModifierJoueur.Enabled = true;
                         buttonSupprimerJoueur.Enabled = true;
+                        ChangerImageBoutons();
                         ancienJoueurAModifier = joueurAVerifier;
                         AjusterFocusDataGridView(codeJoueur);
                     }
                 }
+                buttonAjouterJoueur.Enabled = false;
+                ChangerImageBoutons();
             }
             
+        }
+
+        private void ChangerImageBoutons()
+        {
+            
+            string dossierImages = "..\\..\\Images\\";
+            string butAjoutDis = dossierImages + "AjouterJoueurImageBoutonV2-Disabled.png";
+            string butAjoutEn = dossierImages + "AjouterJoueurImageBoutonV2.png";
+            string butModifDis = dossierImages + "ModifierJoueurImageBoutonV2-Disabled.png";
+            string butModifEn = dossierImages + "ModifierJoueurImageBoutonV2.png";
+            string butSupprDis = dossierImages + "RetirerJoueurImageBoutonV2-Disabled.png";
+            string butSupprEn = dossierImages + "RetirerJoueurImageBoutonV2.png";
+
+            if (!buttonAjouterJoueur.Enabled) buttonAjouterJoueur.BackgroundImage = Image.FromFile(butAjoutDis);
+            else buttonAjouterJoueur.BackgroundImage = Image.FromFile(butAjoutEn);
+            if (!buttonModifierJoueur.Enabled) buttonModifierJoueur.BackgroundImage = Image.FromFile(butModifDis);
+            else buttonModifierJoueur.BackgroundImage = Image.FromFile(butModifEn);
+            if (!buttonSupprimerJoueur.Enabled) buttonSupprimerJoueur.BackgroundImage = Image.FromFile(butSupprDis);
+            else buttonSupprimerJoueur.BackgroundImage = Image.FromFile(butSupprEn);
         }
 
         private void ButtonEffacer_Click(object sender, EventArgs e)
@@ -410,6 +437,7 @@ namespace WindowsFormsLigueScrabble
             buttonAjouterJoueur.Enabled = false;
             buttonSupprimerJoueur.Enabled = false;
             buttonModifierJoueur.Enabled = false;
+            ChangerImageBoutons();
             dataGridViewJoueurs.ClearSelection();
         }
     }

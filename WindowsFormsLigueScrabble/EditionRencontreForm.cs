@@ -195,12 +195,6 @@ namespace WindowsFormsLigueScrabble
 
         private void buttonConfirmerAjout_Click(object sender, EventArgs e)
         {
-            if (!VerifierLesDonnees()) return;
-            int heureDansComboBox = ConvertirComboBoxHeure();
-            DateTime dateDansPicker = dateTimePickerNewSession.Value.AddHours(heureDansComboBox);
-
-             
-
             // Ajout d'une nouvelle session, avec nouvelle table et nouvelle partie
             if (modificationAFaire == ajouterNouvelleSession)
             {
@@ -234,26 +228,13 @@ namespace WindowsFormsLigueScrabble
             //Pour ajouter des joueurs, on ne touche pas à la date, heure, table et joute
             if (modificationAFaire == ajouterJoueursSeulement)  
             {
-                bool changerTable = VerifierSiChangementDeTable(rencontreAModifier).TableChangee;
-                bool changerJoute = VerifierSiChangementDeJoute(rencontreAModifier).JouteChangee;
-                
+                if (!VerifierLesDonnees()) return;
 
-                DonneesRencontre donneesRencontreAModifier = new DonneesRencontre();
-                donneesRencontreAModifier.DateEtHeure = rencontreAModifier.DateDeJeu;
-                donneesRencontreAModifier.IdTable = rencontreAModifier.Id_Table;
-                donneesRencontreAModifier.IdJoute = rencontreAModifier.Id_Joute;
 
                 List<Joueur> joueursAJouter = AjouterJoueursDansPartie();
-                int rencontreAffectee = controleur.ModifierRencontrePartieJoueur(donneesRencontreAModifier, joueursAJouter);
-                if (rencontreAffectee == 0) { MessageBox.Show("Créer nouvelle partie"); }
-                else MessageBox.Show("Partie déjà créée");
-
-                // verifier si on doit créer un nouveau lien session_table_game
-                LiensSessionTablePartie lienExistant = controleur.TrouverLiens(donneesRencontreAModifier);
-                if (lienExistant == null)
-                {
-                    int lienCree = controleur.CreerLienSession_Table_Game(donneesRencontreAModifier);
-                }
+                int lignesDbAffectees = controleur.GererJoute(rencontreAModifier, joueursAJouter);
+                if (lignesDbAffectees != 0) { MessageBox.Show("Ajout réussi."); }
+                else { MessageBox.Show("Ajout impossible."); }
                 AfficherLesDonneesDeRencontreAModifier(rencontreAModifier);
                 
             }
@@ -301,10 +282,19 @@ namespace WindowsFormsLigueScrabble
         private List<Joueur> AjouterJoueursDansPartie()
         {
             List<Joueur> joueurs = new List<Joueur>();
-            joueurs.Add(comboBoxJoueur1.SelectedItem as Joueur);
-            joueurs.Add(comboBoxJoueur2.SelectedItem as Joueur);
-            joueurs.Add(comboBoxJoueur3.SelectedItem as Joueur);
-            joueurs.Add(comboBoxJoueur4.SelectedItem as Joueur);
+
+            Joueur joueur1 = comboBoxJoueur1.SelectedItem as Joueur;
+            if (joueur1 != null && joueur1.Nom.Replace(" ", "") != "(vide)") { joueurs.Add(joueur1); }
+
+            Joueur joueur2 = comboBoxJoueur2.SelectedItem as Joueur;
+            if (joueur2 != null && joueur2.Nom.Replace(" ", "") != "(vide)") { joueurs.Add(joueur2); }
+
+            Joueur joueur3 = comboBoxJoueur3.SelectedItem as Joueur;
+            if (joueur3 != null && joueur3.Nom.Replace(" ", "") != "(vide)") { joueurs.Add(joueur3); }
+
+            Joueur joueur4 = comboBoxJoueur4.SelectedItem as Joueur;
+            if (joueur4 != null && joueur4.Nom.Replace(" ", "") != "(vide)") { joueurs.Add(joueur4); }
+
             return joueurs;
         }
 
@@ -338,9 +328,12 @@ namespace WindowsFormsLigueScrabble
         {
             bool dateOk = dateTimePickerNewSession.Value !=null;
             bool heureOk = comboBoxHeure.SelectedItem != null;
+            int heure = heureOk ? ConvertirComboBoxHeure() : 0;
+            heureOk &= heure > 12;
             bool pupitreOk = comboBoxPupitre.SelectedItem != null;
             bool rondeOk = comboBoxRonde.SelectedItem != null;
-            bool joueursok = (comboBoxJoueur1.SelectedItem != null) && (comboBoxJoueur2.SelectedItem != null);
+            int nbJoueurs = AjouterJoueursDansPartie().Count;
+            bool joueursOk = nbJoueurs > 2;
 
             bool ajoutOk = false;
 
@@ -349,11 +342,22 @@ namespace WindowsFormsLigueScrabble
                 MessageBox.Show("Impossible d'ajouter une nouvelle session sans table(s) ni partie(s).");
                 return false;
             }
-            if (dateOk && heureOk && pupitreOk && rondeOk && !joueursok)
+            if (!heureOk)
             {
-                ajoutOk = controleur.DemandeDeConfirmation("Créer une session sans joueurs?");
+                MessageBox.Show("Choisir une heure pour la session.");
             }
-            if (dateOk && heureOk && joueursok && (!pupitreOk || !rondeOk)) { MessageBox.Show("Erreur de données.\nTable et/ou Partie manquantes."); }
+            if (dateOk && heureOk && pupitreOk && rondeOk && !joueursOk)
+            {
+                if (nbJoueurs == 0 && (modificationAFaire == ajouterNouvelleSession)) ajoutOk = controleur.DemandeDeConfirmation("Créer une session sans joueurs?");
+                else if (nbJoueurs <=2 && (modificationAFaire == ajouterJoueursSeulement)) MessageBox.Show("Le nombre de joueurs est insuffisant (3 min.)");
+            }
+
+            if (dateOk && heureOk && pupitreOk && rondeOk && joueursOk)
+            {
+                ajoutOk = controleur.DemandeDeConfirmation("Créer une session avec les joueurs affichés?");
+            }
+
+            if (dateOk && !heureOk && joueursOk && (!pupitreOk || !rondeOk)) { MessageBox.Show("Erreur de données.\nHeure, Table et/ou Partie manquantes."); }
 
             return ajoutOk;
         }

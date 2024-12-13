@@ -101,6 +101,17 @@ namespace WindowsFormsLigueScrabble
             rencontreAModifier.Id_Table = (int)dataGridViewSessions["Id_Table", dataGridViewSessions.CurrentRow.Index].Value;
             rencontreAModifier.NoTable = (int)dataGridViewSessions["table", dataGridViewSessions.CurrentRow.Index].Value;
             rencontreAModifier.NoJoute = (int)dataGridViewSessions["ronde", dataGridViewSessions.CurrentRow.Index].Value;
+            int nombreDeJoueurs = (int)dataGridViewSessions["NombreJoueurs", dataGridViewSessions.CurrentRow.Index].Value;
+            if (nombreDeJoueurs != 0)
+            {
+                string rubrique = "Vous allez être dirigé vers la page d'ajout de scores.";
+                if (!controleur.DemandeDeConfirmation(rubrique)) return;
+                ScoresForm scoresForm = new ScoresForm(controleur, rencontreAModifier);
+                scoresForm.ShowDialog();
+                RemplirDataGridViewRencontre();
+                return;
+            }
+
             EditionRencontreForm editionRencontreForm = new EditionRencontreForm(controleur, rencontreAModifier);
             editionRencontreForm.ShowDialog();
             RemplirDataGridViewRencontre();

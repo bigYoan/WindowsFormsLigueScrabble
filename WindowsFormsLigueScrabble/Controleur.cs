@@ -71,7 +71,7 @@ namespace WindowsFormsLigueScrabble
         public bool DemandeDeConfirmation(string rubriqueAModifier)
         {
             {
-                DialogResult approuveChangement = MessageBox.Show(rubriqueAModifier + "\nCette modification pourrait influencer toute donnée connexe.\nConfirmer...", "Attention!", MessageBoxButtons.OKCancel);
+                DialogResult approuveChangement = MessageBox.Show(rubriqueAModifier + "\n\nCeci influencera toute donnée connexe.\n\nConfirmer...", "Attention!", MessageBoxButtons.OKCancel);
                 return (approuveChangement != DialogResult.Cancel);
             }
         }
@@ -290,6 +290,24 @@ namespace WindowsFormsLigueScrabble
             int id_Joute = donneesRencontreAModifier.IdJoute;
             int lienCree = dB_Manager.CreerLiens_Session_Table_Partie(id_Session, id_Table, id_Joute);
             return lienCree;
+        }
+
+        internal int GererJoute(Rencontre rencontreAModifier, List<Joueur> joueursAJouter)
+        {
+            int lignesAffectees = 0;
+            if (joueursAJouter.Count <= 2) { MessageBox.Show("Un minimum de trois joueurs est requis."); return 0; }
+            lignesAffectees = dB_Manager.AjouterJoueursDansJoute(rencontreAModifier.Id_Joute, rencontreAModifier.NoJoute, joueursAJouter);
+            if (lignesAffectees == 1)
+            {
+                foreach (var rencontreATrouver in rencontres)
+                {
+                    if (rencontreAModifier.IdSession == rencontreATrouver.IdSession)
+                    {
+                        rencontreATrouver.NombreJoueurs = joueursAJouter.Count;
+                    }
+                }
+            }
+            return lignesAffectees;
         }
     }
 }

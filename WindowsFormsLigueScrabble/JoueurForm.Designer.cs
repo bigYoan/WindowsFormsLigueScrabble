@@ -92,7 +92,6 @@
             this.textBoxNom.Name = "textBoxNom";
             this.textBoxNom.Size = new System.Drawing.Size(163, 36);
             this.textBoxNom.TabIndex = 1;
-            this.textBoxNom.TextChanged += new System.EventHandler(this.AnyTextBoxTextChanged);
             // 
             // textBoxPseudo
             // 

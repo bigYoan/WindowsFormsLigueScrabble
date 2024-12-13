@@ -10,6 +10,7 @@ using Mysqlx.Crud;
 using MySqlX.XDevAPI.Relational;
 using MySqlX.XDevAPI;
 using Org.BouncyCastle.Asn1.X509;
+using System.Text.RegularExpressions;
 
 
 namespace WindowsFormsLigueScrabble
@@ -144,15 +145,10 @@ namespace WindowsFormsLigueScrabble
         }
         internal List<RencontresDataGrid> ListerRencontresDansBD(string orderBy)
         {
-            // Dans la BD :    rencontre -> session
-            /* SELECT s.at, pupitre.no, joute.no
-    FROM session s
-    INNER JOIN session_pupitre_joute spj ON spj.session_id = s.id-- Joindre la table de jonction
-    INNER JOIN pupitre ON spj.pupitre_id = pupitre.id-- Joindre la table pupitre
-    INNER JOIN joute ON spj.joute_id = joute.id; --Joindre la table joute */
 
+            //"Game.PlayerOne, Game.PlayerTwo, Game.PlayerThree, Game.PlayerFour "
             string commande_Lister_Session_Table_Game =
-            "SELECT Session.*, _Table.No_Table, Game.No_Ronde, Game.Id_Joute, _Table.Id_Table " +
+            "SELECT Session.*, _Table.No_Table, Game.*, _Table.Id_Table " +
             "FROM session " +
             "LEFT JOIN Session_Table_Game  as stj ON stj.Id_Session = session.Id_Session " +
             "LEFT JOIN _Table ON stj.Id_Table = _Table.Id_Table " +
@@ -167,7 +163,8 @@ namespace WindowsFormsLigueScrabble
             try
             {
                 MySqlConnection sqlConnexion = new MySqlConnection(maConnexionString);
-                //int lignesAffectees = 0;
+                List<string> listeJoueursDansJoute = new List<string>();
+
                 using (sqlConnexion)
                 {
                     sqlConnexion.Open();
@@ -191,6 +188,16 @@ namespace WindowsFormsLigueScrabble
                                 maSession.Ronde = (reader["No_Ronde"].GetType() == typeof(DBNull)) ? 0 : (int)reader["No_Ronde"];
                                 maSession.Id_Table = (reader["Id_Table"].GetType() == typeof(DBNull)) ? 0 : (int)reader["Id_Table"];
                                 maSession.Table = (reader["No_Table"].GetType() == typeof(DBNull)) ? 0 : (int)reader["No_Table"];
+                                listeJoueursDansJoute.Clear();
+                                string playerOne = (reader["PlayerOne"].GetType() == typeof(DBNull)) ? "" : (string)reader["PlayerOne"];
+                                if (playerOne != "") listeJoueursDansJoute.Add(playerOne);
+                                string playerTwo = (reader["PlayerTwo"].GetType() == typeof(DBNull)) ? "" : (string)reader["PlayerTwo"];
+                                if (playerTwo != "") listeJoueursDansJoute.Add(playerOne);
+                                string playerThree = (reader["PlayerThree"].GetType() == typeof(DBNull)) ? "" : (string)reader["PlayerThree"];
+                                if (playerThree != "") listeJoueursDansJoute.Add(playerOne);
+                                string playerFour = (reader["PlayerFour"].GetType() == typeof(DBNull)) ? "" : (string)reader["PlayerFour"];
+                                if (playerFour != "") listeJoueursDansJoute.Add(playerOne);
+                                maSession.NombreJoueurs = listeJoueursDansJoute.Count;
                                 sessions.Add(maSession);
                             }
                         }
@@ -201,6 +208,7 @@ namespace WindowsFormsLigueScrabble
             }
             catch (Exception) { throw; }
         }
+
 
         internal List<LienTableSession> ListerLiensRencontre_Table(string orderBy)
         {
@@ -624,6 +632,47 @@ namespace WindowsFormsLigueScrabble
                     }
                     sqlConnexion.Close();
                     return rencontreTrouvee;
+                }
+            }
+            catch (Exception) { throw; }
+        }
+
+        internal int AjouterJoueursDansJoute(int id_Joute, int no_Joute, List<Joueur> joueursAJouter)
+        {
+            // On sait qu'il y a trois joueurs minimum, c'est vérifié
+            Joueur playerOne = joueursAJouter[0];
+            Joueur playerTwo = joueursAJouter[1];
+            Joueur playerThree = joueursAJouter[2];
+            Joueur playerFour = new Joueur();
+            if (joueursAJouter.Count == 4) playerFour = joueursAJouter[3];
+            else playerFour = null;
+
+            try
+            {
+                MySqlConnection sqlConnexion = new MySqlConnection(maConnexionString);
+                int lignesAffectees;
+                using (sqlConnexion)
+                {
+                    sqlConnexion.Open();
+
+                    using (MySqlCommand cmd = new MySqlCommand("UPDATE Game SET " 
+                        + "PlayerOne = @PlayerOne, " 
+                        + "PlayerTwo = @PlayerTwo, " 
+                        + "PlayerThree = @PlayerThree, " 
+                        + "PlayerFour = @PlayerFour "
+                        + "WHERE Id_Joute = @Id_Joute AND No_Ronde = @No_Joute ", sqlConnexion))
+                    {
+                        cmd.Parameters.Add(new MySqlParameter("@No_Joute", no_Joute));
+                        cmd.Parameters.Add(new MySqlParameter("@Id_Joute", id_Joute));
+                        cmd.Parameters.Add(new MySqlParameter("@PlayerOne", playerOne.IdJoueur));
+                        cmd.Parameters.Add(new MySqlParameter("@PlayerTwo", playerTwo.IdJoueur));
+                        cmd.Parameters.Add(new MySqlParameter("@PlayerThree", playerThree.IdJoueur));
+                        if (playerFour != null ) cmd.Parameters.Add(new MySqlParameter("@PlayerFour", playerFour.IdJoueur));
+                        else cmd.Parameters.Add(new MySqlParameter("@PlayerFour", DBNull.Value));
+                        lignesAffectees = cmd.ExecuteNonQuery();
+                    }
+                    sqlConnexion.Close();
+                    return lignesAffectees;
                 }
             }
             catch (Exception) { throw; }

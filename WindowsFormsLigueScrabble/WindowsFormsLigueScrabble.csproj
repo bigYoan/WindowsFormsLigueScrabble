@@ -141,6 +141,12 @@
       <DependentUpon>RencontreForm.cs</DependentUpon>
     </Compile>
     <Compile Include="RencontresDataGrid.cs" />
+    <Compile Include="ScoresForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ScoresForm.Designer.cs">
+      <DependentUpon>ScoresForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Table.cs" />
     <EmbeddedResource Include="EditionRencontreForm.resx">
       <DependentUpon>EditionRencontreForm.cs</DependentUpon>
