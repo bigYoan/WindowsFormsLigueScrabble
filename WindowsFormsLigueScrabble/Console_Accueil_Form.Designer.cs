@@ -36,7 +36,7 @@
             this.buttonTables = new System.Windows.Forms.Button();
             this.buttonScores = new System.Windows.Forms.Button();
             this.buttonStats = new System.Windows.Forms.Button();
-            this.buttonFutur = new System.Windows.Forms.Button();
+            this.buttonCreerSaison = new System.Windows.Forms.Button();
             this.buttonQuitter = new System.Windows.Forms.Button();
             this.labelConnexion = new System.Windows.Forms.Label();
             this.timerFlash = new System.Windows.Forms.Timer(this.components);
@@ -115,15 +115,17 @@
             this.buttonStats.UseVisualStyleBackColor = false;
             this.buttonStats.Click += new System.EventHandler(this.buttonStats_Click);
             // 
-            // buttonFutur
+            // buttonCreerSaison
             // 
-            this.buttonFutur.BackColor = System.Drawing.Color.Orange;
-            this.buttonFutur.Font = new System.Drawing.Font("Verdana", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonFutur.Location = new System.Drawing.Point(844, 332);
-            this.buttonFutur.Name = "buttonFutur";
-            this.buttonFutur.Size = new System.Drawing.Size(235, 46);
-            this.buttonFutur.TabIndex = 1;
-            this.buttonFutur.UseVisualStyleBackColor = false;
+            this.buttonCreerSaison.BackColor = System.Drawing.Color.DarkKhaki;
+            this.buttonCreerSaison.Font = new System.Drawing.Font("Verdana", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.buttonCreerSaison.Location = new System.Drawing.Point(844, 332);
+            this.buttonCreerSaison.Name = "buttonCreerSaison";
+            this.buttonCreerSaison.Size = new System.Drawing.Size(235, 46);
+            this.buttonCreerSaison.TabIndex = 1;
+            this.buttonCreerSaison.Text = "Nouvelle Saison";
+            this.buttonCreerSaison.UseVisualStyleBackColor = false;
+            this.buttonCreerSaison.Click += new System.EventHandler(this.buttonCreerSaison_Click);
             // 
             // buttonQuitter
             // 
@@ -167,7 +169,7 @@
             this.ClientSize = new System.Drawing.Size(1222, 528);
             this.Controls.Add(this.labelConnexion);
             this.Controls.Add(this.buttonQuitter);
-            this.Controls.Add(this.buttonFutur);
+            this.Controls.Add(this.buttonCreerSaison);
             this.Controls.Add(this.buttonStats);
             this.Controls.Add(this.buttonScores);
             this.Controls.Add(this.buttonTables);
@@ -189,7 +191,7 @@
         private System.Windows.Forms.Button buttonTables;
         private System.Windows.Forms.Button buttonScores;
         private System.Windows.Forms.Button buttonStats;
-        private System.Windows.Forms.Button buttonFutur;
+        private System.Windows.Forms.Button buttonCreerSaison;
         private System.Windows.Forms.Button buttonQuitter;
         private System.Windows.Forms.Label labelConnexion;
         private System.Windows.Forms.Timer timerFlash;

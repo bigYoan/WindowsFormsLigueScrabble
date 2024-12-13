@@ -110,5 +110,10 @@ namespace WindowsFormsLigueScrabble
         {
             AfficherMessageNonDisponible();
         }
+
+        private void buttonCreerSaison_Click(object sender, EventArgs e)
+        {
+            AfficherMessageNonDisponible();
+        }
     }
 }

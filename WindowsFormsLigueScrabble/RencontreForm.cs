@@ -44,6 +44,7 @@ namespace WindowsFormsLigueScrabble
             dataGridViewSessions.ColumnHeadersDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
             dataGridViewSessions.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.DisplayedCells;
             dataGridViewSessions.DataSource = controleur.rencontres;
+            dataGridViewSessions.Columns["Table"].DisplayIndex = 3;
             dataGridViewSessions.Columns["IdSession"].Visible = false;
             dataGridViewSessions.Columns["Id_Table"].Visible = false;
             dataGridViewSessions.Columns["Id_Ronde"].Visible = false;
@@ -122,9 +123,9 @@ namespace WindowsFormsLigueScrabble
 
         private void buttonConfirmMouseHover(object sender, EventArgs e)
         {
-            toolTipActionne.SetToolTip(buttonAjouterSession, "Ajouter");
-            toolTipActionne.SetToolTip(buttonSupprimerSession, "Supprimer");
-            toolTipActionne.SetToolTip(buttonModifierSession, "Modifier");
+            toolTipActionne.SetToolTip(buttonAjouterSession, "Ajouter nouvelle session");
+            toolTipActionne.SetToolTip(buttonSupprimerSession, "Supprimer session");
+            toolTipActionne.SetToolTip(buttonModifierSession, "Ajouter joueurs");
         }
 
     }

@@ -64,6 +64,7 @@ namespace WindowsFormsLigueScrabble
             rencontres = controleur.GererRencontres(null, 0, 0, null, controleur.lister, orderBySessions);
             modificationAFaire = VerifierModificationAFaire(rencontreAModifier);
             ReglerAffichageEtControles();
+            AjusterProprietesDataGridViewSessions();
         }
 
         private void ReglerAffichageEtControles()
@@ -74,6 +75,7 @@ namespace WindowsFormsLigueScrabble
 
             if (modificationAFaire == ajouterNouvelleSession)
             {
+                dataGridViewRencontres.DataSource = controleur.rencontres;
                 dateTimePickerNewSession.Enabled = true;
                 comboBoxHeure.Enabled = true;
                 comboBoxRonde.Enabled = true;
@@ -108,6 +110,7 @@ namespace WindowsFormsLigueScrabble
             comboBoxHeure.Text = Convert.ToString(rencontreAModifier.DateDeJeu.Hour) + "h";
             if (rencontreAModifier.Id_Joute != 0) comboBoxRonde.Text = rencontreAModifier.NoJoute.ToString();
             if (rencontreAModifier.Id_Table != 0) comboBoxPupitre.Text = rencontreAModifier.NoTable.ToString();
+
             List<RencontresDataGrid> rencontresDansDataGrid = new List<RencontresDataGrid>();
             foreach (var rencontreAVerifier in rencontres)
             {
@@ -117,18 +120,22 @@ namespace WindowsFormsLigueScrabble
                     rencontresDansDataGrid.Add(rencontreAVerifier);
                 }
             }
-            dataGridViewRencontres.ClearSelection();
             dataGridViewRencontres.DataSource = rencontresDansDataGrid;
+            dataGridViewRencontres.ClearSelection();
+        }
+
+        private void AjusterProprietesDataGridViewSessions()
+        {
+            dataGridViewRencontres.Columns["Table"].DisplayIndex = 3;
+
             dataGridViewRencontres.Columns["Gagnant"].Visible = false;
             dataGridViewRencontres.Columns["ScoreGagnant"].Visible = false;
             dataGridViewRencontres.Columns["homologation"].Visible = false;
-
             dataGridViewRencontres.ColumnHeadersDefaultCellStyle.Font = new Font("Verdana", 9);
             dataGridViewRencontres.DefaultCellStyle.Font = new Font("Verdana", 12);
             dataGridViewRencontres.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
             dataGridViewRencontres.ColumnHeadersDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
             dataGridViewRencontres.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.DisplayedCells;
-            dataGridViewRencontres.DataSource = controleur.rencontres;
             dataGridViewRencontres.Columns["IdSession"].Visible = false;
             dataGridViewRencontres.Columns["Id_Table"].Visible = false;
             dataGridViewRencontres.Columns["Id_Ronde"].Visible = false;
@@ -218,6 +225,8 @@ namespace WindowsFormsLigueScrabble
                 if (!lienExiste)
                 {
                     rencontres = AjouterNouvelleSession(nouvellesDonneesRencontre);
+                    dataGridViewRencontres.DataSource = rencontres;
+                    dataGridViewRencontres.ClearSelection();
                 }
                 else MessageBox.Show("Existe déjà");
             }
@@ -245,6 +254,8 @@ namespace WindowsFormsLigueScrabble
                 {
                     int lienCree = controleur.CreerLienSession_Table_Game(donneesRencontreAModifier);
                 }
+                AfficherLesDonneesDeRencontreAModifier(rencontreAModifier);
+                
             }
             
         }

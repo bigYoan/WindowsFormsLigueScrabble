@@ -108,7 +108,7 @@
             // 
             this.labelPupitre.AutoSize = true;
             this.labelPupitre.Font = new System.Drawing.Font("Verdana", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelPupitre.Location = new System.Drawing.Point(44, 377);
+            this.labelPupitre.Location = new System.Drawing.Point(44, 338);
             this.labelPupitre.Name = "labelPupitre";
             this.labelPupitre.Size = new System.Drawing.Size(175, 25);
             this.labelPupitre.TabIndex = 9;
@@ -118,7 +118,7 @@
             // 
             this.labelRonde.AutoSize = true;
             this.labelRonde.Font = new System.Drawing.Font("Verdana", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelRonde.Location = new System.Drawing.Point(44, 339);
+            this.labelRonde.Location = new System.Drawing.Point(44, 378);
             this.labelRonde.Name = "labelRonde";
             this.labelRonde.Size = new System.Drawing.Size(207, 25);
             this.labelRonde.TabIndex = 11;
@@ -331,7 +331,7 @@
             "1",
             "2",
             "3"});
-            this.comboBoxRonde.Location = new System.Drawing.Point(260, 336);
+            this.comboBoxRonde.Location = new System.Drawing.Point(260, 375);
             this.comboBoxRonde.Name = "comboBoxRonde";
             this.comboBoxRonde.Size = new System.Drawing.Size(59, 33);
             this.comboBoxRonde.TabIndex = 25;
@@ -349,7 +349,7 @@
             "6",
             "7",
             "8"});
-            this.comboBoxPupitre.Location = new System.Drawing.Point(260, 374);
+            this.comboBoxPupitre.Location = new System.Drawing.Point(260, 335);
             this.comboBoxPupitre.Name = "comboBoxPupitre";
             this.comboBoxPupitre.Size = new System.Drawing.Size(59, 33);
             this.comboBoxPupitre.TabIndex = 26;

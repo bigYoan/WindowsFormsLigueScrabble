@@ -18,9 +18,7 @@ namespace WindowsFormsLigueScrabble
         Joueur nouveauJoueurAModifier = new Joueur();
         string orderBy = "ORDER BY Nom";
         string erreurDeTextBox = string.Empty;
-        Color couleurDepartTextBoxIDCode;
-
-
+        Color couleurDepartTextBoxCodeJoueur;
 
         public JoueurForm(Controleur controleurX)
         {
@@ -31,22 +29,25 @@ namespace WindowsFormsLigueScrabble
         {
             MettreAJourDataGridView();
             radioButtonNom.Checked = true;
+            buttonAjouterJoueur.Enabled = false;
+            buttonModifierJoueur.Enabled = false;
+            buttonSupprimerJoueur.Enabled = false;
         }
 
         private void buttonAjouterJoueur_Click(object sender, EventArgs e)
         {
             if (ValiderLesTextBox(1))
             {
-                string IdCode = textBoxIdCode.Text;
-                if (VerifierDuplicationID(IdCode))
+                string codeJoueur = textBoxCodeJoueur.Text;
+                if (VerifierDuplicationID(codeJoueur))
                 {
                     MessageBox.Show("L'identificateur est déjà utilisé.");
-                    AjusterFocusDataGridView(IdCode);
+                    AjusterFocusDataGridView(codeJoueur);
                     return;
                 }
                 string nom = textBoxNom.Text;
                 string pseudo = textBoxPseudo.Text;
-                Joueur nouveauJoueur = new Joueur(IdCode, nom, pseudo);
+                Joueur nouveauJoueur = new Joueur(codeJoueur, nom, pseudo);
                 nouveauJoueur.CacherNom = checkBoxCacherNom.Checked;
                 nouveauJoueur.Fqcsf = textBoxNoFqcsf.Text;
                 controleur.GererJoueur(nouveauJoueur, controleur.ajouter, orderBy);
@@ -57,7 +58,7 @@ namespace WindowsFormsLigueScrabble
 
         private void buttonRetirerJoueur_Click(object sender, EventArgs e)
         {
-            if (textBoxIdCode.Text.Replace(" ", "").Length == 0)
+            if (textBoxCodeJoueur.Text.Replace(" ", "").Length == 0)
             {
                 MessageBox.Show("Choisir un joueur dans la liste.");
                 return;
@@ -103,9 +104,9 @@ namespace WindowsFormsLigueScrabble
         {
             if (ordre == 1) //Pour ajouter un nouveau joueur
             {
-                if (textBoxIdCode.Text.Replace(" ", "").Length == 0)
+                if (textBoxCodeJoueur.Text.Replace(" ", "").Length == 0)
                 {
-                    couleurDepartTextBoxIDCode = textBoxIdCode.BackColor;
+                    couleurDepartTextBoxCodeJoueur = textBoxCodeJoueur.BackColor;
                     
                     MessageBox.Show("Un nouveau code de club est requis.");
                     timerDuree.Enabled = true;
@@ -132,14 +133,14 @@ namespace WindowsFormsLigueScrabble
             }
             if (ordre == 2) //Pour modifier un nouveau joueur
             {
-                if (textBoxIdCode.Text.Replace(" ", "").Length == 0)
+                if (textBoxCodeJoueur.Text.Replace(" ", "").Length == 0)
                 {
                     MessageBox.Show("Choisir un joueur dans la liste.");
                     return false;
                 }
                 else
                 {
-                    bool codeJoueurOK = textBoxIdCode.Text == ancienJoueurAModifier.CodeJoueur;
+                    bool codeJoueurOK = textBoxCodeJoueur.Text == ancienJoueurAModifier.CodeJoueur;
                     bool nomChange = textBoxNom.Text != "" && textBoxNom.Text != ancienJoueurAModifier.Nom;
                     bool pseudoChange = textBoxPseudo.Text != ancienJoueurAModifier.Pseudo;
                     bool pseudoVide = textBoxPseudo.Text.Replace(" ", "").Length == 0; 
@@ -171,7 +172,7 @@ namespace WindowsFormsLigueScrabble
                     }
                     // Tout est validé :
                     nouveauJoueurAModifier.IdJoueur = (int)dataGridViewJoueurs["IdJoueur", dataGridViewJoueurs.CurrentRow.Index].Value;
-                    nouveauJoueurAModifier.CodeJoueur = textBoxIdCode.Text;
+                    nouveauJoueurAModifier.CodeJoueur = textBoxCodeJoueur.Text;
                     nouveauJoueurAModifier.Nom = textBoxNom.Text;
                     nouveauJoueurAModifier.Pseudo = textBoxPseudo.Text;
                     nouveauJoueurAModifier.CacherNom = checkBoxCacherNom.Checked;
@@ -186,7 +187,7 @@ namespace WindowsFormsLigueScrabble
             bool memesFqcsf = false;
             int sizeFQ = textBoxNoFqcsf.Text.Replace(" ","").Length;
             if (sizeFQ != 4 && sizeFQ !=0) { erreurDeTextBox = "Le # FQCSF doit être de 4 caractères."; return false; }
-            if (textBoxNoFqcsf.Text.Length != 0) memesFqcsf = textBoxNoFqcsf.Text == joueurDejaInscrit.Fqcsf;
+            if (textBoxNoFqcsf.Text.Replace(" ", "").Length != 0) memesFqcsf = textBoxNoFqcsf.Text == joueurDejaInscrit.Fqcsf;
             if (memesFqcsf) { erreurDeTextBox = "Le numéro FQCSF est déjà utilisé."; return false; }
 
             return true;
@@ -228,7 +229,7 @@ namespace WindowsFormsLigueScrabble
 
         private bool VerifierValiditeCodeJoueur(Joueur joueurAVerifier)
         {
-            bool codeValide = textBoxIdCode.Text.Length != 0 && textBoxIdCode.Text != joueurAVerifier.CodeJoueur;
+            bool codeValide = textBoxCodeJoueur.Text.Length != 0 && textBoxCodeJoueur.Text != joueurAVerifier.CodeJoueur;
             if (!codeValide) 
             { 
 
@@ -246,19 +247,19 @@ namespace WindowsFormsLigueScrabble
             return false;
         }
 
-        private void AjusterFocusDataGridView(string idCode)
+        private void AjusterFocusDataGridView(string codeJoueur)
         {
-            int rangee = ChercherRangeeDansDataGridView(idCode);
+            int rangee = ChercherRangeeDansDataGridView(codeJoueur);
             dataGridViewJoueurs.ClearSelection();
             dataGridViewJoueurs.CurrentCell = dataGridViewJoueurs.Rows[rangee].Cells[0];
         }
 
-        private int ChercherRangeeDansDataGridView(string idCode)
+        private int ChercherRangeeDansDataGridView(string codeJoueur)
         {
             int rangeeTrouvee = 0;
             for (int rangee = 0; rangee < dataGridViewJoueurs.Rows.Count; rangee++)
             {
-                if (dataGridViewJoueurs["CodeJoueur", rangee].Value.ToString() == idCode) rangeeTrouvee = rangee;
+                if (dataGridViewJoueurs["CodeJoueur", rangee].Value.ToString() == codeJoueur) rangeeTrouvee = rangee;
             }
             return rangeeTrouvee;
         }
@@ -269,6 +270,8 @@ namespace WindowsFormsLigueScrabble
             dataGridViewJoueurs.ReadOnly = true;
             dataGridViewJoueurs.DataSource = controleur.joueurs;
             dataGridViewJoueurs.RowHeadersVisible = false;
+            dataGridViewJoueurs.Columns["CodeJoueur"].DisplayIndex = 0;
+
             dataGridViewJoueurs.Columns["IdJoueur"].Visible = false;
             dataGridViewJoueurs.Columns["noFqcsf"].Visible = false;
             dataGridViewJoueurs.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
@@ -283,14 +286,20 @@ namespace WindowsFormsLigueScrabble
             dataGridViewJoueurs.ClearSelection();
             labelNombreJoueurs.Text = "Nombre de joueurs : ";
             labelNombreJoueurs.Text += (controleur.joueurs.Count).ToString();
-            textBoxIdCode.Text = string.Empty;
+            ViderLesTextBox();
+            
+        }
+
+        private void ViderLesTextBox()
+        {
+            textBoxCodeJoueur.Text = string.Empty;
             textBoxNom.Text = string.Empty;
             textBoxPseudo.Text = string.Empty;
             checkBoxCacherNom.Checked = false;
             textBoxNoFqcsf.Text = string.Empty;
         }
 
-        private void textBoxIdCode_KeyUp(object sender, KeyEventArgs e)
+        private void textBoxCodeJoueur_KeyUp(object sender, KeyEventArgs e)
         {
             TextBox currentContainer = ((TextBox)sender);
             int caretPosition = currentContainer.SelectionStart;
@@ -298,7 +307,7 @@ namespace WindowsFormsLigueScrabble
             currentContainer.SelectionStart = caretPosition++;
         }
 
-        private void textBoxIdCode_KeyPress(object sender, KeyPressEventArgs e)
+        private void textBoxCodeJoueur_KeyPress(object sender, KeyPressEventArgs e)
         {
             Char pressedKey = e.KeyChar;
             if (Char.IsControl(pressedKey) || (Char.IsLetter(pressedKey)))
@@ -320,11 +329,14 @@ namespace WindowsFormsLigueScrabble
             ancienJoueurAModifier.Fqcsf = dataGridViewJoueurs["FQCSF", dataGridViewJoueurs.CurrentRow.Index ].Value.ToString();
             bool cacherNom = (bool)dataGridViewJoueurs["CacherNom", dataGridViewJoueurs.CurrentRow.Index ].Value;
             ancienJoueurAModifier.CacherNom = cacherNom;
-            textBoxIdCode.Text = ancienJoueurAModifier.CodeJoueur;
+            textBoxCodeJoueur.Text = ancienJoueurAModifier.CodeJoueur;
             textBoxNom.Text = ancienJoueurAModifier.Nom;
             textBoxPseudo.Text = ancienJoueurAModifier.Pseudo;
             textBoxNoFqcsf.Text = ancienJoueurAModifier.Fqcsf;
             checkBoxCacherNom.Checked = cacherNom;
+            buttonModifierJoueur.Enabled = true;
+            buttonSupprimerJoueur.Enabled = true;
+            buttonAjouterJoueur.Enabled = false;
             
         }
         private void buttonConfirmMouseHover(object sender, EventArgs e)
@@ -337,7 +349,7 @@ namespace WindowsFormsLigueScrabble
 
         private void radioButtonAny_CheckedChanged(object sender, EventArgs e)
         {
-            if (radioButtonIDCode.Checked) orderBy = "ORDER BY ID_Joueur";
+            if (radioButtonCodeJoueur.Checked) orderBy = "ORDER BY Code_Joueur";
             if (radioButtonNom.Checked) orderBy = "ORDER BY Nom";
             if (radioButtonPseudo.Checked) orderBy = "ORDER By Pseudo";
             if (radioButtonFqcsf.Checked) orderBy = "ORDER By FQCSF Desc";
@@ -349,14 +361,56 @@ namespace WindowsFormsLigueScrabble
         private void timerDuree_Tick(object sender, EventArgs e)
         {
             timerFlash.Enabled = false;
-            textBoxIdCode.BackColor = couleurDepartTextBoxIDCode;
+            textBoxCodeJoueur.BackColor = couleurDepartTextBoxCodeJoueur;
             timerDuree.Enabled = false;
         }
 
         private void timerFlash_Tick(object sender, EventArgs e)
         {
-            if (textBoxIdCode.BackColor == couleurDepartTextBoxIDCode) textBoxIdCode.BackColor = Color.Red;
-            else textBoxIdCode.BackColor = couleurDepartTextBoxIDCode;
+            if (textBoxCodeJoueur.BackColor == couleurDepartTextBoxCodeJoueur) textBoxCodeJoueur.BackColor = Color.Red;
+            else textBoxCodeJoueur.BackColor = couleurDepartTextBoxCodeJoueur;
+        }
+
+        private void AnyTextBoxTextChanged(object sender, EventArgs e)
+        {
+            if (textBoxCodeJoueur.Text.Length != 0 && char.IsLower(textBoxCodeJoueur.Text[0])) return;
+            
+            string codeJoueur = textBoxCodeJoueur.Text;
+
+            if (!VerifierDuplicationID(codeJoueur))
+            {
+                string prenomJoueur = textBoxNom.Text; ;
+                if (prenomJoueur.Length > 0) { buttonAjouterJoueur.Enabled = true; }
+                else buttonAjouterJoueur.Enabled = false;
+            }
+            else
+            {
+                //Afficher joueur dont le code a été entré dans textBoxCodeJoueur
+                foreach (Joueur joueurAVerifier in controleur.joueurs)
+                {
+                    if (codeJoueur == joueurAVerifier.CodeJoueur)
+                    {
+                        textBoxNom.Text = joueurAVerifier.Nom;
+                        textBoxPseudo.Text = joueurAVerifier.Pseudo;
+                        checkBoxCacherNom.Checked = joueurAVerifier.CacherNom;
+                        textBoxNoFqcsf.Text = joueurAVerifier.Fqcsf;
+                        buttonModifierJoueur.Enabled = true;
+                        buttonSupprimerJoueur.Enabled = true;
+                        ancienJoueurAModifier = joueurAVerifier;
+                        AjusterFocusDataGridView(codeJoueur);
+                    }
+                }
+            }
+            
+        }
+
+        private void ButtonEffacer_Click(object sender, EventArgs e)
+        {
+            ViderLesTextBox();
+            buttonAjouterJoueur.Enabled = false;
+            buttonSupprimerJoueur.Enabled = false;
+            buttonModifierJoueur.Enabled = false;
+            dataGridViewJoueurs.ClearSelection();
         }
     }
 

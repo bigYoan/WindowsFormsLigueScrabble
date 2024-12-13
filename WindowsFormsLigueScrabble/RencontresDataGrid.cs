@@ -12,10 +12,11 @@ namespace WindowsFormsLigueScrabble
         string jourRencontre;
         Rencontre session;
         string heureRencontre;
-        int id_Ronde;
-        int ronde; 
         int id_Table;
         int table;
+        int id_Ronde;
+        int ronde; 
+        
         int nombreJoueurs;
         string gagnant;
         int scoreGagnant;
@@ -24,8 +25,9 @@ namespace WindowsFormsLigueScrabble
         public Rencontre Session { get => session; set => session = value; }
         public string JourRencontre { get => session.DateDeJeu.ToString("ddd"); }
         public string HeureRencontre { get => session.DateDeJeu.ToString("HH") +"h"; }
-        public int Ronde { get => ronde; set => ronde = value; }
         public int Table { get => table; set => table = value; }
+        public int Ronde { get => ronde; set => ronde = value; }
+        
         public int NombreJoueurs { get => nombreJoueurs; set => nombreJoueurs = value; }
         public string Gagnant { get => gagnant; set => gagnant = value; }
         public int ScoreGagnant { get => scoreGagnant; set => scoreGagnant = value; }
