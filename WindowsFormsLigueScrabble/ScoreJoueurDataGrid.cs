@@ -25,8 +25,8 @@ namespace WindowsFormsLigueScrabble
         Joueur joueur;
 
         public int IdJoute { get => idJoute; set => idJoute = value; }
-        public int IdScore { get => idScore; set => idScore = value; }
-        public int IdJoueur { get => idJoueur; set => idJoueur = value; }
+        public int IdScore { get => scoreJoueur.IdScore; }
+        public int IdJoueur { get => joueur.IdJoueur; }
         public string NomJoueur { get => joueur.CacherNom ? "" : joueur.Nom; }
         public string PseudoJoueur { get => joueur.Pseudo; }
         public int TotalJoueur { get => scoreJoueur.Total; }

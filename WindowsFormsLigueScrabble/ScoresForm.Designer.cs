@@ -67,6 +67,7 @@
             this.buttonEnregistrerModifs.TabIndex = 1;
             this.buttonEnregistrerModifs.Text = "Enregistrer les modifications";
             this.buttonEnregistrerModifs.UseVisualStyleBackColor = true;
+            this.buttonEnregistrerModifs.Click += new System.EventHandler(this.buttonEnregistrerModifs_Click);
             // 
             // buttonQuitter
             // 

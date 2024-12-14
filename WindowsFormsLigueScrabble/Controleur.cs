@@ -370,6 +370,8 @@ namespace WindowsFormsLigueScrabble
                     Score score = dB_Manager.ListerScoresDansBD("WHERE ID_Score = " + lien.IdScore.ToString())[0];
                     // Ajouter à datagridJoueur
                     ScoreJoueurDataGrid scoreJoueur = new ScoreJoueurDataGrid();
+                    score.IdScore = lien.IdScore;
+                    scoreJoueur.IdJoute = idJoute;
                     scoreJoueur.Joueur = joueur;
                     scoreJoueur.ScoreJoueur = score;
                     scoresDataGrid.Add(scoreJoueur);
