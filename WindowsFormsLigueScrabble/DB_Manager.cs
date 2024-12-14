@@ -803,7 +803,7 @@ namespace WindowsFormsLigueScrabble
                                 monScore.Tour3 = reader["Tour3"] == DBNull.Value ? 0 : (int)reader["Tour3"];
                                 monScore.Tour4 = reader["Tour4"] == DBNull.Value ? 0 : (int)reader["Tour4"];
                                 monScore.Tour5 = reader["Tour5"] == DBNull.Value ? 0 : (int)reader["Tour5"];
-                                monScore.Total = reader["Total"] == DBNull.Value ? 0 : (int)reader["Total"];
+                                //monScore.Total = reader["Total"] == DBNull.Value ? 0 : (int)reader["Total"];
                                 monScore.Bonus = reader["Bonus"] == DBNull.Value ? 0 : (int)reader["Bonus"];
                                 monScore.Penalite = reader["Penalite"] == DBNull.Value ? 0 : (int)reader["Penalite"];
                                 

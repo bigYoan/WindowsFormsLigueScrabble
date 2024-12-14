@@ -29,6 +29,7 @@ namespace WindowsFormsLigueScrabble
         int tour18;
         int tour19;
         int tour20;
+        int totalTours;
         int bonus;
         int penalite;
         int total;
@@ -56,6 +57,8 @@ namespace WindowsFormsLigueScrabble
         public int Tour20 { get => tour20; set => tour20 = value; }
         public int Bonus { get => bonus; set => bonus = value; }
         public int Penalite { get => penalite; set => penalite = value; }
-        public int Total { get => total; set => total = value; }
+        public int TotalTours { get => tour1 + tour2 + tour3 + tour4 + tour5 + tour6 + tour7 + tour8 + tour9 + tour10 +
+                tour11 + tour12 + tour13 + tour14 + tour15 + tour16 + tour17 + tour18 + tour19 + tour20 ; }
+        public int Total { get => totalTours + bonus - penalite; }
     }
 }

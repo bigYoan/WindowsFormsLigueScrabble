@@ -24,6 +24,9 @@ namespace WindowsFormsLigueScrabble
         Score scoreJoueur;
         Joueur joueur;
 
+        public int IdJoute { get => idJoute; set => idJoute = value; }
+        public int IdScore { get => idScore; set => idScore = value; }
+        public int IdJoueur { get => idJoueur; set => idJoueur = value; }
         public string NomJoueur { get => joueur.CacherNom ? "" : joueur.Nom; }
         public string PseudoJoueur { get => joueur.Pseudo; }
         public int TotalJoueur { get => scoreJoueur.Total; }
@@ -34,9 +37,7 @@ namespace WindowsFormsLigueScrabble
         public int Tour5 { get => scoreJoueur.Tour5; }
         public int Penalite { get => scoreJoueur.Penalite; }
         public int Bonus { get => scoreJoueur.Bonus; }
-        public int IdJoute { get => idJoute; set => idJoute = value; }
-        public int IdScore { get => idScore; set => idScore = value; }
-        public int IdJoueur { get => idJoueur; set => idJoueur = value; }
+        
         internal Score ScoreJoueur { get => scoreJoueur; set => scoreJoueur = value; }
         internal Joueur Joueur { get => joueur; set => joueur = value; }
     }

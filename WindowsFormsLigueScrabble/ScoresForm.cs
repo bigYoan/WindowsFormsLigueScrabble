@@ -66,18 +66,90 @@ namespace WindowsFormsLigueScrabble
 
         private void RemplirDataGridScores(int commande)
         {
-            
+            //On souhaite afficher les scores avec les noms des joueurs dans les colonnes
+            // et le pointage dans les lignes
+
+            // Récupérer les données à afficher
             dataGridViewScores.DataSource = null;
-            dataGridViewScores.ColumnHeadersDefaultCellStyle.Font = new Font("Verdana", 9);
-            dataGridViewScores.DefaultCellStyle.Font = new Font("Verdana", 12);
             dataGridViewScores.DataSource = scoresDataGrid;
-            dataGridViewScores.Columns["IdJoute"].Visible = false;
-            dataGridViewScores.Columns["IdScore"].Visible = false;
-            dataGridViewScores.Columns["IdJoueur"].Visible = false;
-            dataGridViewScores.RowHeadersVisible = false;
-            dataGridViewScores.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.DisplayedCells;
+
+            // Prépare pour inverser colonnes-lignes du datagridview
+            int nbLignes = dataGridViewScores.Rows.Count;
+            int nbColonnes = dataGridViewScores.Columns.Count;
+            
+            // Stoquer les valeurs du datagridview dans un tableau temporaire
+            string[,] tableauInverseValeurs = new string[nbLignes, nbColonnes];
+            for (int lignesDataGrid = 0; lignesDataGrid < nbColonnes; lignesDataGrid++)
+            {
+                for (int colonnesDataGrid = 0; colonnesDataGrid < nbLignes; colonnesDataGrid++)
+                {
+                    {
+                        tableauInverseValeurs[colonnesDataGrid, lignesDataGrid] = dataGridViewScores[lignesDataGrid, colonnesDataGrid].FormattedValue.ToString();
+                    }
+                }
+            }
+
+            // Stoquer les titres des colonnes dans une liste temporaire
+            List<string> tableauInverseTitres = new List<string>();
+
+            DataGridViewColumn colonneDataGrid = new DataGridViewColumn();
+            foreach (DataGridViewColumn colonne in dataGridViewScores.Columns)
+            {
+                tableauInverseTitres.Add((string)colonne.HeaderCell.Value);
+            }
+
+            // Transférer les données temporaires dans un nouveau datagridview dont les lignes-colonnes sont inversées
+            dataGridViewScores.DataSource = null;
+            dataGridViewScores.ColumnCount = nbLignes;
+            dataGridViewScores.RowCount = nbColonnes;
+
+            for (int lignesDataGrid = 0; lignesDataGrid < nbColonnes; lignesDataGrid++) 
+            {
+                dataGridViewScores.Rows[lignesDataGrid].HeaderCell.Value = tableauInverseTitres[lignesDataGrid];
+            }
+
+            for (int lignesTableauInverse = 0; lignesTableauInverse < tableauInverseValeurs.GetLength(0); lignesTableauInverse++)
+            {
+                for (int colonnesTableauInverse = 0; colonnesTableauInverse < tableauInverseValeurs.GetLength(1); colonnesTableauInverse++)
+                {
+                    {
+                        dataGridViewScores[lignesTableauInverse, colonnesTableauInverse].Value = tableauInverseValeurs[lignesTableauInverse, colonnesTableauInverse];
+                    }
+                }
+            }
+
+            // Formatter l'affichage du datagridview
+            dataGridViewScores.RowHeadersDefaultCellStyle.Font = new Font("Verdana", 9);
+            dataGridViewScores.DefaultCellStyle.Font = new Font("Verdana", 12);
+            dataGridViewScores.Rows[3].HeaderCell.Value = "Joueur";
+            dataGridViewScores.Rows[4].HeaderCell.Value = "Nom/Pseudo";
+            dataGridViewScores.Rows[5].HeaderCell.Value = "Total";
+            dataGridViewScores.Rows[5].DefaultCellStyle.Font = new Font("Verdana", 12, FontStyle.Bold);
+            dataGridViewScores.Rows[5].DefaultCellStyle.ForeColor = Color.Red;
+            for (int ligne = 0; ligne < dataGridViewScores.RowCount; ligne++)
+            {
+                if ((string)dataGridViewScores.Rows[ligne].HeaderCell.Value == "IdScore")
+                {
+                    dataGridViewScores.Rows[ligne].Visible = false;
+                }
+                if ((string)dataGridViewScores.Rows[ligne].HeaderCell.Value == "IdJoute")
+                {
+                    dataGridViewScores.Rows[ligne].Visible = false;
+                }
+                if ((string)dataGridViewScores.Rows[ligne].HeaderCell.Value == "IdJoueur")
+                {
+                    dataGridViewScores.Rows[ligne].Visible = false;
+                }
+            }
+            dataGridViewScores.AutoResizeRowHeadersWidth(DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders);
+            dataGridViewScores.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            
 
         }
 
+        private void buttonAnnulerModifs_Click(object sender, EventArgs e)
+        {
+            RemplirDataGridScores(scoreEnCours);
+        }
     }
 }
