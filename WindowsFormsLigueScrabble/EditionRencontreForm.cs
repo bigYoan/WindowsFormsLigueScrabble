@@ -241,44 +241,6 @@ namespace WindowsFormsLigueScrabble
             
         }
 
-        private ChangementDeJoute VerifierSiChangementDeJoute(Rencontre rencontreAModifier)
-        {
-            ChangementDeJoute changementDeJoute = new ChangementDeJoute();
-            int.TryParse((string)comboBoxRonde.SelectedItem, out int result);
-            int rondeDansComboBox = result;
-            int rondeDansRencontreAModifier = rencontreAModifier.Id_Joute;
-            if (rondeDansComboBox != rondeDansRencontreAModifier)
-            {
-                changementDeJoute.IdOldJoute = changementDeJoute.IdNewJoute;
-                changementDeJoute.IdNewJoute = rondeDansComboBox;
-                changementDeJoute.JouteChangee = true;
-            }
-            else
-            {
-                changementDeJoute.JouteChangee = false;
-            }
-            return changementDeJoute;
-        }
-
-        private ChangementDeTable VerifierSiChangementDeTable(Rencontre rencontreAModifier)
-        {
-            ChangementDeTable changementDeTable = new ChangementDeTable();
-            int.TryParse((string)comboBoxPupitre.SelectedItem, out int result);
-            int noTableDansComboBox = result;
-            int noTableDansRencontreAModifier = rencontreAModifier.NoTable;
-            if (noTableDansComboBox != noTableDansRencontreAModifier)
-            {
-                changementDeTable.IdOldTable = changementDeTable.IdNewTable;
-                changementDeTable.IdNewTable = noTableDansComboBox;
-                changementDeTable.TableChangee = true;
-            }
-            else
-            {
-                changementDeTable.TableChangee = false;
-            }
-            return changementDeTable;
-        }
-
         private List<Joueur> AjouterJoueursDansPartie()
         {
             List<Joueur> joueurs = new List<Joueur>();

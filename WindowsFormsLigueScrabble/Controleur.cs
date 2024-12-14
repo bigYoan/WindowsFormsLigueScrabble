@@ -309,5 +309,73 @@ namespace WindowsFormsLigueScrabble
             }
             return lignesAffectees;
         }
+
+        internal List<LienJouteScoreJoueur> ListerLiensJouteScoreJoueur(string commande)
+        {
+            //int idJoute = 0;
+            List<LienJouteScoreJoueur> liensTrouves = dB_Manager.ListerLiensJouteScoreJoueur("");
+            foreach (var lienAVerifier in liensTrouves) 
+            {
+                
+            }
+            return liensTrouves;
+        }
+
+        internal int CreerLienJouteScoreJoueurDansBD(Rencontre rencontreAjoutScores)
+        {
+            int lignesAffectees = 0;
+
+
+            Partie partie = new Partie();
+
+            partie.IdPartie = rencontreAjoutScores.Id_Joute;
+            List<Partie> parties = dB_Manager.ListerPartiesDansBD(partie, "");
+
+            int id_Joute = parties[0].IdPartie;
+            if (parties[0].Idjoueur1 != 0)
+            {
+                int idScore = dB_Manager.CreerNouveauScore();
+                lignesAffectees += dB_Manager.CreerLienJouteScoreJoueur(id_Joute, parties[0].Idjoueur1, idScore);
+            }
+            if (parties[0].Idjoueur2 != 0)
+            {
+                int idScore = dB_Manager.CreerNouveauScore();
+                lignesAffectees += dB_Manager.CreerLienJouteScoreJoueur(id_Joute, parties[0].Idjoueur2, idScore);
+            }
+            if (parties[0].Idjoueur3 != 0)
+            {
+                int idScore = dB_Manager.CreerNouveauScore();
+                lignesAffectees += dB_Manager.CreerLienJouteScoreJoueur(id_Joute, parties[0].Idjoueur3, idScore);
+            }
+            if (parties[0].Idjoueur4 != 0)
+            {
+                int idScore = dB_Manager.CreerNouveauScore();
+                lignesAffectees += dB_Manager.CreerLienJouteScoreJoueur(id_Joute, parties[0].Idjoueur4, idScore);
+            }
+
+
+            return lignesAffectees;
+        }
+
+        internal List<ScoreJoueurDataGrid> GererScore(int lister, List<LienJouteScoreJoueur> liensJouteScoreJoueur, int idJoute)
+        {
+            List<ScoreJoueurDataGrid> scoresDataGrid = new List<ScoreJoueurDataGrid>();
+            foreach (var lien in liensJouteScoreJoueur)
+            {
+                if (lien.IdJoute == idJoute)
+                {
+                    //Trouver joueur
+                    Joueur joueur = dB_Manager.ListerJoueursDansBD("WHERE ID_Joueur = " + lien.IdJoueur.ToString())[0];
+                    //Trouver score
+                    Score score = dB_Manager.ListerScoresDansBD("WHERE ID_Score = " + lien.IdScore.ToString())[0];
+                    // Ajouter à datagridJoueur
+                    ScoreJoueurDataGrid scoreJoueur = new ScoreJoueurDataGrid();
+                    scoreJoueur.Joueur = joueur;
+                    scoreJoueur.ScoreJoueur = score;
+                    scoresDataGrid.Add(scoreJoueur);
+                }
+            }
+            return scoresDataGrid;
+        }
     }
 }

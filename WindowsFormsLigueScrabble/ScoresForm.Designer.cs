@@ -28,12 +28,39 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
+            this.dataGridViewScores = new System.Windows.Forms.DataGridView();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewScores)).BeginInit();
+            this.SuspendLayout();
+            // 
+            // dataGridViewScores
+            // 
+            this.dataGridViewScores.BackgroundColor = System.Drawing.Color.DeepSkyBlue;
+            this.dataGridViewScores.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.dataGridViewScores.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridViewScores.Location = new System.Drawing.Point(44, 47);
+            this.dataGridViewScores.Name = "dataGridViewScores";
+            this.dataGridViewScores.RowHeadersWidth = 51;
+            this.dataGridViewScores.RowTemplate.Height = 24;
+            this.dataGridViewScores.Size = new System.Drawing.Size(1207, 266);
+            this.dataGridViewScores.TabIndex = 0;
+            // 
+            // ScoresForm
+            // 
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Text = "ScoresForm";
+            this.BackColor = System.Drawing.Color.DeepSkyBlue;
+            this.ClientSize = new System.Drawing.Size(1294, 440);
+            this.Controls.Add(this.dataGridViewScores);
+            this.Name = "ScoresForm";
+            this.Text = "Ajout/Modification des scores";
+            this.Load += new System.EventHandler(this.ScoresForm_Load);
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewScores)).EndInit();
+            this.ResumeLayout(false);
+
         }
 
         #endregion
+
+        private System.Windows.Forms.DataGridView dataGridViewScores;
     }
 }

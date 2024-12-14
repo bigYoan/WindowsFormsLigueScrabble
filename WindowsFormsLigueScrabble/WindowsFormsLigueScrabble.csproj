@@ -122,6 +122,7 @@
       <DependentUpon>Console_Accueil_Form.cs</DependentUpon>
     </Compile>
     <Compile Include="Joueur.cs" />
+    <Compile Include="LienJouteScoreJoueur.cs" />
     <Compile Include="LiensSessionTablePartie.cs" />
     <Compile Include="LienTableSession.cs" />
     <Compile Include="Partie.cs" />
@@ -141,6 +142,8 @@
       <DependentUpon>RencontreForm.cs</DependentUpon>
     </Compile>
     <Compile Include="RencontresDataGrid.cs" />
+    <Compile Include="Score.cs" />
+    <Compile Include="ScoreJoueurDataGrid.cs" />
     <Compile Include="ScoresForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -168,6 +171,9 @@
     </Compile>
     <EmbeddedResource Include="RencontreForm.resx">
       <DependentUpon>RencontreForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ScoresForm.resx">
+      <DependentUpon>ScoresForm.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">

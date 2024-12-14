@@ -491,6 +491,12 @@ namespace WindowsFormsLigueScrabble
                                 Partie maPartie = new Partie();
                                 maPartie.IdPartie = (int)reader["Id_Joute"];
                                 maPartie.NoPartie = (int)reader["No_Ronde"];
+                                maPartie.Idjoueur1 = reader["Id_PlayerOne"] == DBNull.Value ? 0 : (int)reader["Id_PlayerOne"];
+                                maPartie.Idjoueur2 = reader["Id_PlayerTwo"] == DBNull.Value ? 0 : (int)reader["Id_PlayerTwo"];
+                                maPartie.Idjoueur3 = reader["Id_PlayerThree"] == DBNull.Value ? 0 : (int)reader["Id_PlayerThree"];
+                                maPartie.Idjoueur4 = reader["Id_PlayerFour"] == DBNull.Value ? 0 : (int)reader["Id_PlayerFour"];
+
+
                                 parties.Add(maPartie);
                             }
                         }
@@ -659,7 +665,11 @@ namespace WindowsFormsLigueScrabble
                         + "PlayerOne = @PlayerOne, " 
                         + "PlayerTwo = @PlayerTwo, " 
                         + "PlayerThree = @PlayerThree, " 
-                        + "PlayerFour = @PlayerFour "
+                        + "PlayerFour = @PlayerFour, "
+                        + "Id_PlayerOne = @Id_PlayerOne, "
+                        + "Id_PlayerTwo = @Id_PlayerTwo, "
+                        + "Id_PlayerThree = @Id_PlayerThree, "
+                        + "Id_PlayerFour = @Id_PlayerFour "
                         + "WHERE Id_Joute = @Id_Joute AND No_Ronde = @No_Joute ", sqlConnexion))
                     {
                         cmd.Parameters.Add(new MySqlParameter("@No_Joute", no_Joute));
@@ -667,12 +677,142 @@ namespace WindowsFormsLigueScrabble
                         cmd.Parameters.Add(new MySqlParameter("@PlayerOne", playerOne.IdJoueur));
                         cmd.Parameters.Add(new MySqlParameter("@PlayerTwo", playerTwo.IdJoueur));
                         cmd.Parameters.Add(new MySqlParameter("@PlayerThree", playerThree.IdJoueur));
-                        if (playerFour != null ) cmd.Parameters.Add(new MySqlParameter("@PlayerFour", playerFour.IdJoueur));
-                        else cmd.Parameters.Add(new MySqlParameter("@PlayerFour", DBNull.Value));
+                        cmd.Parameters.Add(new MySqlParameter("@Id_PlayerOne", playerOne.IdJoueur));
+                        cmd.Parameters.Add(new MySqlParameter("@Id_PlayerTwo", playerTwo.IdJoueur));
+                        cmd.Parameters.Add(new MySqlParameter("@Id_PlayerThree", playerThree.IdJoueur));
+                        if (playerFour != null)
+                        {
+                            cmd.Parameters.Add(new MySqlParameter("@PlayerFour", playerFour.IdJoueur));
+                            cmd.Parameters.Add(new MySqlParameter("@Id_PlayerFour", playerFour.IdJoueur));
+                        }
+                        else
+                        {
+                            cmd.Parameters.Add(new MySqlParameter("@PlayerFour", DBNull.Value));
+                            cmd.Parameters.Add(new MySqlParameter("@Id_PlayerFour", DBNull.Value));
+                        }
                         lignesAffectees = cmd.ExecuteNonQuery();
                     }
                     sqlConnexion.Close();
                     return lignesAffectees;
+                }
+            }
+            catch (Exception) { throw; }
+        }
+
+        internal List<LienJouteScoreJoueur> ListerLiensJouteScoreJoueur(string commande)
+        {
+            List<LienJouteScoreJoueur> liensExistants = new List<LienJouteScoreJoueur>();
+            try
+            {
+                MySqlConnection sqlConnexion = new MySqlConnection(maConnexionString);
+                //int lignesAffectees = 0;
+                using (sqlConnexion)
+                {
+                    sqlConnexion.Open();
+                    using (MySqlCommand cmd = new MySqlCommand("SELECT * FROM Joute_Score_Joueur " + commande, sqlConnexion))
+                    {
+                        using (MySqlDataReader reader = cmd.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                LienJouteScoreJoueur monLien = new LienJouteScoreJoueur();
+                                monLien.IdJoute = (int)reader["Id_Joute"];
+                                monLien.IdScore = (int)reader["Id_Score"];
+                                monLien.IdJoueur = (int)reader["Id_Joueur"];
+                                liensExistants.Add(monLien);
+                            }
+                        }
+                    }
+                    sqlConnexion.Close();
+                    return liensExistants;
+                }
+            }
+            catch (Exception) { throw; }
+        }
+
+        internal int CreerLienJouteScoreJoueur(int id_Joute, int id_Joueur, int id_Score)
+        {
+            try
+            {
+                MySqlConnection sqlConnexion = new MySqlConnection(maConnexionString);
+                int lignesAffectees = 0;
+                using (sqlConnexion)
+                {
+                    sqlConnexion.Open();
+
+                    using (MySqlCommand cmd = new MySqlCommand("INSERT INTO Joute_Score_Joueur VALUES (@Id_Joute, @Id_Joueur, @Id_Score)", sqlConnexion))
+                    {
+                        cmd.Parameters.Add(new MySqlParameter("@Id_Joute", id_Joute));
+                        cmd.Parameters.Add(new MySqlParameter("@Id_Score", id_Score));
+                        cmd.Parameters.Add(new MySqlParameter("@Id_Joueur", id_Joueur));
+                        lignesAffectees = cmd.ExecuteNonQuery();
+                    }
+                    sqlConnexion.Close();
+                    return lignesAffectees;
+                }
+            }
+            catch (Exception) { throw; }
+        }
+
+        internal int CreerNouveauScore()
+        {
+            try
+            {
+                MySqlConnection sqlConnexion = new MySqlConnection(maConnexionString);
+                int lignesAffectees = 0;
+                int id_Score = 0;
+                using (sqlConnexion)
+                {
+                    sqlConnexion.Open();
+
+                    using (MySqlCommand cmd = new MySqlCommand("INSERT INTO Score () VALUES (); SELECT LAST_INSERT_ID();", sqlConnexion))
+                    {
+                        //cmd.Parameters.Add(new MySqlParameter("@Id_Joute", id_Joute));
+                        //cmd.Parameters.Add(new MySqlParameter("@Id_Score", id_Score));
+                        //cmd.Parameters.Add(new MySqlParameter("@Id_Joueur", id_Joueur));
+                        var idCree = cmd.ExecuteScalar().ToString();
+                        bool ok = int.TryParse(idCree, out id_Score);
+                        
+                    }
+                    sqlConnexion.Close();
+                    return id_Score;
+                }
+            }
+            catch (Exception) { throw; }
+        }
+
+        internal List<Score> ListerScoresDansBD(string orderBy)
+        {
+            List<Score> scores = new List<Score>();
+            try
+            {
+                MySqlConnection sqlConnexion = new MySqlConnection(maConnexionString);
+                //int lignesAffectees = 0;
+                using (sqlConnexion)
+                {
+                    sqlConnexion.Open();
+                    using (MySqlCommand cmd = new MySqlCommand("SELECT * FROM Score " + orderBy, sqlConnexion))
+                    {
+                        using (MySqlDataReader reader = cmd.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                Score monScore = new Score();
+                                monScore.Tour1 = reader["Tour1"] == DBNull.Value ? 0 : (int)reader["Tour1"];
+                                monScore.Tour2 = reader["Tour2"] == DBNull.Value ? 0 : (int)reader["Tour2"];
+                                monScore.Tour3 = reader["Tour3"] == DBNull.Value ? 0 : (int)reader["Tour3"];
+                                monScore.Tour4 = reader["Tour4"] == DBNull.Value ? 0 : (int)reader["Tour4"];
+                                monScore.Tour5 = reader["Tour5"] == DBNull.Value ? 0 : (int)reader["Tour5"];
+                                monScore.Total = reader["Total"] == DBNull.Value ? 0 : (int)reader["Total"];
+                                monScore.Bonus = reader["Bonus"] == DBNull.Value ? 0 : (int)reader["Bonus"];
+                                monScore.Penalite = reader["Penalite"] == DBNull.Value ? 0 : (int)reader["Penalite"];
+                                
+                                scores.Add(monScore);
+                            }
+                        }
+                    }
+                    sqlConnexion.Close();
+                    return scores;
                 }
             }
             catch (Exception) { throw; }
