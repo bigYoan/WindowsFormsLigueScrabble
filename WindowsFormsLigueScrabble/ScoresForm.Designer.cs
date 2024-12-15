@@ -46,6 +46,7 @@
             this.dataGridViewScores.RowTemplate.Height = 24;
             this.dataGridViewScores.Size = new System.Drawing.Size(737, 551);
             this.dataGridViewScores.TabIndex = 0;
+            this.dataGridViewScores.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewScores_CellValueChanged);
             // 
             // buttonAnnulerModifs
             // 
@@ -78,6 +79,7 @@
             this.buttonQuitter.TabIndex = 1;
             this.buttonQuitter.Text = "Fermer";
             this.buttonQuitter.UseVisualStyleBackColor = true;
+            this.buttonQuitter.Click += new System.EventHandler(this.buttonQuitter_Click);
             // 
             // ScoresForm
             // 

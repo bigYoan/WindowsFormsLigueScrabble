@@ -357,7 +357,7 @@ namespace WindowsFormsLigueScrabble
             return lignesAffectees;
         }
 
-        internal List<ScoreJoueurDataGrid> GererScore(int lister, List<LienJouteScoreJoueur> liensJouteScoreJoueur, int idJoute)
+        internal List<ScoreJoueurDataGrid> ListerLiensJouteScoreJoueur(int lister, List<LienJouteScoreJoueur> liensJouteScoreJoueur, int idJoute)
         {
             List<ScoreJoueurDataGrid> scoresDataGrid = new List<ScoreJoueurDataGrid>();
             foreach (var lien in liensJouteScoreJoueur)
@@ -378,6 +378,11 @@ namespace WindowsFormsLigueScrabble
                 }
             }
             return scoresDataGrid;
+        }
+
+        internal int GererScore(int ajouter, ScoreJoueurDataGrid scoreJoueurDataGrid)
+        {
+            return dB_Manager.AjouterDonneesScore(scoreJoueurDataGrid);
         }
     }
 }

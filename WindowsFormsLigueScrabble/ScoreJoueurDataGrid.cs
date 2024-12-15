@@ -9,8 +9,8 @@ namespace WindowsFormsLigueScrabble
     internal class ScoreJoueurDataGrid
     {
         int idJoute;
-        int idScore;
-        int idJoueur;
+        //int idScore;
+        //int idJoueur;
         string nomJoueur;
         string pseudoJoueur;
         int totalJoueur;
@@ -25,9 +25,9 @@ namespace WindowsFormsLigueScrabble
         Joueur joueur;
 
         public int IdJoute { get => idJoute; set => idJoute = value; }
-        public int IdScore { get => scoreJoueur.IdScore; }
-        public int IdJoueur { get => joueur.IdJoueur; }
-        public string NomJoueur { get => joueur.CacherNom ? "" : joueur.Nom; }
+        //public int IdScore { get => scoreJoueur.IdScore; }
+        //public int IdJoueur { get => joueur.IdJoueur; }
+        public string NomJoueur { get => joueur.CacherNom ? "--" : joueur.Nom; }
         public string PseudoJoueur { get => joueur.Pseudo; }
         public int TotalJoueur { get => scoreJoueur.Total; }
         public int Tour1 { get => scoreJoueur.Tour1; }

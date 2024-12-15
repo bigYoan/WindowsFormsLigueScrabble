@@ -14,10 +14,12 @@ namespace WindowsFormsLigueScrabble
     {
         Controleur controleur;
         Rencontre rencontreAjoutScores;
-        Score[] scoreJoueur = new Score[4];
-        List<Score[]> scores = new List<Score[]>();
-        List<LienJouteScoreJoueur> liensJouteScoreJoueur;
+        //Score[] scoreJoueur = new Score[4];
+        //List<Score[]> scores = new List<Score[]>();
+        List<LienJouteScoreJoueur> liensJouteScoreJoueur = new List<LienJouteScoreJoueur>();
         List<ScoreJoueurDataGrid> scoresDataGrid = new List<ScoreJoueurDataGrid>();
+        bool chargementEnCours = false;
+        bool changementDataGridNonSauvegarde = false;
 
         int nouveauScore = 1;
         int scoreEnCours = 2;
@@ -35,13 +37,17 @@ namespace WindowsFormsLigueScrabble
             //scoresDataGrid = controleur.GererScore(controleur.lister, liensJouteScoreJoueur);
             if (JouteExiste())
             {
-                scoresDataGrid = controleur.GererScore(controleur.lister, liensJouteScoreJoueur, rencontreAjoutScores.Id_Joute);
-                RemplirDataGridScores(scoreEnCours);
-                ModifierScoresAJouteDejaCommencee();
+                InitialiserDataGridViewScores(0);
             }
             else CreerNouveauxScores();
         }
 
+        private void InitialiserDataGridViewScores( int offset)
+        {
+            scoresDataGrid = controleur.ListerLiensJouteScoreJoueur(controleur.lister, liensJouteScoreJoueur, rencontreAjoutScores.Id_Joute);
+            RemplirDataGridScores(scoreEnCours);
+            ModifierScoresAJouteDejaCommencee();
+        }
         private void CreerNouveauxScores()
         {
             //Créer un nouveau Score et un nouveau lien Joute_Score_Joueur
@@ -70,6 +76,7 @@ namespace WindowsFormsLigueScrabble
             // et le pointage dans les lignes
 
             // Récupérer les données à afficher
+            chargementEnCours = true; //Bloque l'événement : "Changement dans les cellules"
             dataGridViewScores.DataSource = null;
             dataGridViewScores.DataSource = scoresDataGrid;
 
@@ -121,63 +128,99 @@ namespace WindowsFormsLigueScrabble
             // Formatter l'affichage du datagridview
             dataGridViewScores.RowHeadersDefaultCellStyle.Font = new Font("Verdana", 9);
             dataGridViewScores.DefaultCellStyle.Font = new Font("Verdana", 12);
-            dataGridViewScores.Rows[3].HeaderCell.Value = "Joueur";
-            dataGridViewScores.Rows[4].HeaderCell.Value = "Nom/Pseudo";
-            dataGridViewScores.Rows[5].HeaderCell.Value = "Total";
-            dataGridViewScores.Rows[5].DefaultCellStyle.Font = new Font("Verdana", 12, FontStyle.Bold);
-            dataGridViewScores.Rows[5].DefaultCellStyle.ForeColor = Color.Red;
-            //for (int ligne = 0; ligne < dataGridViewScores.RowCount; ligne++)
-            //{
-            //    if ((string)dataGridViewScores.Rows[ligne].HeaderCell.Value == "IdScore")
-            //    {
-            //        dataGridViewScores.Rows[ligne].Visible = false;
-            //    }
-            //    if ((string)dataGridViewScores.Rows[ligne].HeaderCell.Value == "IdJoute")
-            //    {
-            //        dataGridViewScores.Rows[ligne].Visible = false;
-            //    }
-            //    if ((string)dataGridViewScores.Rows[ligne].HeaderCell.Value == "IdJoueur")
-            //    {
-            //        dataGridViewScores.Rows[ligne].Visible = false;
-            //    }
-            //}
+            dataGridViewScores.Rows[1].HeaderCell.Value = "Joueur";
+            dataGridViewScores.Rows[2].HeaderCell.Value = "Nom/Pseudo";
+            dataGridViewScores.Rows[3].HeaderCell.Value = "Total";
+            dataGridViewScores.Rows[3].DefaultCellStyle.Font = new Font("Verdana", 12, FontStyle.Bold);
+            dataGridViewScores.Rows[3].DefaultCellStyle.ForeColor = Color.Red;
+            for (int ligne = 0; ligne < dataGridViewScores.RowCount; ligne++)
+            {
+                if ((string)dataGridViewScores.Rows[ligne].HeaderCell.Value == "IdScore")
+                {
+                    dataGridViewScores.Rows[ligne].Visible = false;
+                }
+                if ((string)dataGridViewScores.Rows[ligne].HeaderCell.Value == "IdJoute")
+                {
+                    dataGridViewScores.Rows[ligne].Visible = false;
+                }
+                if ((string)dataGridViewScores.Rows[ligne].HeaderCell.Value == "IdJoueur")
+                {
+                    dataGridViewScores.Rows[ligne].Visible = false;
+                }
+            }
             dataGridViewScores.AutoResizeRowHeadersWidth(DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders);
             dataGridViewScores.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
 
-
+            
+            chargementEnCours = false;
+            changementDataGridNonSauvegarde = false;
         }
 
         private void buttonAnnulerModifs_Click(object sender, EventArgs e)
         {
-            RemplirDataGridScores(scoreEnCours);
+            MessageBox.Show("Cette fonctionnalité n'est pas disponible.\n\nPour annuler TOUTES les modifications,\n veuillez fermer cette page sans sauvegarder\npuis modifier à nouveau la session.");
+            //scoresDataGrid = null;
+            //dataGridViewScores.DataSource = null;
+            //liensJouteScoreJoueur = controleur.ListerLiensJouteScoreJoueur("");
+            //scoresDataGrid = controleur.(controleur.lister, liensJouteScoreJoueur);
+            //if (JouteExiste())
+            //{
+            //    InitialiserDataGridViewScores(0);
+            //}
+            //else CreerNouveauxScores();
+
+            //InitialiserDataGridViewScores(0);
+
+            //this.Refresh();
+            //this.Load += new EventHandler(ScoresForm_Load);
         }
 
         private void buttonEnregistrerModifs_Click(object sender, EventArgs e)
         {
+            int lignesAffectees = 0;
             List<ScoreJoueurDataGrid> nouveauxScoresDataGrid = new List<ScoreJoueurDataGrid>();
-            for (int colonne = 0; colonne < dataGridViewScores.Rows.Count; colonne++)
+            for (int colonne = 0; colonne < dataGridViewScores.Columns.Count; colonne++)
             {
-                //for (int ligne = 0; ligne < dataGridViewScores.ColumnCount; ligne++)
-                //{
-                    Joueur nouveauJoueur = new Joueur();
-                    Score nouveauScore = new Score();
-                    ScoreJoueurDataGrid nouveauScoreJoueur = new ScoreJoueurDataGrid();
-                    nouveauScoreJoueur.IdJoute = int.Parse(dataGridViewScores[0, 0].FormattedValue.ToString());
-                    nouveauScore.IdScore = int.Parse(dataGridViewScores[0, 1].FormattedValue.ToString());
-                    nouveauJoueur.IdJoueur = int.Parse(dataGridViewScores[0, 2].FormattedValue.ToString());
-                    nouveauJoueur.Nom = dataGridViewScores[0, 3].FormattedValue.ToString();
-                    nouveauJoueur.Pseudo = (string)dataGridViewScores[0, 4].Value;
-                    nouveauScore.Tour1 = int.Parse(dataGridViewScores[0, 6].FormattedValue.ToString());
-                    nouveauScore.Tour2 = int.Parse(dataGridViewScores[0, 7].FormattedValue.ToString());
-                    nouveauScore.Tour3 = int.Parse(dataGridViewScores[0, 8].FormattedValue.ToString());
-                    nouveauScore.Tour4 = int.Parse(dataGridViewScores[0, 9].FormattedValue.ToString());
-                    nouveauScore.Tour5 = int.Parse(dataGridViewScores[0, 10].FormattedValue.ToString());
-                    nouveauScore.Bonus = int.Parse(dataGridViewScores[0, 11].FormattedValue.ToString());
-                    nouveauScore.Penalite = int.Parse(dataGridViewScores[0, 12].FormattedValue.ToString());
-                    nouveauScoreJoueur.Joueur = nouveauJoueur;
-                    nouveauScoreJoueur.ScoreJoueur = nouveauScore;
-                //}
+                Joueur nouveauJoueur = new Joueur();
+                Score nouveauScore = new Score();
+                ScoreJoueurDataGrid nouveauScoreJoueur = new ScoreJoueurDataGrid();
+                nouveauScoreJoueur.IdJoute = int.Parse(dataGridViewScores[colonne, 0].FormattedValue.ToString());
+                //nouveauScore.IdScore = int.Parse(dataGridViewScores[colonne, 1].FormattedValue.ToString());
+                //nouveauJoueur.IdJoueur = int.Parse(dataGridViewScores[colonne, 2].FormattedValue.ToString());
+                nouveauJoueur.Nom = dataGridViewScores[colonne, 2].FormattedValue.ToString();
+                nouveauJoueur.Pseudo = (string)dataGridViewScores[colonne, 2].Value;
+                nouveauScore.Tour1 = int.Parse(dataGridViewScores[colonne, 4].FormattedValue.ToString());
+                nouveauScore.Tour2 = int.Parse(dataGridViewScores[colonne, 5].FormattedValue.ToString());
+                nouveauScore.Tour3 = int.Parse(dataGridViewScores[colonne, 6].FormattedValue.ToString());
+                nouveauScore.Tour4 = int.Parse(dataGridViewScores[colonne, 7].FormattedValue.ToString());
+                nouveauScore.Tour5 = int.Parse(dataGridViewScores[colonne, 8].FormattedValue.ToString());
+                nouveauScore.Bonus = int.Parse(dataGridViewScores[colonne, 9].FormattedValue.ToString());
+                nouveauScore.Penalite = int.Parse(dataGridViewScores[colonne, 10].FormattedValue.ToString());
+                nouveauScoreJoueur.Joueur = nouveauJoueur;
+                nouveauScoreJoueur.ScoreJoueur = nouveauScore;
+                nouveauxScoresDataGrid.Add(nouveauScoreJoueur);
             }
+            for (int noScore = 0; noScore < nouveauxScoresDataGrid.Count; noScore++)
+            {
+                lignesAffectees = controleur.GererScore(controleur.ajouter, nouveauxScoresDataGrid[noScore]);
+            }
+            
+            changementDataGridNonSauvegarde = false;
+        }
+
+        private void dataGridViewScores_CellValueChanged(object sender, DataGridViewCellEventArgs e)
+        {
+            if (!chargementEnCours) 
+            changementDataGridNonSauvegarde = true;
+        }
+        private void buttonQuitter_Click(object sender, EventArgs e)
+        {
+            if (changementDataGridNonSauvegarde) 
+            {
+                bool fermerOk = controleur.DemandeDeConfirmation("Quitter cette page sans enregistrer les modifications? ");
+                if (!fermerOk) return;
+            }
+            this.Close();
         }
     }
 }
