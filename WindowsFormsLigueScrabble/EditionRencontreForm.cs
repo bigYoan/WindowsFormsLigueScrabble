@@ -76,6 +76,7 @@ namespace WindowsFormsLigueScrabble
 
             if (modificationAFaire == ajouterNouvelleSession)
             {
+                labelInstructions.Text = "Ajouter une nouvelle session.";
                 AfficherLesDonneesDeRencontreAModifier(null);
                 dateTimePickerNewSession.Enabled = true;
                 comboBoxHeure.Enabled = true;
@@ -86,6 +87,7 @@ namespace WindowsFormsLigueScrabble
             }
             if (modificationAFaire == ajouterTableEtPartie) 
             {
+                labelInstructions.Text = "Ajouter une table, une partie et joueurs(optionnels) à une session.";
                 rencontres = controleur.GererRencontres(null, 0, 0, null, controleur.lister, orderBySessions);
                 AfficherLesDonneesDeRencontreAModifier(rencontreAModifier);
                 dateTimePickerNewSession.Enabled = false;
@@ -94,6 +96,7 @@ namespace WindowsFormsLigueScrabble
             }
             if (modificationAFaire == ajouterJoueursSeulement)
             {
+                labelInstructions.Text = "Ajouter des joueurs à une session.";
                 rencontres = controleur.GererRencontres(null, rencontreAModifier.Id_Table, rencontreAModifier.Id_Joute, null, controleur.lister, orderBySessions);
                 AfficherLesDonneesDeRencontreAModifier(rencontreAModifier);
                 dateTimePickerNewSession.Enabled = false;
