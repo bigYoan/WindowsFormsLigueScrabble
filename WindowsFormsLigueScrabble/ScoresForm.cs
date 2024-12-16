@@ -42,21 +42,20 @@ namespace WindowsFormsLigueScrabble
         private void ScoresForm_Load(object sender, EventArgs e)
         {
             liensJouteScoreJoueur = controleur.ListerLiensJouteScoreJoueur("");
-            //scoresDataGrid = controleur.GererScore(controleur.lister, liensJouteScoreJoueur);
             if (JouteExiste())
             {
                 InitialiserDataGridViewScores();
             }
-            else CreerNouveauxScores();
+            //else CreerNouveauxScores();
         }
 
         private void InitialiserDataGridViewScores()
         {
             List<ScoreJoueurDataGrid> scoresBrut = new List<ScoreJoueurDataGrid>();
-            scoresBrut = controleur.ListerLiensJouteScoreJoueur(controleur.lister, liensJouteScoreJoueur, rencontreAjoutScores.Id_Joute);
+            scoresBrut = controleur.ListerScoresJoueurs(controleur.lister, liensJouteScoreJoueur, rencontreAjoutScores.Id_Joute);
             scoresDataGrid = DeterminerLesRangsDesJoueurs(scoresBrut);
             RemplirDataGridScores(scoreEnCours, null);
-            ModifierScoresAJouteDejaCommencee();
+            //ModifierScoresAJouteDejaCommencee();
         }
 
         private List<ScoreJoueurDataGrid> DeterminerLesRangsDesJoueurs(List<ScoreJoueurDataGrid> scores)
@@ -72,9 +71,6 @@ namespace WindowsFormsLigueScrabble
                 totalJoueur.Add(score.ScoreJoueur.Total);
                 if (score.ScoreJoueur.Total == 0) joueursSansTotal++;
             }
-
-            
-           
             indexRang1 = totalJoueur.IndexOf(totalJoueur.Max());
             totalJoueur[indexRang1] = 0;
             indexRang2 = totalJoueur.IndexOf(totalJoueur.Max());
@@ -97,13 +93,13 @@ namespace WindowsFormsLigueScrabble
             return scores;
         }
 
-        private void CreerNouveauxScores()
-        {
-            //Créer un nouveau Score et un nouveau lien Joute_Score_Joueur
-            int lienJouteScoreJoueurCree = controleur.CreerLienJouteScoreJoueurDansBD(rencontreAjoutScores);
-            if (lienJouteScoreJoueurCree == 0) { MessageBox.Show("Une erreur s'est produite lors de la création\ndes nouveaux scores."); }
-            RemplirDataGridScores(nouveauScore, null);
-        }
+        //private void CreerNouveauxScores()
+        //{
+        //    //Créer un nouveau Score et un nouveau lien Joute_Score_Joueur
+        //    int lienJouteScoreJoueurCree = controleur.CreerLienJouteScoreJoueurDansBD(rencontreAjoutScores);
+        //    if (lienJouteScoreJoueurCree == 0) { MessageBox.Show("Une erreur s'est produite lors de la création\ndes nouveaux scores."); }
+        //    RemplirDataGridScores(nouveauScore, null);
+        //}
         private bool JouteExiste()
         {
             bool jouteExiste = false;
@@ -113,16 +109,14 @@ namespace WindowsFormsLigueScrabble
             }
             return jouteExiste;
         }
+        //private void ModifierScoresAJouteDejaCommencee()
+        //{
 
-        private void ModifierScoresAJouteDejaCommencee()
-        {
-
-        }
-
+        //}
         private void RemplirDataGridScores(int commande, List<ScoreJoueurDataGrid> scoresModifies)
         {
             //On souhaite afficher les scores avec les noms des joueurs dans les colonnes
-            // et le pointage dans les lignes
+            // et le pointage dans les lignes. Pour ce faire il faut pivoter les données du datagridview
 
             // Récupérer les données à afficher
             chargementEnCours = true; //Bloque l'événement : "Changement dans les cellules"
@@ -174,10 +168,7 @@ namespace WindowsFormsLigueScrabble
                     }
                 }
             }
-
             FormatterAffichageDataGridViewScores();
-
-            
             chargementEnCours = false;
             changementDataGridNonSauvegarde = false;
         }
@@ -200,13 +191,11 @@ namespace WindowsFormsLigueScrabble
                     dataGridViewScores.Rows[ligne].HeaderCell.Value = "Pseudo/Nom";
                     dataGridViewScores.Rows[ligne].ReadOnly = true;
                     indexLignePseudo = ligne;
-
                 }
                 if ((string)dataGridViewScores.Rows[ligne].HeaderCell.Value == "Rang")
                 {
                     dataGridViewScores.Rows[ligne].ReadOnly = true;
                     indexLigneRang = ligne;
-
                 }
                 if ((string)dataGridViewScores.Rows[ligne].HeaderCell.Value == "TotalJoueur")
                 {
@@ -288,7 +277,6 @@ namespace WindowsFormsLigueScrabble
             }
             return scoresDansDataGrid;
         }
-
         private void dataGridViewScores_CellValueChanged(object sender, DataGridViewCellEventArgs e)
         {
             if (!chargementEnCours)
@@ -314,15 +302,8 @@ namespace WindowsFormsLigueScrabble
                 for (int colonne = 0; colonne < scoresModifies.Count; colonne++)
                 {
                     dataGridViewScores[colonne, indexLigneRang].Value = scoresModifies[colonne].Rang;
-                    //dataGridViewScores[1, indexLigneRang].Value = scoresModifies[1].Rang;
-                    //dataGridViewScores[2, indexLigneRang].Value = scoresModifies[2].Rang;
-                    //dataGridViewScores[3, indexLigneRang].Value = scoresModifies[3].Rang;
                     dataGridViewScores[colonne, indexLigneTotal].Value = scoresModifies[colonne].TotalJoueur;
-                    //dataGridViewScores[1, indexLigneTotal].Value = scoresModifies[1].TotalJoueur;
-                    //dataGridViewScores[2, indexLigneTotal].Value = scoresModifies[2].TotalJoueur;
-                    //dataGridViewScores[3, indexLigneTotal].Value = scoresModifies[3].TotalJoueur;
                 }
-
                 changementDataGridNonSauvegarde = true;
             }
         }

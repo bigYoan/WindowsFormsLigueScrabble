@@ -59,6 +59,7 @@ namespace WindowsFormsLigueScrabble
 
         private void buttonRetirerJoueur_Click(object sender, EventArgs e)
         {
+            // Attention, supprimer un joueur avec un score ou une partie liées fera planter
             if (textBoxCodeJoueur.Text.Replace(" ", "").Length == 0)
             {
                 MessageBox.Show("Choisir un joueur dans la liste.");
@@ -76,7 +77,6 @@ namespace WindowsFormsLigueScrabble
                 MettreAJourDataGridView();
             }
         }
-
         private void buttonModifierJoueur_Click(object sender, EventArgs e)
         {
             bool changementOK = ValiderLesTextBox(2);
@@ -99,8 +99,6 @@ namespace WindowsFormsLigueScrabble
         {
             this.Close();
         }
-
-
         private bool ValiderLesTextBox(int ordre)
         {
             if (ordre == 1) //Pour ajouter un nouveau joueur
@@ -129,8 +127,6 @@ namespace WindowsFormsLigueScrabble
                     }
                 }
                 return true;
-               
-
             }
             if (ordre == 2) //Pour modifier un nouveau joueur
             {
@@ -226,8 +222,6 @@ namespace WindowsFormsLigueScrabble
             
             return true;
         }
-
-
         private bool VerifierValiditeCodeJoueur(Joueur joueurAVerifier)
         {
             bool codeValide = textBoxCodeJoueur.Text.Length != 0 && textBoxCodeJoueur.Text != joueurAVerifier.CodeJoueur;
@@ -238,7 +232,6 @@ namespace WindowsFormsLigueScrabble
                 return false; }
             return true;
         }
-
         private bool VerifierDuplicationID(string codeJoueur)
         {
             foreach (var joueurAVerifier in controleur.joueurs)
@@ -254,7 +247,6 @@ namespace WindowsFormsLigueScrabble
             dataGridViewJoueurs.ClearSelection();
             dataGridViewJoueurs.CurrentCell = dataGridViewJoueurs.Rows[rangee].Cells[0];
         }
-
         private int ChercherRangeeDansDataGridView(string codeJoueur)
         {
             int rangeeTrouvee = 0;
@@ -264,7 +256,6 @@ namespace WindowsFormsLigueScrabble
             }
             return rangeeTrouvee;
         }
-
         private void MettreAJourDataGridView()
         {
             dataGridViewJoueurs.DataSource = null;
@@ -288,7 +279,6 @@ namespace WindowsFormsLigueScrabble
             labelNombreJoueurs.Text = "Nombre de joueurs : ";
             labelNombreJoueurs.Text += (controleur.joueurs.Count).ToString();
             ViderLesTextBox();
-            
         }
 
         private void ViderLesTextBox()
@@ -299,7 +289,6 @@ namespace WindowsFormsLigueScrabble
             checkBoxCacherNom.Checked = false;
             textBoxNoFqcsf.Text = string.Empty;
         }
-
         private void textBoxCodeJoueur_KeyUp(object sender, KeyEventArgs e)
         {
             TextBox currentContainer = ((TextBox)sender);
@@ -307,7 +296,6 @@ namespace WindowsFormsLigueScrabble
             currentContainer.Text = currentContainer.Text.ToUpper();
             currentContainer.SelectionStart = caretPosition++;
         }
-
         private void textBoxCodeJoueur_KeyPress(object sender, KeyPressEventArgs e)
         {
             Char pressedKey = e.KeyChar;
@@ -339,14 +327,12 @@ namespace WindowsFormsLigueScrabble
             buttonSupprimerJoueur.Enabled = true;
             buttonAjouterJoueur.Enabled = false;
             ChangerImageBoutons();
-            
         }
         private void buttonConfirmMouseHover(object sender, EventArgs e)
         {
             toolTipActionne.SetToolTip(buttonAjouterJoueur, "Ajouter");
             toolTipActionne.SetToolTip(buttonSupprimerJoueur, "Supprimer");
             toolTipActionne.SetToolTip(buttonModifierJoueur, "Modifier");
-
         }
 
         private void radioButtonAny_CheckedChanged(object sender, EventArgs e)
@@ -359,7 +345,6 @@ namespace WindowsFormsLigueScrabble
             dataGridViewJoueurs.DataSource = controleur.GererJoueur(null, controleur.lister, orderBy);
             MettreAJourDataGridView();
         }
-
         private void timerDuree_Tick(object sender, EventArgs e)
         {
             timerFlash.Enabled = false;
@@ -381,12 +366,8 @@ namespace WindowsFormsLigueScrabble
 
             if (!VerifierDuplicationID(codeJoueur))
             {
-                //string prenomJoueur = textBoxNom.Text;
-                //if (prenomJoueur.Length > 0)
                 { buttonAjouterJoueur.Enabled = true; }
                 ChangerImageBoutons();
-                //else
-                //{ buttonAjouterJoueur.Enabled = false; }
             }
             else
             {
@@ -409,12 +390,10 @@ namespace WindowsFormsLigueScrabble
                 buttonAjouterJoueur.Enabled = false;
                 ChangerImageBoutons();
             }
-            
         }
 
         private void ChangerImageBoutons()
         {
-            
             string dossierImages = "..\\..\\Images\\";
             string butAjoutDis = dossierImages + "AjouterJoueurImageBoutonV2-Disabled.png";
             string butAjoutEn = dossierImages + "AjouterJoueurImageBoutonV2.png";
@@ -430,7 +409,6 @@ namespace WindowsFormsLigueScrabble
             if (!buttonSupprimerJoueur.Enabled) buttonSupprimerJoueur.BackgroundImage = Image.FromFile(butSupprDis);
             else buttonSupprimerJoueur.BackgroundImage = Image.FromFile(butSupprEn);
         }
-
         private void ButtonEffacer_Click(object sender, EventArgs e)
         {
             ViderLesTextBox();
@@ -441,6 +419,5 @@ namespace WindowsFormsLigueScrabble
             dataGridViewJoueurs.ClearSelection();
         }
     }
-
 }
 

@@ -31,12 +31,13 @@ namespace WindowsFormsLigueScrabble
 
             if (nouveauJoueur == null && ordre == lister) 
             {
-                //Fait une liste des joueurs
+                //Afficher une liste des joueurs
                 joueurs = dB_Manager.ListerJoueursDansBD(orderBy);
                 return joueurs;
             }
             if (nouveauJoueur != null && ordre == ajouter)
             {
+                //Ajouter un nouveau joueur
                 lignesAffectees = dB_Manager.AjouterJoueurDansBD(nouveauJoueur);
                 joueurs.Add(nouveauJoueur);
                 if (lignesAffectees == 0) { MessageBox.Show("Exécution annulée"); }
@@ -74,12 +75,11 @@ namespace WindowsFormsLigueScrabble
 
             if (newRencontre == null && ordre == lister)
             {
-                //Fait une liste des joueurs
-                //rencontres = dB_Manager.ListerRencontresDansBD(orderBy);
-                //return rencontres;
+                // La liste des rencontres est retournée, peu importe l'action à faire
             }
             if (newRencontre != null && ordre == ajouter)
             {
+                // Ajouter une rencontre (session) avec table et joute (partie)
                 int idNouvelleSession = dB_Manager.AjouterRencontreDansBD(newRencontre);
                 if (idNouvelleSession >0 && noTable != 0)
                 {
@@ -100,6 +100,8 @@ namespace WindowsFormsLigueScrabble
 
             if (newRencontre != null && ordre == supprimer)
             {
+                // Supprimer une rencontre :  vérifier si liens avec d'autres tables avant de supprimer
+
                 // Lister liens puis les supprimer
                 int idJoute = 0;
                 List<LiensSessionTablePartie> liensSTP = dB_Manager.ListerLiensSessionTablePartie(" WHERE Id_Session = " + newRencontre.IdSession.ToString());
@@ -110,26 +112,27 @@ namespace WindowsFormsLigueScrabble
                     {
                         for (int noLien = 0; noLien < liensJSJ.Count; noLien++) 
                         {
-                            lignesAffectees = dB_Manager.SupprimerLienJSJ("DELETE FROM Joute_Score_Joueur WHERE Id_Score = " + liensJSJ[noLien].IdScore.ToString());
+                            lignesAffectees = dB_Manager.SupprimerLienJouteScoreJoueur("DELETE FROM Joute_Score_Joueur WHERE Id_Score = " + liensJSJ[noLien].IdScore.ToString());
                             if (lignesAffectees != 0)
                             {
                                 dB_Manager.SupprimerScore(liensJSJ[noLien].IdScore);
                             }
                         }
-                        
                     }
                 }
                 
-                // Supprimer rencontre dans BD
+                // Supprimer rencontre et partie dans BD
                 lignesAffectees = dB_Manager.SupprimerRencontreDansBD(newRencontre.IdSession, noTable, noPartie);
                 if (lignesAffectees == 0) { MessageBox.Show("Exécution annulée"); }
             }
+
             if (newRencontre != null && ordre == modifier)
             {
-                //Modifier joueur dans BD
+                //Modifier rencontre dans BD
                 lignesAffectees = dB_Manager.ModifierRencontreDansBD(newRencontre, modifier);
                 if (lignesAffectees == 0) { MessageBox.Show("Exécution annulée"); }
             }
+
             rencontres = dB_Manager.ListerRencontresDansBD(orderBy);
             return rencontres;
         }
@@ -153,6 +156,8 @@ namespace WindowsFormsLigueScrabble
         }
         internal bool VerifierLiens(DonneesRencontre nouvelledonneeRencontre)
         {
+            // Vieux code, à remplacer
+            // Vérifie s'il y a un lien créé dans la table Session_Table_Partie
             List<Rencontre> rencontresDansBD = dB_Manager.ListerRencontresSeules("");
             List<Table> tablesDansBD = dB_Manager.ListerTablesDansBD("");
             List<Partie> partiesDansBD = dB_Manager.ListerPartiesDansBD(null, "");
@@ -223,53 +228,6 @@ namespace WindowsFormsLigueScrabble
             }
             return false;
         }
-
-        private void ChercherMatchDansLiens(Rencontre rencontreAVerifier, DonneesRencontre nouvellesdonneesRencontre)
-        {
-            throw new NotImplementedException();
-        }
-
-        internal Rencontre TrouverRencontre(int idSession)
-        {
-            Rencontre rencontreTrouvee = new Rencontre();
-            rencontreTrouvee = dB_Manager.ListerRencontreSeule(idSession);
-            return rencontreTrouvee;
-        }
-
-        internal int ModifierRencontrePartieJoueur(DonneesRencontre donneesRencontreAModifier, List<Joueur> joueursAJouter)
-        {
-            // Vérifier si on peut modifier la partie (ou joute)
-            Partie partieAModifier = new Partie();
-            partieAModifier.IdPartie = donneesRencontreAModifier.IdJoute;
-            List<Partie> partiesDansBD = dB_Manager.ListerPartiesDansBD(partieAModifier, "");
-            if (partiesDansBD.Count == 0) return 0;
-
-            return 1;
-        }
-
-        internal LiensSessionTablePartie TrouverLiens(DonneesRencontre donneesRencontreAModifier)
-        {
-            List<LiensSessionTablePartie> liensTrouves = dB_Manager.ListerLiensSessionTablePartie("");
-            int id_Joute = donneesRencontreAModifier.IdJoute;
-            foreach (var LienAVerifier in liensTrouves)
-            {
-                if (id_Joute == LienAVerifier.IdPartie)
-                {
-                    return LienAVerifier;
-                }
-            }
-            return null;
-        }
-
-        internal int CreerLienSession_Table_Game(DonneesRencontre donneesRencontreAModifier)
-        {
-            int id_Session = donneesRencontreAModifier.IdSession;
-            int id_Table = donneesRencontreAModifier.IdTable;
-            int id_Joute = donneesRencontreAModifier.IdJoute;
-            int lienCree = dB_Manager.CreerLiens_Session_Table_Partie(id_Session, id_Table, id_Joute);
-            return lienCree;
-        }
-
         internal int GererJoute(Rencontre rencontreAModifier, List<Joueur> joueursAJouter)
         {
             int lignesAffectees = 0;
@@ -290,22 +248,13 @@ namespace WindowsFormsLigueScrabble
 
         internal List<LienJouteScoreJoueur> ListerLiensJouteScoreJoueur(string commande)
         {
-            //int idJoute = 0;
-            List<LienJouteScoreJoueur> liensTrouves = dB_Manager.ListerLiensJouteScoreJoueur("");
-            foreach (var lienAVerifier in liensTrouves) 
-            {
-                
-            }
-            return liensTrouves;
+            return dB_Manager.ListerLiensJouteScoreJoueur("");
         }
 
         internal int CreerLienJouteScoreJoueurDansBD(Rencontre rencontreAjoutScores)
         {
             int lignesAffectees = 0;
-
-
             Partie partie = new Partie();
-
             partie.IdPartie = rencontreAjoutScores.Id_Joute;
             List<Partie> parties = dB_Manager.ListerPartiesDansBD(partie, "");
 
@@ -331,11 +280,10 @@ namespace WindowsFormsLigueScrabble
                 lignesAffectees += dB_Manager.CreerLienJouteScoreJoueur(id_Joute, parties[0].Idjoueur4, idScore);
             }
 
-
             return lignesAffectees;
         }
 
-        internal List<ScoreJoueurDataGrid> ListerLiensJouteScoreJoueur(int lister, List<LienJouteScoreJoueur> liensJouteScoreJoueur, int idJoute)
+        internal List<ScoreJoueurDataGrid> ListerScoresJoueurs(int lister, List<LienJouteScoreJoueur> liensJouteScoreJoueur, int idJoute)
         {
             List<ScoreJoueurDataGrid> scoresDataGrid = new List<ScoreJoueurDataGrid>();
             foreach (var lien in liensJouteScoreJoueur)

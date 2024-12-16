@@ -26,15 +26,6 @@ namespace WindowsFormsLigueScrabble
             RemplirDataGridViewRencontre();
         }
 
-        private DateTime TrouverProchainMercredi()
-        {
-            DateTime aujourdhui = DateTime.Today;
-            // The (... + 7) % 7 ensures we end up with a value in the range [0, 6]
-            int nombreJoursDIciProchainMercredi = ((int)DayOfWeek.Wednesday - (int)aujourdhui.DayOfWeek + 7) % 7;
-            DateTime mercrediProchain = aujourdhui.AddDays(nombreJoursDIciProchainMercredi);
-            return mercrediProchain;
-        }
-
         private void RemplirDataGridViewRencontre()
         {
             dataGridViewSessions.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
@@ -62,7 +53,6 @@ namespace WindowsFormsLigueScrabble
             dataGridViewSessions.ReadOnly = true;
             labelTotalSessions.Text = controleur.rencontres.Count.ToString() + " rencontres total.";
         }
-
         private void buttonAjouterSession_Click(object sender, EventArgs e)
         {
             EditionRencontreForm editionRencontreForm = new EditionRencontreForm(controleur, null);
@@ -95,7 +85,6 @@ namespace WindowsFormsLigueScrabble
             Rencontre rencontreAModifier = new Rencontre();
             if (controleur.rencontres.Count == 0) return;
             rencontreAModifier = (Rencontre)dataGridViewSessions["Session", dataGridViewSessions.CurrentRow.Index].Value;
-            //rencontreAModifier.DateDeJeu = (DateTime)dataGridViewSessions["Session", dataGridViewSessions.CurrentRow.Index].Value;
             rencontreAModifier.IdSession = (int)dataGridViewSessions["IdSession", dataGridViewSessions.CurrentRow.Index].Value;
             rencontreAModifier.Id_Joute = (int)dataGridViewSessions["Id_Ronde", dataGridViewSessions.CurrentRow.Index].Value;
             rencontreAModifier.Id_Table = (int)dataGridViewSessions["Id_Table", dataGridViewSessions.CurrentRow.Index].Value;
@@ -111,11 +100,9 @@ namespace WindowsFormsLigueScrabble
                 RemplirDataGridViewRencontre();
                 return;
             }
-
             EditionRencontreForm editionRencontreForm = new EditionRencontreForm(controleur, rencontreAModifier);
             editionRencontreForm.ShowDialog();
             RemplirDataGridViewRencontre();
-
         }
         private void buttonTerminer_Click(object sender, EventArgs e)
         {
@@ -131,13 +118,11 @@ namespace WindowsFormsLigueScrabble
             dataGridViewSessions.DataSource = controleur.GererRencontres(null, 0, 0, null, controleur.lister, orderBy);
             RemplirDataGridViewRencontre ();
         }
-
         private void buttonConfirmMouseHover(object sender, EventArgs e)
         {
             toolTipActionne.SetToolTip(buttonAjouterSession, "Ajouter nouvelle session");
             toolTipActionne.SetToolTip(buttonSupprimerSession, "Supprimer session");
             toolTipActionne.SetToolTip(buttonModifierSession, "Ajouter joueurs");
         }
-
     }
 }

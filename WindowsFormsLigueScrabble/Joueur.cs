@@ -24,7 +24,6 @@ namespace WindowsFormsLigueScrabble
 
         public Joueur() { }
 
-
         public string Nom { get => nom; set => nom = value; }
         public bool CacherNom { get => cacherNom; set => cacherNom = value; }
 

@@ -32,11 +32,6 @@ namespace WindowsFormsLigueScrabble
         List<Joueur> listeJoueur3 = new List<Joueur>();
         List<Joueur> listeJoueur4 = new List<Joueur>();
 
-        Joueur ancienJoueur;
-        Joueur ancienJoueur2;
-        Joueur ancienJoueur3;
-        Joueur ancienJoueur4;
-
         int modificationAFaire = 100;
         int ajouterNouvelleSession = 0;
         int ajouterTableEtPartie = 1;
@@ -78,7 +73,6 @@ namespace WindowsFormsLigueScrabble
         {
             InitialiserLesListesComboBoxJoueurs();
             RemplirLesComboBoxJoueurs();
-            MettreAJourAnciensJoueurs();
 
             if (modificationAFaire == ajouterNouvelleSession)
             {
@@ -97,8 +91,6 @@ namespace WindowsFormsLigueScrabble
                 dateTimePickerNewSession.Enabled = false;
 
                 comboBoxHeure.Enabled = false;
-                //if (rencontreAModifier.Id_Joute != 0) comboBoxRonde.Enabled = false;
-                //if (rencontreAModifier.Id_Table != 0) comboBoxPupitre.Enabled = false;
             }
             if (modificationAFaire == ajouterJoueursSeulement)
             {
@@ -118,7 +110,6 @@ namespace WindowsFormsLigueScrabble
                 dataGridViewRencontres.DataSource = controleur.GererRencontres(null, 0, 0, null, controleur.lister, orderBySessions);
                 return;
             }
-            //Rencontre rencontreAAfficher = controleur.TrouverRencontre(rencontreAModifier.IdSession);
             dateTimePickerNewSession.Value = rencontreAModifier.DateDeJeu;
             comboBoxHeure.Text = Convert.ToString(rencontreAModifier.DateDeJeu.Hour) + "h";
             if (rencontreAModifier.Id_Joute != 0) comboBoxRonde.Text = rencontreAModifier.NoJoute.ToString();
@@ -175,14 +166,6 @@ namespace WindowsFormsLigueScrabble
             return mercrediProchain;
         }
 
-        private void MettreAJourAnciensJoueurs()
-        {
-            //if (comboBoxJoueur1.SelectedItem != null) ancienJoueur1 = (comboBoxJoueur1.SelectedItem as Joueur);
-            //if (comboBoxJoueur2.SelectedItem != null) ancienJoueur2 = (comboBoxJoueur2.SelectedItem as Joueur);
-            //if (comboBoxJoueur3.SelectedItem != null) ancienJoueur3 = (comboBoxJoueur3.SelectedItem as Joueur);
-            //if (comboBoxJoueur4.SelectedItem != null) ancienJoueur4 = (comboBoxJoueur4.SelectedItem as Joueur);
-        }
-
         private void InitialiserLesListesComboBoxJoueurs()
         {
             listeJoueursOriginale = controleur.GererJoueur(null, controleur.lister, orderByJoueurs);
@@ -195,7 +178,6 @@ namespace WindowsFormsLigueScrabble
 
         private void RemplirLesComboBoxJoueurs()
         {
-            //List<Joueur> joueurs = controleur.GererJoueur(null, controleur.lister, orderByJoueurs);
             comboBoxJoueur1.DataSource = listeJoueur1;
             comboBoxJoueur1.SelectedIndex = -1; 
             comboBoxJoueur2.DataSource = listeJoueur2;
@@ -224,8 +206,6 @@ namespace WindowsFormsLigueScrabble
                 int.TryParse((string)comboBoxRonde.SelectedItem, out result);
                 nouvellesDonneesRencontre.NoPartie = result;
 
-               
-
                 LienTableSession lienTableSession = new LienTableSession();
                 List<LienTableSession> liensTableSession = new List<LienTableSession>();
 
@@ -247,25 +227,20 @@ namespace WindowsFormsLigueScrabble
                     rencontreAModifier.NoTable = rencontreBidon.Table;
                     rencontreAModifier.DateNouvelle = rencontreBidon.Session.DateNouvelle;
                     rencontreAModifier.DateDeJeu = rencontreBidon.Session.DateDeJeu;
-
                     
                     modificationAFaire = VerifierModificationAFaire(rencontreAModifier);
-
                 }
                 else MessageBox.Show("Existe déjà");
             }
 
-            //Pour ajouter des joueurs, on ne touche pas à la date, heure, table et joute
+            //Pour ajouter des joueurs sans toucher à date, heure, table et joute
             if (modificationAFaire == ajouterJoueursAvecPartieExistante)  
             {
                 if (!VerifierLesDonnees()) return;
-
-
                 List<Joueur> joueursAJouter = AjouterJoueursDansPartie();
                 int lignesDbAffectees = controleur.GererJoute(rencontreAModifier, joueursAJouter);
                 if (lignesDbAffectees != 0) 
                 { 
-                    
                     MessageBox.Show("Ajout réussi."); 
                 }
                 else { MessageBox.Show("Ajout impossible."); }
@@ -290,14 +265,12 @@ namespace WindowsFormsLigueScrabble
                 int lignesDbAffectees = controleur.GererJoute(rencontreAModifier, joueursAJouter);
                 if (lignesDbAffectees != 0)
                 {
-
                     MessageBox.Show("Ajout réussi.");
                 }
                 else { MessageBox.Show("Ajout impossible."); }
                 AfficherLesDonneesDeRencontreAModifier(rencontreAModifier);
                 int idScore = controleur.CreerLienJouteScoreJoueurDansBD(rencontreAModifier);
             }
-            
         }
 
         private List<Joueur> AjouterJoueursDansPartie()
@@ -335,7 +308,6 @@ namespace WindowsFormsLigueScrabble
                 return sessions;
             }
             return null;
-           
         }
 
         private int ConvertirComboBoxHeure()
@@ -372,12 +344,10 @@ namespace WindowsFormsLigueScrabble
                 if (nbJoueurs == 0 && (modificationAFaire == ajouterNouvelleSession)) ajoutOk = controleur.DemandeDeConfirmation("Créer une session sans joueurs?");
                 else if (nbJoueurs <=2 && (modificationAFaire == ajouterJoueursSeulement)) MessageBox.Show("Le nombre de joueurs est insuffisant (3 min.)");
             }
-
             if (dateOk && heureOk && pupitreOk && rondeOk && joueursOk)
             {
                 ajoutOk = controleur.DemandeDeConfirmation("Créer une session avec les joueurs affichés?");
             }
-
             if (dateOk && !heureOk && joueursOk && (!pupitreOk || !rondeOk)) { MessageBox.Show("Erreur de données.\nHeure, Table et/ou Partie manquantes."); }
 
             return ajoutOk;
@@ -404,7 +374,6 @@ namespace WindowsFormsLigueScrabble
                 labelPlace4.Text = string.Empty;
             }
         }
-
         private void MettreAJourPlacesAuPupitre()
         {
             if (comboBoxJoueur1.SelectedItem != null) labelPlace1.Text = comboBoxJoueur1.SelectedItem.ToString();
@@ -432,11 +401,6 @@ namespace WindowsFormsLigueScrabble
             this.Close();
         }
 
-        private void labelPlace2_Click(object sender, EventArgs e)
-        {
-
-        }
-
         private void AnyComboBoxJoueur_SelectionChangeCommitted(object sender, EventArgs e)
         {
             ComboBox comboBoxChoisie = sender as ComboBox;
@@ -458,10 +422,7 @@ namespace WindowsFormsLigueScrabble
             {
                 if (joueurChoisi == comboBoxJoueur4.SelectedItem as Joueur) { MessageErreurChoixJoueur(comboBoxChoisie, joueurChoisi); return; }
             }
-            ancienJoueur = comboBoxChoisie.SelectedItem as Joueur;
             MettreAJourPlacesAuPupitre();
         }
-        
-
     }
 }

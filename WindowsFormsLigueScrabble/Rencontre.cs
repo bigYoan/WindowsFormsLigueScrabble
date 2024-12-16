@@ -15,7 +15,6 @@ namespace WindowsFormsLigueScrabble
         int id_Joute;
         int noTable;
         int noJoute;
-        //int heureNouvelle;
 
         public DateTime DateDeJeu { get => dateDeJeu; set => dateDeJeu = value; }
         public DateTime DateNouvelle { get => dateNouvelle; set => dateNouvelle = value; }
@@ -25,7 +24,6 @@ namespace WindowsFormsLigueScrabble
         public int NoTable { get => noTable; set => noTable = value; }
         public int NoJoute { get => noJoute; set => noJoute = value; }
 
-        //public int HeureNouvelle { get => heureNouvelle; set => heureNouvelle = value; }
 
         public override string ToString()
         {

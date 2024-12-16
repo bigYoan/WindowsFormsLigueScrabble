@@ -222,7 +222,6 @@
             this.labelPlace2.Name = "labelPlace2";
             this.labelPlace2.Size = new System.Drawing.Size(0, 20);
             this.labelPlace2.TabIndex = 18;
-            this.labelPlace2.Click += new System.EventHandler(this.labelPlace2_Click);
             // 
             // labelPlace4
             // 
