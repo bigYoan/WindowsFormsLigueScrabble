@@ -60,14 +60,7 @@ namespace WindowsFormsLigueScrabble
                 return joueurs;
             }
             return null;
-            
         }
-        internal List<Joueur> AjouterJoueurDansBD(Joueur joueurAAjouter)
-        {
-            
-            return joueurs;
-        }
-
         public bool DemandeDeConfirmation(string rubriqueAModifier)
         {
             {
@@ -75,7 +68,6 @@ namespace WindowsFormsLigueScrabble
                 return (approuveChangement != DialogResult.Cancel);
             }
         }
-
         internal List<RencontresDataGrid> GererRencontres(Rencontre newRencontre, int noTable, int noPartie, List<Joueur> joueurs, int ordre, string orderBy)
         {
             int lignesAffectees = 0;
@@ -94,7 +86,6 @@ namespace WindowsFormsLigueScrabble
                     if (AjouterTable(idNouvelleSession, noTable, noPartie) > 0) 
                     {
                         MessageBox.Show("Ajout réussi");
-                        //return dB_Manager.ListerRencontresDansBD(orderBy);
                     }
                 }
                 else
@@ -109,25 +100,39 @@ namespace WindowsFormsLigueScrabble
 
             if (newRencontre != null && ordre == supprimer)
             {
-                // Supprimer joueur dans BD
+                // Lister liens puis les supprimer
+                int idJoute = 0;
+                List<LiensSessionTablePartie> liensSTP = dB_Manager.ListerLiensSessionTablePartie(" WHERE Id_Session = " + newRencontre.IdSession.ToString());
+                if (liensSTP.Count != 0)
+                {
+                    List<LienJouteScoreJoueur> liensJSJ = dB_Manager.ListerLiensJouteScoreJoueur(" WHERE Id_Joute = " + liensSTP[0].IdPartie.ToString());
+                    if (liensJSJ.Count != 0)
+                    {
+                        for (int noLien = 0; noLien < liensJSJ.Count; noLien++) 
+                        {
+                            lignesAffectees = dB_Manager.SupprimerLienJSJ("DELETE FROM Joute_Score_Joueur WHERE Id_Score = " + liensJSJ[noLien].IdScore.ToString());
+                            if (lignesAffectees != 0)
+                            {
+                                dB_Manager.SupprimerScore(liensJSJ[noLien].IdScore);
+                            }
+                        }
+                        
+                    }
+                }
+                
+                // Supprimer rencontre dans BD
                 lignesAffectees = dB_Manager.SupprimerRencontreDansBD(newRencontre.IdSession, noTable, noPartie);
                 if (lignesAffectees == 0) { MessageBox.Show("Exécution annulée"); }
-                //rencontres = dB_Manager.ListerRencontresDansBD(orderBy);
-                //return rencontres;
             }
             if (newRencontre != null && ordre == modifier)
             {
                 //Modifier joueur dans BD
                 lignesAffectees = dB_Manager.ModifierRencontreDansBD(newRencontre, modifier);
                 if (lignesAffectees == 0) { MessageBox.Show("Exécution annulée"); }
-                //rencontres = dB_Manager.ListerRencontresDansBD(orderBy);
-                //return rencontres;
             }
-            //return null;
             rencontres = dB_Manager.ListerRencontresDansBD(orderBy);
             return rencontres;
         }
-
         private int AjouterTable(int id_rencontre, int noTable, int noPartie)
         {
             int idTable = 0;
@@ -140,33 +145,12 @@ namespace WindowsFormsLigueScrabble
             {
                 idTable = dB_Manager.AjouterNouvelleTable(noTable, "Sans ODS");
             }
-
-            //if (noPartie != 0)
-            //{
-            //    List<Partie> parties = dB_Manager.ListerPartiesDansBD("");
-            //    foreach (Partie partie in parties) { if (noPartie == partie.NoPartie) { idPartie = partie.IdPartie; } }
-            //}
-            // Crée des tables ou des nouvelles parties au besoin
-            //if (idPartie == 0)
-            //{
-                idPartie = dB_Manager.CreerNouvellePartie(noPartie);
-            //}
+            idPartie = dB_Manager.CreerNouvellePartie(noPartie);
+           
             // Ajouter des tables avec joutes
             int lignesAffectees = dB_Manager.CreerLiens_Session_Table_Partie(id_rencontre, idTable, idPartie);
             return lignesAffectees;
         }
-
-        internal List<LienTableSession> ListerLiens(string commande)
-        {
-            List<LienTableSession> liens = new List<LienTableSession>();
-
-            if (commande == "Table_Session")
-            {
-                liens = dB_Manager.ListerLiensRencontre_Table("");
-            }
-            return liens;
-        }
-
         internal bool VerifierLiens(DonneesRencontre nouvelledonneeRencontre)
         {
             List<Rencontre> rencontresDansBD = dB_Manager.ListerRencontresSeules("");
@@ -180,9 +164,6 @@ namespace WindowsFormsLigueScrabble
             List<int> listeTablesAvecMatch = new List<int>();
             int idPartieDansBD = 0;
             List<int> listePartiesAvecMatch = new List<int>();
-            int idRencontre = 0;
-            int idTable = 0;
-            int idPartie = 0;
             bool trouveMatchRencontre = false;
             bool trouveMatchTable = false;
             bool trouveMatchPartie = false;
@@ -195,7 +176,6 @@ namespace WindowsFormsLigueScrabble
                     listeSessionsAvecMatch.Add(idSessionDansBD);
                     trouveMatchRencontre = true;
                 }
-                 
             }
             foreach (var tableAVerifier in tablesDansBD)
             {
@@ -205,7 +185,6 @@ namespace WindowsFormsLigueScrabble
                     listeTablesAvecMatch.Add(idTableDansBD);
                     trouveMatchTable = true;
                 }
-                 
             }
             foreach (var partieAVerifier in partiesDansBD)
             {
@@ -215,7 +194,6 @@ namespace WindowsFormsLigueScrabble
                     listePartiesAvecMatch.Add(idPartieDansBD);
                     trouveMatchPartie = true;
                 }
-                
             }
             if (trouveMatchRencontre && trouveMatchTable && trouveMatchPartie)
             {

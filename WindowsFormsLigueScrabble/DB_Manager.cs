@@ -874,5 +874,47 @@ namespace WindowsFormsLigueScrabble
             }
             catch (Exception) { throw; }
         }
+
+        internal int SupprimerLienJSJ(string commande)
+        {
+            try
+            {
+                MySqlConnection sqlConnexion = new MySqlConnection(maConnexionString);
+                int lignesAffectees = 0;
+                using (sqlConnexion)
+                {
+                    sqlConnexion.Open();
+
+                    using (MySqlCommand cmd = new MySqlCommand(commande, sqlConnexion))
+                    {
+                        lignesAffectees = cmd.ExecuteNonQuery();
+                    }
+                    sqlConnexion.Close();
+                    return lignesAffectees;
+                }
+            }
+            catch (Exception) { throw; }
+        }
+
+        internal int SupprimerScore(int idScore)
+        {
+            try
+            {
+                MySqlConnection sqlConnexion = new MySqlConnection(maConnexionString);
+                int lignesAffectees = 0;
+                using (sqlConnexion)
+                {
+                    sqlConnexion.Open();
+
+                    using (MySqlCommand cmd = new MySqlCommand("DELETE from Score WHERE ID_Score = " + idScore.ToString(), sqlConnexion))
+                    {
+                        lignesAffectees = cmd.ExecuteNonQuery();
+                    }
+                    sqlConnexion.Close();
+                    return lignesAffectees;
+                }
+            }
+            catch (Exception) { throw; }
+        }
     }
 }

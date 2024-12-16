@@ -65,27 +65,34 @@ namespace WindowsFormsLigueScrabble
             int indexRang1;
             int indexRang2;
             int indexRang3;
-            int indexRang4 = 5;
+            int indexRang4;
+            int joueursSansTotal = 0;
             foreach (var score in scores)
             {
                 totalJoueur.Add(score.ScoreJoueur.Total);
+                if (score.ScoreJoueur.Total == 0) joueursSansTotal++;
             }
 
+            
+           
             indexRang1 = totalJoueur.IndexOf(totalJoueur.Max());
-
             totalJoueur[indexRang1] = 0;
             indexRang2 = totalJoueur.IndexOf(totalJoueur.Max());
             totalJoueur[indexRang2] = 0;
             indexRang3 = totalJoueur.IndexOf(totalJoueur.Max());
             totalJoueur[indexRang3] = 0;
             if (totalJoueur.Count == 4) indexRang4 = totalJoueur.IndexOf(totalJoueur.Max());
-
+            else indexRang4 = 0;
             for (int colonne = 0; colonne < scores.Count; colonne++)
             {
-                if (colonne == indexRang1) scores[colonne].Rang = "1er";
-                if (colonne == indexRang2) scores[colonne].Rang = "2e";
-                if (colonne == indexRang3) scores[colonne].Rang = "3e";
-                if (colonne == indexRang4) scores[colonne].Rang = "4e";
+                if (joueursSansTotal == 0)
+                {
+                    if (colonne == indexRang1) scores[colonne].Rang = "1er";
+                    if (colonne == indexRang2) scores[colonne].Rang = "2e";
+                    if (colonne == indexRang3) scores[colonne].Rang = "3e";
+                    if (totalJoueur.Count > 3) if (colonne == indexRang4) scores[colonne].Rang = "4e";
+                }
+                else scores[colonne].Rang = "";
             }
             return scores;
         }
@@ -250,7 +257,7 @@ namespace WindowsFormsLigueScrabble
             {
                 lignesAffectees = controleur.GererScore(controleur.ajouter, scoresASauvegarderDataGrid[noScore]);
             }
-
+            if (lignesAffectees > 0) MessageBox.Show("Données sauvegardées.");
             changementDataGridNonSauvegarde = false;
         }
 

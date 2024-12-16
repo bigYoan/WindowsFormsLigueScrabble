@@ -64,7 +64,6 @@ namespace WindowsFormsLigueScrabble
             }
             else if (j1 + j2 + j3 + j4 >= 3) { return ajouterJoueursAvecPartieExistante; }
             else return ajouterJoueursSeulement;
-
         }
 
         private void EditionRencontreForm_Load(object sender, EventArgs e)
@@ -209,6 +208,8 @@ namespace WindowsFormsLigueScrabble
 
         private void buttonConfirmerAjout_Click(object sender, EventArgs e)
         {
+            Rencontre rencontreAModifier = new Rencontre();
+
             // Ajout d'une nouvelle session, avec nouvelle table et nouvelle partie
             if (modificationAFaire == ajouterNouvelleSession)
             {
@@ -235,22 +236,66 @@ namespace WindowsFormsLigueScrabble
                     rencontres = AjouterNouvelleSession(nouvellesDonneesRencontre);
                     dataGridViewRencontres.DataSource = rencontres;
                     dataGridViewRencontres.ClearSelection();
+
+                    // Préparer si on veut ajouter des joueurs
+
+                    RencontresDataGrid rencontreBidon = rencontres.ElementAt(rencontres.Count - 1);
+                    rencontreAModifier.IdSession = rencontreBidon.IdSession;
+                    rencontreAModifier.Id_Joute = rencontreBidon.Id_Ronde;
+                    rencontreAModifier.NoJoute = rencontreBidon.Ronde;
+                    rencontreAModifier.Id_Table = rencontreBidon.Id_Table;
+                    rencontreAModifier.NoTable = rencontreBidon.Table;
+                    rencontreAModifier.DateNouvelle = rencontreBidon.Session.DateNouvelle;
+                    rencontreAModifier.DateDeJeu = rencontreBidon.Session.DateDeJeu;
+
+                    
+                    modificationAFaire = VerifierModificationAFaire(rencontreAModifier);
+
                 }
                 else MessageBox.Show("Existe déjà");
             }
 
             //Pour ajouter des joueurs, on ne touche pas à la date, heure, table et joute
-            if (modificationAFaire == ajouterJoueursSeulement)  
+            if (modificationAFaire == ajouterJoueursAvecPartieExistante)  
             {
                 if (!VerifierLesDonnees()) return;
 
 
                 List<Joueur> joueursAJouter = AjouterJoueursDansPartie();
                 int lignesDbAffectees = controleur.GererJoute(rencontreAModifier, joueursAJouter);
-                if (lignesDbAffectees != 0) { MessageBox.Show("Ajout réussi."); }
+                if (lignesDbAffectees != 0) 
+                { 
+                    
+                    MessageBox.Show("Ajout réussi."); 
+                }
                 else { MessageBox.Show("Ajout impossible."); }
                 AfficherLesDonneesDeRencontreAModifier(rencontreAModifier);
-                
+                int idScore = controleur.CreerLienJouteScoreJoueurDansBD(rencontreAModifier);
+            }
+
+            if (modificationAFaire == ajouterJoueursSeulement)
+            {
+                if (!VerifierLesDonnees()) return;
+
+                RencontresDataGrid rencontreBidon = rencontres.ElementAt(rencontres.Count - 1);
+                rencontreAModifier.IdSession = rencontreBidon.IdSession;
+                rencontreAModifier.Id_Joute = rencontreBidon.Id_Ronde;
+                rencontreAModifier.NoJoute = rencontreBidon.Ronde;
+                rencontreAModifier.Id_Table = rencontreBidon.Id_Table;
+                rencontreAModifier.NoTable = rencontreBidon.Table;
+                rencontreAModifier.DateNouvelle = rencontreBidon.Session.DateNouvelle;
+                rencontreAModifier.DateDeJeu = rencontreBidon.Session.DateDeJeu;
+
+                List<Joueur> joueursAJouter = AjouterJoueursDansPartie();
+                int lignesDbAffectees = controleur.GererJoute(rencontreAModifier, joueursAJouter);
+                if (lignesDbAffectees != 0)
+                {
+
+                    MessageBox.Show("Ajout réussi.");
+                }
+                else { MessageBox.Show("Ajout impossible."); }
+                AfficherLesDonneesDeRencontreAModifier(rencontreAModifier);
+                int idScore = controleur.CreerLienJouteScoreJoueurDansBD(rencontreAModifier);
             }
             
         }
