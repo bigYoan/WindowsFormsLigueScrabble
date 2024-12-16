@@ -26,6 +26,7 @@ insert into game (No_ronde) values (1);
 insert into game (No_ronde) values (2);
 insert into game (No_ronde) values (1);
 
+
 insert into Session_Table_Game values (1,1,1);		 /*(Id_Session, Id_Table, Id_Joute)*/
 insert into Session_Table_Game values (1,1,2);
 insert into Session_Table_Game values (1,2,3);
