@@ -42,6 +42,7 @@ namespace WindowsFormsLigueScrabble
         private void ScoresForm_Load(object sender, EventArgs e)
         {
             liensJouteScoreJoueur = controleur.ListerLiensJouteScoreJoueur("");
+            if (liensJouteScoreJoueur == null) controleur.MsgErrDB();
             if (JouteExiste())
             {
                 InitialiserDataGridViewScores();
@@ -53,6 +54,7 @@ namespace WindowsFormsLigueScrabble
         {
             List<ScoreJoueurDataGrid> scoresBrut = new List<ScoreJoueurDataGrid>();
             scoresBrut = controleur.ListerScoresJoueurs(controleur.lister, liensJouteScoreJoueur, rencontreAjoutScores.Id_Joute);
+            if (scoresBrut == null) controleur.MsgErrDB();
             scoresDataGrid = DeterminerLesRangsDesJoueurs(scoresBrut);
             RemplirDataGridScores(scoreEnCours, null);
             //ModifierScoresAJouteDejaCommencee();
@@ -247,6 +249,7 @@ namespace WindowsFormsLigueScrabble
                 lignesAffectees = controleur.GererScore(controleur.ajouter, scoresASauvegarderDataGrid[noScore]);
             }
             if (lignesAffectees > 0) MessageBox.Show("Données sauvegardées.");
+            else controleur.MsgErrDB();
             changementDataGridNonSauvegarde = false;
         }
 
