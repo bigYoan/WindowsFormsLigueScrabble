@@ -93,6 +93,7 @@
             this.Controls.Add(this.dataGridViewScores);
             this.Name = "ScoresForm";
             this.Text = "Ajout/Modification des scores";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.ScoresForm_FormClosing);
             this.Load += new System.EventHandler(this.ScoresForm_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewScores)).EndInit();
             this.ResumeLayout(false);

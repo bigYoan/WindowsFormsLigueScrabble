@@ -41,6 +41,7 @@ namespace WindowsFormsLigueScrabble
         int ajouterNouvelleSession = 0;
         int ajouterTableEtPartie = 1;
         int ajouterJoueursSeulement = 2;
+        int ajouterJoueursAvecPartieExistante = 3;
 
         public EditionRencontreForm(Controleur controleurX, Rencontre rencontreAModifierX)
         {
@@ -51,18 +52,25 @@ namespace WindowsFormsLigueScrabble
 
         private int VerifierModificationAFaire(Rencontre rencontreAModifier)
         {
+            int j1 = comboBoxJoueur1.SelectedItem == null ? 0 : 1;
+            int j2 = comboBoxJoueur2.SelectedItem == null ? 0 : 1;
+            int j3 = comboBoxJoueur3.SelectedItem == null ? 0 : 1;
+            int j4 = comboBoxJoueur4.SelectedItem == null ? 0 : 1;
+
             if (rencontreAModifier == null) { return ajouterNouvelleSession; }
             if (rencontreAModifier.Id_Table == 0 || rencontreAModifier.Id_Joute == 0)
             {
                 return ajouterTableEtPartie;
             }
-            return ajouterJoueursSeulement;
+            else if (j1 + j2 + j3 + j4 >= 3) { return ajouterJoueursAvecPartieExistante; }
+            else return ajouterJoueursSeulement;
+
         }
 
         private void EditionRencontreForm_Load(object sender, EventArgs e)
         {
-            rencontres = controleur.GererRencontres(null, 0, 0, null, controleur.lister, orderBySessions);
             modificationAFaire = VerifierModificationAFaire(rencontreAModifier);
+            if (rencontreAModifier == null) rencontres = controleur.GererRencontres(null, 0, 0, null, controleur.lister, orderBySessions);
             ReglerAffichageEtControles();
             AjusterProprietesDataGridViewSessions();
         }
@@ -75,7 +83,7 @@ namespace WindowsFormsLigueScrabble
 
             if (modificationAFaire == ajouterNouvelleSession)
             {
-                dataGridViewRencontres.DataSource = controleur.rencontres;
+                AfficherLesDonneesDeRencontreAModifier(null);
                 dateTimePickerNewSession.Enabled = true;
                 comboBoxHeure.Enabled = true;
                 comboBoxRonde.Enabled = true;
@@ -85,6 +93,7 @@ namespace WindowsFormsLigueScrabble
             }
             if (modificationAFaire == ajouterTableEtPartie) 
             {
+                rencontres = controleur.GererRencontres(null, 0, 0, null, controleur.lister, orderBySessions);
                 AfficherLesDonneesDeRencontreAModifier(rencontreAModifier);
                 dateTimePickerNewSession.Enabled = false;
 
@@ -94,17 +103,22 @@ namespace WindowsFormsLigueScrabble
             }
             if (modificationAFaire == ajouterJoueursSeulement)
             {
+                rencontres = controleur.GererRencontres(null, rencontreAModifier.Id_Table, rencontreAModifier.Id_Joute, null, controleur.lister, orderBySessions);
                 AfficherLesDonneesDeRencontreAModifier(rencontreAModifier);
                 dateTimePickerNewSession.Enabled = false;
                 comboBoxHeure.Enabled = false;
                 comboBoxPupitre.Enabled = false;
                 comboBoxRonde.Enabled= false;
-
             }
         }
 
         private void AfficherLesDonneesDeRencontreAModifier(Rencontre rencontreAModifier)
         {
+            if (rencontreAModifier == null)
+            {
+                dataGridViewRencontres.DataSource = controleur.GererRencontres(null, 0, 0, null, controleur.lister, orderBySessions);
+                return;
+            }
             //Rencontre rencontreAAfficher = controleur.TrouverRencontre(rencontreAModifier.IdSession);
             dateTimePickerNewSession.Value = rencontreAModifier.DateDeJeu;
             comboBoxHeure.Text = Convert.ToString(rencontreAModifier.DateDeJeu.Hour) + "h";
