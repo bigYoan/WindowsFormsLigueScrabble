@@ -55,6 +55,7 @@ namespace WindowsFormsLigueScrabble
         }
         private void buttonAjouterSession_Click(object sender, EventArgs e)
         {
+            Rencontre rencontreVide = new Rencontre();
             EditionRencontreForm editionRencontreForm = new EditionRencontreForm(controleur, null);
             editionRencontreForm.ShowDialog();
             RemplirDataGridViewRencontre();
@@ -124,5 +125,7 @@ namespace WindowsFormsLigueScrabble
             toolTipActionne.SetToolTip(buttonSupprimerSession, "Supprimer session");
             toolTipActionne.SetToolTip(buttonModifierSession, "Ajouter joueurs");
         }
+
+        
     }
 }

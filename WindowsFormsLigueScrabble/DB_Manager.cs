@@ -493,7 +493,7 @@ namespace WindowsFormsLigueScrabble
                     using (MySqlCommand cmd = new MySqlCommand("INSERT INTO Game (No_Ronde) VALUES (@No_Ronde); SELECT LAST_INSERT_ID();", sqlConnexion))
                     {
                         cmd.Parameters.Add(new MySqlParameter("@No_Ronde", noPartie));
-                        lignesAffectees = cmd.ExecuteNonQuery();
+                        //lignesAffectees = cmd.ExecuteNonQuery();
                         var idCree = cmd.ExecuteScalar().ToString();
                         bool ok = int.TryParse(idCree, out idPartieCree);
                     }
@@ -559,15 +559,15 @@ namespace WindowsFormsLigueScrabble
                     {
                         cmd.Parameters.Add(new MySqlParameter("@No_Joute", no_Joute));
                         cmd.Parameters.Add(new MySqlParameter("@Id_Joute", id_Joute));
-                        cmd.Parameters.Add(new MySqlParameter("@PlayerOne", playerOne.IdJoueur));
-                        cmd.Parameters.Add(new MySqlParameter("@PlayerTwo", playerTwo.IdJoueur));
-                        cmd.Parameters.Add(new MySqlParameter("@PlayerThree", playerThree.IdJoueur));
+                        cmd.Parameters.Add(new MySqlParameter("@PlayerOne", playerOne.Nom));
+                        cmd.Parameters.Add(new MySqlParameter("@PlayerTwo", playerTwo.Nom));
+                        cmd.Parameters.Add(new MySqlParameter("@PlayerThree", playerThree.Nom));
                         cmd.Parameters.Add(new MySqlParameter("@Id_PlayerOne", playerOne.IdJoueur));
                         cmd.Parameters.Add(new MySqlParameter("@Id_PlayerTwo", playerTwo.IdJoueur));
                         cmd.Parameters.Add(new MySqlParameter("@Id_PlayerThree", playerThree.IdJoueur));
                         if (playerFour != null)
                         {
-                            cmd.Parameters.Add(new MySqlParameter("@PlayerFour", playerFour.IdJoueur));
+                            cmd.Parameters.Add(new MySqlParameter("@PlayerFour", playerFour.Nom));
                             cmd.Parameters.Add(new MySqlParameter("@Id_PlayerFour", playerFour.IdJoueur));
                         }
                         else
@@ -587,6 +587,9 @@ namespace WindowsFormsLigueScrabble
         internal List<LienJouteScoreJoueur> ListerLiensJouteScoreJoueur(string commande)
         {
             List<LienJouteScoreJoueur> liensExistants = new List<LienJouteScoreJoueur>();
+            List<LienJouteScoreJoueur> liensExistantsARetourner = new List<LienJouteScoreJoueur>();
+
+            List<int> listeJoueursDansOrdre = new List<int>();
             try
             {
                 MySqlConnection sqlConnexion = new MySqlConnection(maConnexionString);
@@ -608,8 +611,32 @@ namespace WindowsFormsLigueScrabble
                             }
                         }
                     }
+                    using (MySqlCommand cmd = new MySqlCommand("SELECT * FROM Game where id_Joute =" + liensExistants[0].IdJoute.ToString() + commande, sqlConnexion))
+                    {
+                        using (MySqlDataReader reader = cmd.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                listeJoueursDansOrdre.Add((int)reader["Id_PlayerOne"]);
+                                listeJoueursDansOrdre.Add((int)reader["Id_PlayerTwo"]);
+                                listeJoueursDansOrdre.Add((int)reader["Id_PlayerThree"]);
+                                listeJoueursDansOrdre.Add((int)reader["Id_PlayerFour"]);
+                            }
+                        }
+                    }
                     sqlConnexion.Close();
-                    return liensExistants;
+                    foreach (int idJoueur  in listeJoueursDansOrdre)
+                    {
+                        for (int nbLien = 0; nbLien < liensExistants.Count; nbLien++)
+                        {
+                            if (liensExistants[nbLien].IdJoueur == idJoueur)
+                            {
+                                liensExistantsARetourner.Add(liensExistants[nbLien]);
+                            }
+                        }
+
+                    }
+                    return liensExistantsARetourner;
                 }
             }
             catch (Exception) { throw; }

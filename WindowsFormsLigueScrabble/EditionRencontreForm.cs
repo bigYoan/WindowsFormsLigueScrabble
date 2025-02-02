@@ -20,7 +20,7 @@ namespace WindowsFormsLigueScrabble
     internal partial class EditionRencontreForm : Form
     {
         Controleur controleur = new Controleur();
-        Rencontre rencontreAModifier = new Rencontre();
+        public Rencontre rencontreAModifier = new Rencontre();
         bool modeAjoutNouvelleSession = false;
         bool modeAjoutJoueursSeulement = false;
         string orderByJoueurs = "ORDER BY ID_Joueur";
@@ -52,7 +52,7 @@ namespace WindowsFormsLigueScrabble
             int j3 = comboBoxJoueur3.SelectedItem == null ? 0 : 1;
             int j4 = comboBoxJoueur4.SelectedItem == null ? 0 : 1;
 
-            if (rencontreAModifier == null) { return ajouterNouvelleSession; }
+            if (modeAjoutNouvelleSession) { return ajouterNouvelleSession; }
             if (rencontreAModifier.Id_Table == 0 || rencontreAModifier.Id_Joute == 0)
             {
                 return ajouterTableEtPartie;
@@ -63,8 +63,19 @@ namespace WindowsFormsLigueScrabble
 
         private void EditionRencontreForm_Load(object sender, EventArgs e)
         {
+            if (rencontreAModifier == null)
+            {
+                modeAjoutNouvelleSession = true;
+                rencontreAModifier = new Rencontre();
+            }
             modificationAFaire = VerifierModificationAFaire(rencontreAModifier);
-            if (rencontreAModifier == null) rencontres = controleur.GererRencontres(null, 0, 0, null, controleur.lister, orderBySessions);
+            
+
+            //if (rencontreAModifier == null)
+            //{
+            //    modificationAFaire = ajouterNouvelleSession;
+            //    rencontres = controleur.GererRencontres(null, 0, 0, null, controleur.lister, orderBySessions);
+            //}
             ReglerAffichageEtControles();
             AjusterProprietesDataGridViewSessions();
         }
@@ -108,7 +119,7 @@ namespace WindowsFormsLigueScrabble
 
         private void AfficherLesDonneesDeRencontreAModifier(Rencontre rencontreAModifier)
         {
-            if (rencontreAModifier == null)
+            if (modeAjoutNouvelleSession)
             {
                 dataGridViewRencontres.DataSource = controleur.GererRencontres(null, 0, 0, null, controleur.lister, orderBySessions);
                 return;
@@ -193,7 +204,8 @@ namespace WindowsFormsLigueScrabble
 
         private void buttonConfirmerAjout_Click(object sender, EventArgs e)
         {
-            Rencontre rencontreAModifier = new Rencontre();
+            //Rencontre rencontreAModifier = new Rencontre();
+            modificationAFaire = VerifierModificationAFaire(rencontreAModifier);
 
             // Ajout d'une nouvelle session, avec nouvelle table et nouvelle partie
             if (modificationAFaire == ajouterNouvelleSession)
@@ -221,7 +233,6 @@ namespace WindowsFormsLigueScrabble
                     dataGridViewRencontres.ClearSelection();
 
                     // Préparer si on veut ajouter des joueurs
-
                     RencontresDataGrid rencontreBidon = rencontres.ElementAt(rencontres.Count - 1);
                     rencontreAModifier.IdSession = rencontreBidon.IdSession;
                     rencontreAModifier.Id_Joute = rencontreBidon.Id_Ronde;
@@ -230,6 +241,7 @@ namespace WindowsFormsLigueScrabble
                     rencontreAModifier.NoTable = rencontreBidon.Table;
                     rencontreAModifier.DateNouvelle = rencontreBidon.Session.DateNouvelle;
                     rencontreAModifier.DateDeJeu = rencontreBidon.Session.DateDeJeu;
+                    modeAjoutNouvelleSession = false;
                     
                     modificationAFaire = VerifierModificationAFaire(rencontreAModifier);
                 }
