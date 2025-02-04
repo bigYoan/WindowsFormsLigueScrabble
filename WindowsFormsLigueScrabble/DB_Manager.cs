@@ -455,25 +455,27 @@ namespace WindowsFormsLigueScrabble
             catch (Exception) { throw; }
         }
 
-        internal int CreerLiens_Session_Table_Partie(int id_rencontre, int idTable, int idPartie)
+        internal int CreerLiens_Session_Table_Partie(LiensSessionTablePartie newLien)
         {
             try
             {
                 MySqlConnection sqlConnexion = new MySqlConnection(maConnexionString);
-                int lignesAffectees = 0;
+                int nbLignesAffectees = 0;
                 using (sqlConnexion)
                 {
                     sqlConnexion.Open();
 
-                    using (MySqlCommand cmd = new MySqlCommand("INSERT INTO Session_Table_Game VALUES (@Id_Session, @Id_Table, @Id_Joute)", sqlConnexion))
+                    using (MySqlCommand cmd = new MySqlCommand("INSERT INTO Session_Table_Game VALUES (@Id_Session, @Id_Table, @Id_Joute); SELECT LAST_INSERT_ID();", sqlConnexion))
                     {
-                        cmd.Parameters.Add(new MySqlParameter("@Id_Session", id_rencontre));
-                        cmd.Parameters.Add(new MySqlParameter("@Id_Table", idTable));
-                        cmd.Parameters.Add(new MySqlParameter("@Id_Joute", idPartie));
-                        lignesAffectees = cmd.ExecuteNonQuery();
+                        cmd.Parameters.Add(new MySqlParameter("@Id_Session", newLien.IdSession));
+                        cmd.Parameters.Add(new MySqlParameter("@Id_Table", newLien.IdTable));
+                        cmd.Parameters.Add(new MySqlParameter("@Id_Joute", newLien.IdPartie));
+                        nbLignesAffectees = cmd.ExecuteNonQuery();
+                        //var idCree = cmd.ExecuteScalar().ToString();
+                        //bool ok = int.TryParse(idCree, out idLienCree);
                     }
                     sqlConnexion.Close();
-                    return lignesAffectees;
+                    return nbLignesAffectees;
                 }
             }
             catch (Exception) { throw; }
@@ -611,7 +613,9 @@ namespace WindowsFormsLigueScrabble
                             }
                         }
                     }
-                    using (MySqlCommand cmd = new MySqlCommand("SELECT * FROM Game where id_Joute =" + liensExistants[0].IdJoute.ToString() + commande, sqlConnexion))
+                    if (liensExistants.Count == 0) return liensExistants;
+                    string maCommande = "SELECT * FROM Game where id_Joute =" + liensExistants[0].IdJoute.ToString();
+                    using (MySqlCommand cmd = new MySqlCommand(maCommande, sqlConnexion))
                     {
                         using (MySqlDataReader reader = cmd.ExecuteReader())
                         {
@@ -620,7 +624,8 @@ namespace WindowsFormsLigueScrabble
                                 listeJoueursDansOrdre.Add((int)reader["Id_PlayerOne"]);
                                 listeJoueursDansOrdre.Add((int)reader["Id_PlayerTwo"]);
                                 listeJoueursDansOrdre.Add((int)reader["Id_PlayerThree"]);
-                                listeJoueursDansOrdre.Add((int)reader["Id_PlayerFour"]);
+                                listeJoueursDansOrdre.Add(reader["Id_PlayerFour"] == DBNull.Value ? 0 : (int)reader["Id_PlayerFour"]);
+                                //listeJoueursDansOrdre.Add((int)reader["Id_PlayerFour"]);
                             }
                         }
                     }
@@ -685,7 +690,10 @@ namespace WindowsFormsLigueScrabble
             }
            
             commandeModifier = "UPDATE Score ";
-            setTours = " SET Tour1 = @Tour1, Tour2 = @Tour2, Tour3 = @Tour3, Tour4 = @Tour4, Tour5 = @Tour5 ";
+            setTours = " SET Tour1 = @Tour1, Tour2 = @Tour2, Tour3 = @Tour3, Tour4 = @Tour4, Tour5 = @Tour5" +
+                    ", Tour6 = @Tour6, Tour7 = @Tour7, Tour8 = @Tour8, Tour9 = @Tour9, Tour10 = @Tour10" +
+                    ", Tour11 = @Tour11, Tour12 = @Tour12, Tour13 = @Tour13, Tour14 = @Tour14, Tour15 = @Tour15" +
+                    ", Tour16 = @Tour16, Tour17 = @Tour17, Tour18 = @Tour18, Tour19 = @Tour19, Tour20 = @Tour20";
             setCompilations = ", Bonus = @Bonus, Penalite = @Penalite, Total = @Total ";
             whereCommand = " WHERE Id_Score = " + id_Score.ToString() + ";";
             commandeModifier = commandeModifier + setTours + setCompilations + whereCommand;
@@ -699,11 +707,26 @@ namespace WindowsFormsLigueScrabble
 
                     using (MySqlCommand cmd = new MySqlCommand(commandeModifier, sqlConnexion))
                     {
-                        cmd.Parameters.Add(new MySqlParameter("@Tour1", scoreAAjouter.Tour1));
-                        cmd.Parameters.Add(new MySqlParameter("@Tour2", scoreAAjouter.Tour2));
-                        cmd.Parameters.Add(new MySqlParameter("@Tour3", scoreAAjouter.Tour3));
-                        cmd.Parameters.Add(new MySqlParameter("@Tour4", scoreAAjouter.Tour4));
-                        cmd.Parameters.Add(new MySqlParameter("@Tour5", scoreAAjouter.Tour5));
+                        cmd.Parameters.Add(new MySqlParameter("@Tour1", scoreAAjouter.ScoreJoueur.Tour1));
+                        cmd.Parameters.Add(new MySqlParameter("@Tour2", scoreAAjouter.ScoreJoueur.Tour2));
+                        cmd.Parameters.Add(new MySqlParameter("@Tour3", scoreAAjouter.ScoreJoueur.Tour3));
+                        cmd.Parameters.Add(new MySqlParameter("@Tour4", scoreAAjouter.ScoreJoueur.Tour4));
+                        cmd.Parameters.Add(new MySqlParameter("@Tour5", scoreAAjouter.ScoreJoueur.Tour5));
+                        cmd.Parameters.Add(new MySqlParameter("@Tour6", scoreAAjouter.ScoreJoueur.Tour6));
+                        cmd.Parameters.Add(new MySqlParameter("@Tour7", scoreAAjouter.ScoreJoueur.Tour7));
+                        cmd.Parameters.Add(new MySqlParameter("@Tour8", scoreAAjouter.ScoreJoueur.Tour8));
+                        cmd.Parameters.Add(new MySqlParameter("@Tour9", scoreAAjouter.ScoreJoueur.Tour9));
+                        cmd.Parameters.Add(new MySqlParameter("@Tour10", scoreAAjouter.ScoreJoueur.Tour10));
+                        cmd.Parameters.Add(new MySqlParameter("@Tour11", scoreAAjouter.ScoreJoueur.Tour11));
+                        cmd.Parameters.Add(new MySqlParameter("@Tour12", scoreAAjouter.ScoreJoueur.Tour12));
+                        cmd.Parameters.Add(new MySqlParameter("@Tour13", scoreAAjouter.ScoreJoueur.Tour13));
+                        cmd.Parameters.Add(new MySqlParameter("@Tour14", scoreAAjouter.ScoreJoueur.Tour14));
+                        cmd.Parameters.Add(new MySqlParameter("@Tour15", scoreAAjouter.ScoreJoueur.Tour15));
+                        cmd.Parameters.Add(new MySqlParameter("@Tour16", scoreAAjouter.ScoreJoueur.Tour16));
+                        cmd.Parameters.Add(new MySqlParameter("@Tour17", scoreAAjouter.ScoreJoueur.Tour17));
+                        cmd.Parameters.Add(new MySqlParameter("@Tour18", scoreAAjouter.ScoreJoueur.Tour18));
+                        cmd.Parameters.Add(new MySqlParameter("@Tour19", scoreAAjouter.ScoreJoueur.Tour19));
+                        cmd.Parameters.Add(new MySqlParameter("@Tour20", scoreAAjouter.ScoreJoueur.Tour20));
                         cmd.Parameters.Add(new MySqlParameter("@Bonus", scoreAAjouter.Bonus));
                         cmd.Parameters.Add(new MySqlParameter("@Penalite", scoreAAjouter.Penalite));
                         cmd.Parameters.Add(new MySqlParameter("@Total", scoreAAjouter.TotalJoueur));
@@ -769,6 +792,24 @@ namespace WindowsFormsLigueScrabble
                                 monScore.Tour3 = reader["Tour3"] == DBNull.Value ? 0 : (int)reader["Tour3"];
                                 monScore.Tour4 = reader["Tour4"] == DBNull.Value ? 0 : (int)reader["Tour4"];
                                 monScore.Tour5 = reader["Tour5"] == DBNull.Value ? 0 : (int)reader["Tour5"];
+                                monScore.Tour6 = reader["Tour6"] == DBNull.Value ? 0 : (int)reader["Tour6"];
+                                monScore.Tour7 = reader["Tour7"] == DBNull.Value ? 0 : (int)reader["Tour7"];
+                                monScore.Tour8 = reader["Tour8"] == DBNull.Value ? 0 : (int)reader["Tour8"];
+                                monScore.Tour9 = reader["Tour9"] == DBNull.Value ? 0 : (int)reader["Tour9"];
+                                monScore.Tour10 = reader["Tour10"] == DBNull.Value ? 0 : (int)reader["Tour10"];
+                                monScore.Tour11 = reader["Tour11"] == DBNull.Value ? 0 : (int)reader["Tour11"];
+                                monScore.Tour12 = reader["Tour12"] == DBNull.Value ? 0 : (int)reader["Tour12"];
+                                monScore.Tour13 = reader["Tour13"] == DBNull.Value ? 0 : (int)reader["Tour13"];
+                                monScore.Tour14 = reader["Tour14"] == DBNull.Value ? 0 : (int)reader["Tour14"];
+                                monScore.Tour15 = reader["Tour15"] == DBNull.Value ? 0 : (int)reader["Tour15"];
+                                monScore.Tour16 = reader["Tour16"] == DBNull.Value ? 0 : (int)reader["Tour16"];
+                                monScore.Tour17 = reader["Tour17"] == DBNull.Value ? 0 : (int)reader["Tour17"];
+                                monScore.Tour18 = reader["Tour18"] == DBNull.Value ? 0 : (int)reader["Tour18"];
+                                monScore.Tour19 = reader["Tour19"] == DBNull.Value ? 0 : (int)reader["Tour19"];
+                                monScore.Tour20 = reader["Tour20"] == DBNull.Value ? 0 : (int)reader["Tour20"];
+                                //monScore.Tour21 = reader["Tour21"] == DBNull.Value ? 0 : (int)reader["Tour21"];
+                                //monScore.Tour22 = reader["Tour22"] == DBNull.Value ? 0 : (int)reader["Tour22"];
+
                                 //monScore.Total = reader["Total"] == DBNull.Value ? 0 : (int)reader["Total"];
                                 monScore.Bonus = reader["Bonus"] == DBNull.Value ? 0 : (int)reader["Bonus"];
                                 monScore.Penalite = reader["Penalite"] == DBNull.Value ? 0 : (int)reader["Penalite"];
@@ -825,5 +866,69 @@ namespace WindowsFormsLigueScrabble
             }
             catch (Exception) { throw; }
         }
+
+        internal int TrouverIdTable(int noTable)
+        {
+            int idTable = 0;
+            try
+            {
+                MySqlConnection sqlConnexion = new MySqlConnection(maConnexionString);
+                using (sqlConnexion)
+                {
+                    sqlConnexion.Open();
+                    using (MySqlCommand cmd = new MySqlCommand("SELECT Id_Table FROM _Table WHERE No_Table = " + noTable.ToString(), sqlConnexion))
+                    {
+                        var idCree = cmd.ExecuteScalar().ToString();
+                        bool ok = int.TryParse(idCree, out idTable);
+                    }
+                    sqlConnexion.Close();
+                    return idTable;
+                }
+            }
+            catch (Exception) { throw; }
+        }
+
+        internal int TrouverIdJoute(int newLienTable_Session_Joute)
+        {
+            int idJoute = 0;
+            try
+            {
+                MySqlConnection sqlConnexion = new MySqlConnection(maConnexionString);
+                using (sqlConnexion)
+                {
+                    sqlConnexion.Open();
+                    using (MySqlCommand cmd = new MySqlCommand("SELECT Id_Table FROM Session_Table_Game WHERE Id_Table_Session_Joute = " + newLienTable_Session_Joute.ToString(), sqlConnexion))
+                    {
+                        var idCree = cmd.ExecuteScalar().ToString();
+                        bool ok = int.TryParse(idCree, out idJoute);
+                    }
+                    sqlConnexion.Close();
+                    return idJoute;
+                }
+            }
+            catch (Exception) { throw; }
+        }
+
+        internal int TrouverNoJoute(int idJoute)
+        {
+            int noJoute = 0;
+            try
+            {
+                MySqlConnection sqlConnexion = new MySqlConnection(maConnexionString);
+                using (sqlConnexion)
+                {
+                    sqlConnexion.Open();
+                    using (MySqlCommand cmd = new MySqlCommand("SELECT No_Joute FROM Game WHERE Id_Joute = " + idJoute.ToString(), sqlConnexion))
+                    {
+                        var idCree = cmd.ExecuteScalar().ToString();
+                        bool ok = int.TryParse(idCree, out noJoute);
+                    }
+                    sqlConnexion.Close();
+                    return noJoute;
+                }
+            }
+            catch (Exception) { throw; }
+        }
     }
+    
 }

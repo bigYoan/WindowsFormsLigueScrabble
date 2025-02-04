@@ -10,8 +10,10 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Microsoft.Win32.SafeHandles;
 using Mysqlx.Session;
 using MySqlX.XDevAPI.Common;
+using MySqlX.XDevAPI.Relational;
 using Org.BouncyCastle.Bcpg;
 using Org.BouncyCastle.Tls;
 
@@ -45,6 +47,19 @@ namespace WindowsFormsLigueScrabble
             rencontreAModifier = rencontreAModifierX;
         }
 
+        private void EditionRencontreForm_Load(object sender, EventArgs e)
+        {
+            ReglerAffichageEtControles(rencontreAModifier);
+            AjusterProprietesDataGridViewSessions();
+
+            if (rencontreAModifier == null)
+            {
+                modeAjoutNouvelleSession = true;
+                rencontreAModifier = new Rencontre();
+            }
+            modificationAFaire = VerifierModificationAFaire(rencontreAModifier);
+
+        }
         private int VerifierModificationAFaire(Rencontre rencontreAModifier)
         {
             int j1 = comboBoxJoueur1.SelectedItem == null ? 0 : 1;
@@ -60,66 +75,72 @@ namespace WindowsFormsLigueScrabble
             else if (j1 + j2 + j3 + j4 >= 3) { return ajouterJoueursAvecPartieExistante; }
             else return ajouterJoueursSeulement;
         }
-
-        private void EditionRencontreForm_Load(object sender, EventArgs e)
-        {
-            if (rencontreAModifier == null)
-            {
-                modeAjoutNouvelleSession = true;
-                rencontreAModifier = new Rencontre();
-            }
-            modificationAFaire = VerifierModificationAFaire(rencontreAModifier);
-            
-
-            //if (rencontreAModifier == null)
-            //{
-            //    modificationAFaire = ajouterNouvelleSession;
-            //    rencontres = controleur.GererRencontres(null, 0, 0, null, controleur.lister, orderBySessions);
-            //}
-            ReglerAffichageEtControles();
-            AjusterProprietesDataGridViewSessions();
-        }
-
-        private void ReglerAffichageEtControles()
+        private void ReglerAffichageEtControles(Rencontre rencontreAAfficher)
         {
             InitialiserLesListesComboBoxJoueurs();
             RemplirLesComboBoxJoueurs();
 
-            if (modificationAFaire == ajouterNouvelleSession)
-            {
-                labelInstructions.Text = "Ajouter une nouvelle session.";
-                AfficherLesDonneesDeRencontreAModifier(null);
-                dateTimePickerNewSession.Enabled = true;
-                comboBoxHeure.Enabled = true;
-                comboBoxRonde.Enabled = true;
-                comboBoxPupitre.Enabled = true;
-                dateTimePickerNewSession.Value = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
-                comboBoxHeure.SelectedIndex = -1;
-            }
-            if (modificationAFaire == ajouterTableEtPartie) 
-            {
-                labelInstructions.Text = "Ajouter une table, une partie et joueurs(optionnels) à une session.";
-                rencontres = controleur.GererRencontres(null, 0, 0, null, controleur.lister, orderBySessions);
-                AfficherLesDonneesDeRencontreAModifier(rencontreAModifier);
-                dateTimePickerNewSession.Enabled = false;
+            // Temporaire :   afficher pour ajouter nouvelle session seulement
 
-                comboBoxHeure.Enabled = false;
-            }
-            if (modificationAFaire == ajouterJoueursSeulement)
-            {
-                labelInstructions.Text = "Ajouter des joueurs à une session.";
-                rencontres = controleur.GererRencontres(null, rencontreAModifier.Id_Table, rencontreAModifier.Id_Joute, null, controleur.lister, orderBySessions);
-                AfficherLesDonneesDeRencontreAModifier(rencontreAModifier);
-                dateTimePickerNewSession.Enabled = false;
-                comboBoxHeure.Enabled = false;
-                comboBoxPupitre.Enabled = false;
-                comboBoxRonde.Enabled= false;
-            }
+            labelInstructions.Text = "Ajouter une nouvelle session.";
+            AfficherLesDonneesDeRencontreAModifier(rencontreAAfficher);
+            dateTimePickerNewSession.Enabled = true;
+            comboBoxHeure.Enabled = true;
+            comboBoxRonde.Enabled = true;
+            comboBoxPupitre.Enabled = true;
+            dateTimePickerNewSession.Value = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
+            comboBoxHeure.SelectedIndex = -1;
+
+
+
+
+            //if (rencontreAAfficher == null)
+            //{
+            //    labelInstructions.Text = "Ajouter une nouvelle session.";
+            //    AfficherLesDonneesDeRencontreAModifier(rencontreAAfficher);
+            //    dateTimePickerNewSession.Enabled = true;
+            //    comboBoxHeure.Enabled = true;
+            //    comboBoxRonde.Enabled = true;
+            //    comboBoxPupitre.Enabled = true;
+            //    dateTimePickerNewSession.Value = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
+            //    comboBoxHeure.SelectedIndex = -1;
+            //}
+            //else
+            //{
+            //    //labelInstructions.Text = "Ajouter des joueurs à une session.";
+            //    AfficherLesDonneesDeRencontreAModifier(rencontreAAfficher);
+            //    if (rencontreAAfficher.Id_Table == 0) comboBoxPupitre.Enabled = false;
+            //    if (rencontreAAfficher.Id_Joute == 0) comboBoxRonde.Enabled = false;
+            //    //if (rencontreAAfficher.Joueurs == null) comboBoxJoueur1.Enabled = false;
+            //    dateTimePickerNewSession.Enabled = false;
+            //    comboBoxHeure.Enabled = false;
+            //    //comboBoxPupitre.Enabled = false;
+            //    //comboBoxRonde.Enabled = false;
+            //}
+            //if (modificationAFaire == ajouterTableEtPartie) 
+            //{
+            //    labelInstructions.Text = "Ajouter une table, une partie et joueurs(optionnels) à une session.";
+            //    rencontres = controleur.GererRencontres(null, 0, 0, null, controleur.lister, orderBySessions);
+            //    AfficherLesDonneesDeRencontreAModifier(rencontreAModifier);
+            //    dateTimePickerNewSession.Enabled = false;
+
+            //    comboBoxHeure.Enabled = false;
+            //}
+            //if (modificationAFaire == ajouterJoueursSeulement)
+            //{
+            //    labelInstructions.Text = "Ajouter des joueurs à une session.";
+            //    rencontres = controleur.GererRencontres(null, rencontreAModifier.Id_Table, rencontreAModifier.Id_Joute, null, controleur.lister, orderBySessions);
+            //    AfficherLesDonneesDeRencontreAModifier(rencontreAModifier);
+            //    dateTimePickerNewSession.Enabled = false;
+            //    comboBoxHeure.Enabled = false;
+            //    comboBoxPupitre.Enabled = false;
+            //    comboBoxRonde.Enabled= false;
+            //}
         }
 
         private void AfficherLesDonneesDeRencontreAModifier(Rencontre rencontreAModifier)
         {
-            if (modeAjoutNouvelleSession)
+            if (rencontreAModifier == null)
             {
                 dataGridViewRencontres.DataSource = controleur.GererRencontres(null, 0, 0, null, controleur.lister, orderBySessions);
                 return;
@@ -207,85 +228,112 @@ namespace WindowsFormsLigueScrabble
             //Rencontre rencontreAModifier = new Rencontre();
             modificationAFaire = VerifierModificationAFaire(rencontreAModifier);
 
-            // Ajout d'une nouvelle session, avec nouvelle table et nouvelle partie
-            if (modificationAFaire == ajouterNouvelleSession)
-            {
-                if (!VerifierLesDonnees()) return;
+            // Temporaire :   seulement ajouter nouvelle session avec joueurs pour l'instant sans vérifier les intrants
 
-                DonneesRencontre nouvellesDonneesRencontre = new DonneesRencontre();
 
-                int heureNouvelle = ConvertirComboBoxHeure();
-                nouvellesDonneesRencontre.DateEtHeure = dateTimePickerNewSession.Value.AddHours(heureNouvelle);
-                int.TryParse((string)comboBoxPupitre.SelectedItem, out int result);
-                nouvellesDonneesRencontre.NoTable = result;
-                int.TryParse((string)comboBoxRonde.SelectedItem, out result);
-                nouvellesDonneesRencontre.NoPartie = result;
+            
+            // Ajouter nouvelles Date, heure , table et partie
+            Rencontre nouvelleRencontre = new Rencontre();
+            int heureNouvelle = ConvertirComboBoxHeure();
+            nouvelleRencontre.DateNouvelle = dateTimePickerNewSession.Value.AddHours(heureNouvelle);
+            int.TryParse((string)comboBoxPupitre.SelectedItem, out int result);
+            int noTable = result;
+            int.TryParse((string)comboBoxRonde.SelectedItem, out result);
+            int noPartie = result;            
 
-                LienTableSession lienTableSession = new LienTableSession();
-                List<LienTableSession> liensTableSession = new List<LienTableSession>();
+            // Créer nouvelle session
+            List<RencontresDataGrid> sessions = new List<RencontresDataGrid>();
+            sessions = controleur.GererRencontres(nouvelleRencontre, noTable, noPartie, AjouterJoueursDansPartie(), controleur.ajouter, orderBySessions);
 
-                //Vérifier si lien existe déjà
-                bool lienExiste = controleur.VerifierLiens(nouvellesDonneesRencontre);
-                if (!lienExiste)
-                {
-                    rencontres = AjouterNouvelleSession(nouvellesDonneesRencontre);
-                    dataGridViewRencontres.DataSource = rencontres;
-                    dataGridViewRencontres.ClearSelection();
+            // Ajouter joueurs à la session
 
-                    // Préparer si on veut ajouter des joueurs
-                    RencontresDataGrid rencontreBidon = rencontres.ElementAt(rencontres.Count - 1);
-                    rencontreAModifier.IdSession = rencontreBidon.IdSession;
-                    rencontreAModifier.Id_Joute = rencontreBidon.Id_Ronde;
-                    rencontreAModifier.NoJoute = rencontreBidon.Ronde;
-                    rencontreAModifier.Id_Table = rencontreBidon.Id_Table;
-                    rencontreAModifier.NoTable = rencontreBidon.Table;
-                    rencontreAModifier.DateNouvelle = rencontreBidon.Session.DateNouvelle;
-                    rencontreAModifier.DateDeJeu = rencontreBidon.Session.DateDeJeu;
-                    modeAjoutNouvelleSession = false;
-                    
-                    modificationAFaire = VerifierModificationAFaire(rencontreAModifier);
-                }
-                else MessageBox.Show("Existe déjà");
-            }
+            //int lignesAffectees = controleur.GererJoute(sessions[sessions.Count-1].Session, AjouterJoueursDansPartie());
 
-            //Pour ajouter des joueurs sans toucher à date, heure, table et joute
-            if (modificationAFaire == ajouterJoueursAvecPartieExistante)  
-            {
-                if (!VerifierLesDonnees()) return;
-                List<Joueur> joueursAJouter = AjouterJoueursDansPartie();
-                int lignesDbAffectees = controleur.GererJoute(rencontreAModifier, joueursAJouter);
-                if (lignesDbAffectees != 0) 
-                { 
-                    MessageBox.Show("Ajout réussi."); 
-                }
-                else { MessageBox.Show("Ajout impossible."); }
-                AfficherLesDonneesDeRencontreAModifier(rencontreAModifier);
-                int idScore = controleur.CreerLienJouteScoreJoueurDansBD(rencontreAModifier);
-            }
+            // Afficher la nouvelle session
+            dataGridViewRencontres.DataSource = controleur.GererRencontres(null, 0, 0, null, controleur.lister, orderBySessions);
 
-            if (modificationAFaire == ajouterJoueursSeulement)
-            {
-                if (!VerifierLesDonnees()) return;
+            //int idScore = controleur.CreerLienJouteScoreJoueurDansBD(rencontreAModifier);
 
-                RencontresDataGrid rencontreBidon = rencontres.ElementAt(rencontres.Count - 1);
-                rencontreAModifier.IdSession = rencontreBidon.IdSession;
-                rencontreAModifier.Id_Joute = rencontreBidon.Id_Ronde;
-                rencontreAModifier.NoJoute = rencontreBidon.Ronde;
-                rencontreAModifier.Id_Table = rencontreBidon.Id_Table;
-                rencontreAModifier.NoTable = rencontreBidon.Table;
-                rencontreAModifier.DateNouvelle = rencontreBidon.Session.DateNouvelle;
-                rencontreAModifier.DateDeJeu = rencontreBidon.Session.DateDeJeu;
 
-                List<Joueur> joueursAJouter = AjouterJoueursDansPartie();
-                int lignesDbAffectees = controleur.GererJoute(rencontreAModifier, joueursAJouter);
-                if (lignesDbAffectees != 0)
-                {
-                    MessageBox.Show("Ajout réussi.");
-                }
-                else { MessageBox.Show("Ajout impossible."); }
-                AfficherLesDonneesDeRencontreAModifier(rencontreAModifier);
-                int idScore = controleur.CreerLienJouteScoreJoueurDansBD(rencontreAModifier);
-            }
+            //// Ajout d'une nouvelle session, avec nouvelle table et nouvelle partie
+            //if (modificationAFaire == ajouterNouvelleSession)
+            //{
+            //    if (!VerifierLesDonnees()) return;
+
+            //    DonneesRencontre nouvellesDonneesRencontre = new DonneesRencontre();
+
+            //    int heureNouvelle = ConvertirComboBoxHeure();
+            //    nouvellesDonneesRencontre.DateEtHeure = dateTimePickerNewSession.Value.AddHours(heureNouvelle);
+            //    int.TryParse((string)comboBoxPupitre.SelectedItem, out int result);
+            //    nouvellesDonneesRencontre.NoTable = result;
+            //    int.TryParse((string)comboBoxRonde.SelectedItem, out result);
+            //    nouvellesDonneesRencontre.NoPartie = result;
+
+            //    LienTableSession lienTableSession = new LienTableSession();
+            //    List<LienTableSession> liensTableSession = new List<LienTableSession>();
+
+            //    //Vérifier si lien existe déjà
+            //    bool lienExiste = controleur.VerifierLiens(nouvellesDonneesRencontre);
+            //    if (!lienExiste)
+            //    {
+            //        rencontres = AjouterNouvelleSession(nouvellesDonneesRencontre);
+            //        dataGridViewRencontres.DataSource = rencontres;
+            //        dataGridViewRencontres.ClearSelection();
+
+            //        // Préparer si on veut ajouter des joueurs
+            //        RencontresDataGrid rencontreBidon = rencontres.ElementAt(rencontres.Count - 1);
+            //        rencontreAModifier.IdSession = rencontreBidon.IdSession;
+            //        rencontreAModifier.Id_Joute = rencontreBidon.Id_Ronde;
+            //        rencontreAModifier.NoJoute = rencontreBidon.Ronde;
+            //        rencontreAModifier.Id_Table = rencontreBidon.Id_Table;
+            //        rencontreAModifier.NoTable = rencontreBidon.Table;
+            //        rencontreAModifier.DateNouvelle = rencontreBidon.Session.DateNouvelle;
+            //        rencontreAModifier.DateDeJeu = rencontreBidon.Session.DateDeJeu;
+            //        modeAjoutNouvelleSession = false;
+
+            //        modificationAFaire = VerifierModificationAFaire(rencontreAModifier);
+            //    }
+            //    else MessageBox.Show("Existe déjà");
+            //}
+
+            ////Pour ajouter des joueurs sans toucher à date, heure, table et joute
+            //if (modificationAFaire == ajouterJoueursAvecPartieExistante)  
+            //{
+            //    if (!VerifierLesDonnees()) return;
+            //    List<Joueur> joueursAJouter = AjouterJoueursDansPartie();
+            //    int lignesDbAffectees = controleur.GererJoute(rencontreAModifier, joueursAJouter);
+            //    if (lignesDbAffectees != 0) 
+            //    { 
+            //        MessageBox.Show("Ajout réussi."); 
+            //    }
+            //    else { MessageBox.Show("Ajout impossible."); }
+            //    AfficherLesDonneesDeRencontreAModifier(rencontreAModifier);
+            //    int idScore = controleur.CreerLienJouteScoreJoueurDansBD(rencontreAModifier);
+            //}
+
+            //if (modificationAFaire == ajouterJoueursSeulement)
+            //{
+            //    if (!VerifierLesDonnees()) return;
+
+            //    RencontresDataGrid rencontreBidon = rencontres.ElementAt(rencontres.Count - 1);
+            //    rencontreAModifier.IdSession = rencontreBidon.IdSession;
+            //    rencontreAModifier.Id_Joute = rencontreBidon.Id_Ronde;
+            //    rencontreAModifier.NoJoute = rencontreBidon.Ronde;
+            //    rencontreAModifier.Id_Table = rencontreBidon.Id_Table;
+            //    rencontreAModifier.NoTable = rencontreBidon.Table;
+            //    rencontreAModifier.DateNouvelle = rencontreBidon.Session.DateNouvelle;
+            //    rencontreAModifier.DateDeJeu = rencontreBidon.Session.DateDeJeu;
+
+            //    List<Joueur> joueursAJouter = AjouterJoueursDansPartie();
+            //    int lignesDbAffectees = controleur.GererJoute(rencontreAModifier, joueursAJouter);
+            //    if (lignesDbAffectees != 0)
+            //    {
+            //        MessageBox.Show("Ajout réussi.");
+            //    }
+            //    else { MessageBox.Show("Ajout impossible."); }
+            //    AfficherLesDonneesDeRencontreAModifier(rencontreAModifier);
+            //    int idScore = controleur.CreerLienJouteScoreJoueurDansBD(rencontreAModifier);
+            //}
         }
 
         private List<Joueur> AjouterJoueursDansPartie()

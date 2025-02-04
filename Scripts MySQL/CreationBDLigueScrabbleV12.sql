@@ -17,7 +17,7 @@
 create database ligue_scrabble;
 
 use ligue_scrabble;
-
+select * from _table;
 CREATE TABLE _Table(
 	ID_Table int auto_increment,
    No_Table int,
@@ -30,7 +30,8 @@ CREATE TABLE Session(
    Date_Session DATETIME,
    PRIMARY KEY(Id_Session)
 );
-
+select * from score;
+delete from score where id_score > 135;
 create table Score(
 	Id_Score int auto_increment,
     Tour1 int,
@@ -58,7 +59,9 @@ create table Score(
     Total int,
     primary key (Id_Score)
     );
-     
+select * from game;  
+select * from session;
+delete from game where id_joute = 64;   
 CREATE TABLE Game(
    Id_Joute int auto_increment,
    No_Ronde int not null,
@@ -86,7 +89,8 @@ CREATE TABLE Game(
    /*UNIQUE(Id_Stats),
    FOREIGN KEY(Id_Stats) REFERENCES Stats(Id_Stats)*/
 );
-
+select * from Joute_Score_Joueur;
+delete from joute_Score_joueur where id_joute = 50;
 create table Joute_Score_Joueur(
 	Id_Joute int,
     Id_Joueur int,
@@ -96,7 +100,7 @@ create table Joute_Score_Joueur(
 	FOREIGN KEY(Id_Joueur) REFERENCES Joueur(Id_Joueur),
     foreign key(Id_Score) references Score(Id_Score)
 );
-
+select * from session_table_game;
 CREATE TABLE Session_Table_Game(
    Id_Session int,
    Id_Table int,
@@ -145,6 +149,16 @@ CREATE TABLE Table_Session(
    FOREIGN KEY(Id_Table) REFERENCES _Table(Id_Table),
    FOREIGN KEY(Id_Session) REFERENCES Session(Id_Session)
 );  */
+
+use ligue_scrabble;
+select * from _table;
+select * from game;  
+select * from session;
+delete from game where id_joute = 64;   
+select * from Score;
+select * from session_table_game;
+select * from Joute_Score_Joueur;
+delete from joute_Score_joueur where id_joute = 50;
 
 
 

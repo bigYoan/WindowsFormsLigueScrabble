@@ -41,7 +41,8 @@ namespace WindowsFormsLigueScrabble
 
         private void ScoresForm_Load(object sender, EventArgs e)
         {
-            liensJouteScoreJoueur = controleur.ListerLiensJouteScoreJoueur("");
+
+            liensJouteScoreJoueur = controleur.ListerLiensJouteScoreJoueur(rencontreAjoutScores, "");
             if (liensJouteScoreJoueur == null) controleur.MsgErrDB();
             if (JouteExiste())
             {
@@ -56,8 +57,42 @@ namespace WindowsFormsLigueScrabble
             scoresBrut = controleur.ListerScoresJoueurs(controleur.lister, liensJouteScoreJoueur, rencontreAjoutScores.Id_Joute);
             if (scoresBrut == null) controleur.MsgErrDB();
             scoresDataGrid = DeterminerLesRangsDesJoueurs(scoresBrut);
+            int toursNuls = EnleverToursNuls();
             RemplirDataGridScores(scoreEnCours, null);
             //ModifierScoresAJouteDejaCommencee();
+        }
+
+        private int EnleverToursNuls()
+        {
+            List<int> listeToursNulsParJoueur = new List<int>();
+            
+            int toursNuls = 0;
+            for (int joueur = 0; joueur < scoresDataGrid.Count; joueur ++) 
+            {
+                listeToursNulsParJoueur.Add(0);
+                if (scoresDataGrid[joueur].Tour20 == 0) listeToursNulsParJoueur[joueur]++; else return listeToursNulsParJoueur.Min();
+                if (scoresDataGrid[joueur].Tour19 == 0) listeToursNulsParJoueur[joueur]++;
+                if (scoresDataGrid[joueur].Tour18 == 0) listeToursNulsParJoueur[joueur]++;
+                if (scoresDataGrid[joueur].Tour17 == 0) listeToursNulsParJoueur[joueur]++;
+                if (scoresDataGrid[joueur].Tour16 == 0) listeToursNulsParJoueur[joueur]++;
+                if (scoresDataGrid[joueur].Tour15 == 0) listeToursNulsParJoueur[joueur]++;
+                if (scoresDataGrid[joueur].Tour14 == 0) listeToursNulsParJoueur[joueur]++;
+                if (scoresDataGrid[joueur].Tour13 == 0) listeToursNulsParJoueur[joueur]++;
+                if (scoresDataGrid[joueur].Tour12 == 0) listeToursNulsParJoueur[joueur]++;
+                if (scoresDataGrid[joueur].Tour11 == 0) listeToursNulsParJoueur[joueur]++;
+                if (scoresDataGrid[joueur].Tour10 == 0) listeToursNulsParJoueur[joueur]++;
+                if (scoresDataGrid[joueur].Tour9 == 0) listeToursNulsParJoueur[joueur]++;
+                if (scoresDataGrid[joueur].Tour8 == 0) listeToursNulsParJoueur[joueur]++;
+                if (scoresDataGrid[joueur].Tour7 == 0) listeToursNulsParJoueur[joueur]++;
+                if (scoresDataGrid[joueur].Tour6 == 0) listeToursNulsParJoueur[joueur]++;
+                if (scoresDataGrid[joueur].Tour5 == 0) listeToursNulsParJoueur[joueur]++;
+                if (scoresDataGrid[joueur].Tour4 == 0) listeToursNulsParJoueur[joueur]++;
+                if (scoresDataGrid[joueur].Tour3 == 0) listeToursNulsParJoueur[joueur]++;
+                if (scoresDataGrid[joueur].Tour2 == 0) listeToursNulsParJoueur[joueur]++;
+                if (scoresDataGrid[joueur].Tour1 == 0) listeToursNulsParJoueur[joueur] = 10;
+
+            }
+            return listeToursNulsParJoueur.Min();
         }
 
         private List<ScoreJoueurDataGrid> DeterminerLesRangsDesJoueurs(List<ScoreJoueurDataGrid> scores)
@@ -177,6 +212,8 @@ namespace WindowsFormsLigueScrabble
 
         private void FormatterAffichageDataGridViewScores()
         {
+            int nbToursValides = 20 - EnleverToursNuls();
+
             dataGridViewScores.RowHeadersDefaultCellStyle.Font = new Font("Verdana", 9);
             dataGridViewScores.DefaultCellStyle.Font = new Font("Verdana", 12);
 
@@ -261,21 +298,38 @@ namespace WindowsFormsLigueScrabble
                 Joueur nouveauJoueur = new Joueur();
                 Score nouveauScore = new Score();
                 ScoreJoueurDataGrid nouveauScoreJoueur = new ScoreJoueurDataGrid();
-                nouveauScoreJoueur.IdJoute = int.Parse(dataGridViewScores[colonne, 0].FormattedValue.ToString());
-                nouveauScore.IdScore = int.Parse(dataGridViewScores[colonne, 1].FormattedValue.ToString());
-                nouveauJoueur.IdJoueur = int.Parse(dataGridViewScores[colonne, 2].FormattedValue.ToString());
-                nouveauJoueur.Nom = dataGridViewScores[colonne, indexLigneNom].FormattedValue.ToString();
-                nouveauJoueur.Pseudo = dataGridViewScores[colonne, indexLignePseudo].FormattedValue.ToString();
-
-                nouveauScore.Tour1 = int.Parse(dataGridViewScores[colonne, 7].FormattedValue.ToString());
-                nouveauScore.Tour2 = int.Parse(dataGridViewScores[colonne, 8].FormattedValue.ToString());
-                nouveauScore.Tour3 = int.Parse(dataGridViewScores[colonne, 9].FormattedValue.ToString());
-                nouveauScore.Tour4 = int.Parse(dataGridViewScores[colonne, 10].FormattedValue.ToString());
-                nouveauScore.Tour5 = int.Parse(dataGridViewScores[colonne, 11].FormattedValue.ToString());
-                nouveauScore.Bonus = int.Parse(dataGridViewScores[colonne, indexLigneBonus].FormattedValue.ToString());
-                nouveauScore.Penalite = int.Parse(dataGridViewScores[colonne, indexLignePenalite].FormattedValue.ToString());
                 nouveauScoreJoueur.Joueur = nouveauJoueur;
                 nouveauScoreJoueur.ScoreJoueur = nouveauScore;
+                nouveauScoreJoueur.IdJoute = int.Parse(dataGridViewScores[colonne, 0].FormattedValue.ToString());
+                nouveauScore.IdScore = int.Parse(dataGridViewScores[colonne, 1].FormattedValue.ToString());
+                nouveauScoreJoueur.Joueur.IdJoueur = int.Parse(dataGridViewScores[colonne, 2].FormattedValue.ToString());
+                nouveauScoreJoueur.Joueur.Nom = dataGridViewScores[colonne, indexLigneNom].FormattedValue.ToString();
+                nouveauScoreJoueur.Joueur.Pseudo = dataGridViewScores[colonne, indexLignePseudo].FormattedValue.ToString();
+
+                nouveauScoreJoueur.ScoreJoueur.Tour1 = int.Parse(dataGridViewScores[colonne, 7].FormattedValue.ToString());
+                nouveauScoreJoueur.ScoreJoueur.Tour2 = int.Parse(dataGridViewScores[colonne, 8].FormattedValue.ToString());
+                nouveauScoreJoueur.ScoreJoueur.Tour3 = int.Parse(dataGridViewScores[colonne, 9].FormattedValue.ToString());
+                nouveauScoreJoueur.ScoreJoueur.Tour4 = int.Parse(dataGridViewScores[colonne, 10].FormattedValue.ToString());
+                nouveauScoreJoueur.ScoreJoueur.Tour5 = int.Parse(dataGridViewScores[colonne, 11].FormattedValue.ToString());
+                nouveauScoreJoueur.ScoreJoueur.Tour6 = int.Parse(dataGridViewScores[colonne, 12].FormattedValue.ToString());
+                nouveauScoreJoueur.ScoreJoueur.Tour7 = int.Parse(dataGridViewScores[colonne, 13].FormattedValue.ToString());
+                nouveauScoreJoueur.ScoreJoueur.Tour8 = int.Parse(dataGridViewScores[colonne, 14].FormattedValue.ToString());
+                nouveauScoreJoueur.ScoreJoueur.Tour9 = int.Parse(dataGridViewScores[colonne, 15].FormattedValue.ToString());
+                nouveauScoreJoueur.ScoreJoueur.Tour10 = int.Parse(dataGridViewScores[colonne, 16].FormattedValue.ToString());
+                nouveauScoreJoueur.ScoreJoueur.Tour11 = int.Parse(dataGridViewScores[colonne, 17].FormattedValue.ToString());
+                nouveauScoreJoueur.ScoreJoueur.Tour12 = int.Parse(dataGridViewScores[colonne, 18].FormattedValue.ToString());
+                nouveauScoreJoueur.ScoreJoueur.Tour13 = int.Parse(dataGridViewScores[colonne, 19].FormattedValue.ToString());
+                nouveauScoreJoueur.ScoreJoueur.Tour14 = int.Parse(dataGridViewScores[colonne, 20].FormattedValue.ToString());
+                nouveauScoreJoueur.ScoreJoueur.Tour15 = int.Parse(dataGridViewScores[colonne, 21].FormattedValue.ToString());
+                nouveauScoreJoueur.ScoreJoueur.Tour16 = int.Parse(dataGridViewScores[colonne, 22].FormattedValue.ToString());
+                nouveauScoreJoueur.ScoreJoueur.Tour17 = int.Parse(dataGridViewScores[colonne, 23].FormattedValue.ToString());
+                nouveauScoreJoueur.ScoreJoueur.Tour18 = int.Parse(dataGridViewScores[colonne, 24].FormattedValue.ToString());
+                nouveauScoreJoueur.ScoreJoueur.Tour19 = int.Parse(dataGridViewScores[colonne, 25].FormattedValue.ToString());
+                nouveauScoreJoueur.ScoreJoueur.Tour20 = int.Parse(dataGridViewScores[colonne, 26].FormattedValue.ToString());
+                nouveauScoreJoueur.ScoreJoueur.Bonus = int.Parse(dataGridViewScores[colonne, indexLigneBonus].FormattedValue.ToString());
+                nouveauScoreJoueur.ScoreJoueur.Penalite = int.Parse(dataGridViewScores[colonne, indexLignePenalite].FormattedValue.ToString());
+                //nouveauScoreJoueur.Joueur = nouveauJoueur;
+                //nouveauScoreJoueur.ScoreJoueur = nouveauScore;
                 scoresDansDataGrid.Add(nouveauScoreJoueur);
             }
             return scoresDansDataGrid;

@@ -118,11 +118,54 @@ namespace WindowsFormsLigueScrabble
                 {
                     // Ajouter une rencontre (session) avec table et joute (partie)
                     int idNouvelleSession = dB_Manager.AjouterRencontreDansBD(newRencontre);
-                    if (idNouvelleSession > 0 && noTable != 0)
+                    if (idNouvelleSession > 0 && noTable != 0 && noPartie !=0 && joueurs.Count !=0)
                     {
-                        if (AjouterTable(idNouvelleSession, noTable, noPartie) > 0)
+                        // Ajouter à la session :  table, joute et joueurs
+
+                        int idTable = TrouverIdTable(noTable);
+                        if (idTable == 0) throw new Exception("Table introuvalbe");
+
+                        // Vérifier si table_Session_Joute existe avec date, heure, table et partie
+                        // INsérer code ici
+
+                        // Créer nouvelle partie et créer lien Session_Table_Partie
+                        LiensSessionTablePartie newLienT_S_P = new LiensSessionTablePartie();
+                        newLienT_S_P.IdSession = idNouvelleSession;
+                        newLienT_S_P.IdTable = idTable;
+                        newLienT_S_P.NoTable = noTable;
+                        newLienT_S_P.NoPartie = noPartie;
+
+                        int nbLiensCrees = AjouterTable(newLienT_S_P);
+                        if (nbLiensCrees > 0) 
                         {
-                            MessageBox.Show("Ajout réussi");
+                            MessageBox.Show("Ajout de lien réussi");
+                        }
+                        //int idJoute = dB_Manager.TrouverIdJoute(newLienTable_Session_Joute);
+                        //newLienT_S_P.NoPartie = dB_Manager.TrouverNoJoute(idJoute);
+
+                        // Ajouter joueurs à la joute
+                        int ajoutReussi = GererJoute(newLienT_S_P.IdPartie, newLienT_S_P.NoPartie, joueurs);
+
+                        // Ajouter nombre de joueurs à rencontres data grid
+                        if (ajoutReussi > 0)
+                        {
+                            MessageBox.Show("Ajout de joueurs réussi.");
+                            foreach (var rencontreATrouver in rencontres)
+                            {
+                                if (idNouvelleSession == rencontreATrouver.IdSession)
+                                {
+                                    rencontreATrouver.NombreJoueurs = joueurs.Count;
+                                    newLienT_S_P.IdSession = idNouvelleSession;
+                                }
+                            }
+                        }
+
+                        // Créer lien Joute_Score_Joueur
+                        int newLienJoute_Score_Joueur = CreerLienJouteScoreJoueurDansBD(newLienT_S_P);
+
+                        if (newLienJoute_Score_Joueur > 0)
+                        {
+                            MessageBox.Show("Ajout de lien réussi : " + newLienJoute_Score_Joueur.ToString() + " joueurs.");
                         }
                     }
                     else
@@ -178,32 +221,25 @@ namespace WindowsFormsLigueScrabble
             }
             return rencontres;
         }
-        private int AjouterTable(int id_rencontre, int noTable, int noPartie)
+
+        private int TrouverIdTable(int noTable)
         {
-            int lignesAffectees = 0;
+            return dB_Manager.TrouverIdTable(noTable);
+        }
+
+        private int AjouterTable(LiensSessionTablePartie lienT_S_P)
+        {
+            int nbLiensSessionTableJouteCree = 0;
             try 
             {
-                
-                int idTable = 0;
-                int idPartie = 0;
-
-                List<Table> tables = dB_Manager.ListerTablesDansBD("");
-                foreach (Table table in tables) { if (noTable == table.NoTable) { idTable = table.IDTable; } }
-
-                if (idTable == 0)
-                {
-                    idTable = dB_Manager.AjouterNouvelleTable(noTable, "Sans ODS");
-                }
-                idPartie = dB_Manager.CreerNouvellePartie(noPartie);
-           
-                // Ajouter des tables avec joutes
-                lignesAffectees = dB_Manager.CreerLiens_Session_Table_Partie(id_rencontre, idTable, idPartie);
+                lienT_S_P.IdPartie = dB_Manager.CreerNouvellePartie(lienT_S_P.NoPartie);
+                nbLiensSessionTableJouteCree = dB_Manager.CreerLiens_Session_Table_Partie(lienT_S_P);
             }
             catch (Exception ex)
             {
                 MsgErrDB();
             }
-            return lignesAffectees;
+            return nbLiensSessionTableJouteCree;
         }
         internal bool VerifierLiens(DonneesRencontre nouvelledonneeRencontre)
         {
@@ -286,23 +322,14 @@ namespace WindowsFormsLigueScrabble
             }
             return false;
         }
-        internal int GererJoute(Rencontre rencontreAModifier, List<Joueur> joueursAJouter)
+        internal int GererJoute(int idJoute, int noJoute, List<Joueur> joueursAJouter)
         {
             int lignesAffectees = 0;
             try
             {
                 if (joueursAJouter.Count <= 2) { MessageBox.Show("Un minimum de trois joueurs est requis."); return 0; }
-                lignesAffectees = dB_Manager.AjouterJoueursDansJoute(rencontreAModifier.Id_Joute, rencontreAModifier.NoJoute, joueursAJouter);
-                if (lignesAffectees == 1)
-                {
-                    foreach (var rencontreATrouver in rencontres)
-                    {
-                        if (rencontreAModifier.IdSession == rencontreATrouver.IdSession)
-                        {
-                            rencontreATrouver.NombreJoueurs = joueursAJouter.Count;
-                        }
-                    }
-                }
+                lignesAffectees = dB_Manager.AjouterJoueursDansJoute(idJoute, noJoute, joueursAJouter);
+                
             }
             catch (Exception ex)
             {
@@ -311,11 +338,11 @@ namespace WindowsFormsLigueScrabble
             return lignesAffectees;
         }
 
-        internal List<LienJouteScoreJoueur> ListerLiensJouteScoreJoueur(string commande)
+        internal List<LienJouteScoreJoueur> ListerLiensJouteScoreJoueur(Rencontre rencontreAjoutScores ,string commande)
         {
             try
             {
-                return dB_Manager.ListerLiensJouteScoreJoueur("");
+                return dB_Manager.ListerLiensJouteScoreJoueur(" WHERE Id_Joute =" + rencontreAjoutScores.Id_Joute.ToString());
             }
             catch (Exception ex)
             {
@@ -324,13 +351,13 @@ namespace WindowsFormsLigueScrabble
             return null;
         }
 
-        internal int CreerLienJouteScoreJoueurDansBD(Rencontre rencontreAjoutScores)
+        internal int CreerLienJouteScoreJoueurDansBD(LiensSessionTablePartie lienT_S_P)
         {
             int lignesAffectees = 0;
             try
             {
                 Partie partie = new Partie();
-                partie.IdPartie = rencontreAjoutScores.Id_Joute;
+                partie.IdPartie = lienT_S_P.IdPartie;
                 List<Partie> parties = dB_Manager.ListerPartiesDansBD(partie, "");
 
                 int id_Joute = parties[0].IdPartie;
@@ -381,6 +408,7 @@ namespace WindowsFormsLigueScrabble
                         scoreJoueur.IdJoute = idJoute;
                         scoreJoueur.Joueur = joueur;
                         scoreJoueur.ScoreJoueur = score;
+                        
                         scoresDataGrid.Add(scoreJoueur);
                     }
                 }

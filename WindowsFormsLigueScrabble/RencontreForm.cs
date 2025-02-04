@@ -38,7 +38,7 @@ namespace WindowsFormsLigueScrabble
             dataGridViewSessions.Columns["Table"].DisplayIndex = 3;
             dataGridViewSessions.Columns["IdSession"].Visible = false;
             dataGridViewSessions.Columns["Id_Table"].Visible = false;
-            dataGridViewSessions.Columns["Id_Ronde"].Visible = false;
+            //dataGridViewSessions.Columns["Id_Ronde"].Visible = false;
             dataGridViewSessions.Columns["Session"].HeaderText = "Date";
             dataGridViewSessions.Columns["jourRencontre"].HeaderText = "Jour";
             dataGridViewSessions.Columns["heureRencontre"].HeaderText = "Heure";
@@ -51,7 +51,11 @@ namespace WindowsFormsLigueScrabble
             dataGridViewSessions.Columns["scoreGagnant"].DefaultCellStyle.Format = "###.##";
             dataGridViewSessions.RowHeadersVisible = false;
             dataGridViewSessions.ReadOnly = true;
-            labelTotalSessions.Text = controleur.rencontres.Count.ToString() + " rencontres total.";
+            string totalRencontres = " rencontres total.";
+            if (controleur.rencontres.Count == 0) totalRencontres = "aucune rencontre.";
+            if (controleur.rencontres.Count == 1) totalRencontres = "1 rencontre.";
+            else totalRencontres = controleur.rencontres.Count.ToString() + " rencontres.";
+            labelTotalSessions.Text = totalRencontres;
         }
         private void buttonAjouterSession_Click(object sender, EventArgs e)
         {
