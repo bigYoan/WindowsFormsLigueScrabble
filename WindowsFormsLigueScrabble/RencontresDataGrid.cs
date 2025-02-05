@@ -15,7 +15,9 @@ namespace WindowsFormsLigueScrabble
         int id_Table;
         int table;
         int id_Ronde;
-        int ronde; 
+        int ronde;
+
+        List<int> listeIdJoueurs;
         
         int nombreJoueurs;
         string gagnant;
@@ -35,6 +37,7 @@ namespace WindowsFormsLigueScrabble
         public int IdSession { get => session.IdSession; }
         public int Id_Ronde { get => id_Ronde; set => id_Ronde = value; }
         public int Id_Table { get => id_Table; set => id_Table = value; }
+        public List<int> ListeIdJoueurs { get => listeIdJoueurs; set => listeIdJoueurs = value; }
 
         public override string ToString()
         {

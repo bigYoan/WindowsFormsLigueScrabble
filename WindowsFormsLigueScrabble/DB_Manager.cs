@@ -139,7 +139,7 @@ namespace WindowsFormsLigueScrabble
         internal List<RencontresDataGrid> ListerRencontresDansBD(string orderBy)
         {
             // Affiche la compilation Session, Table, Partie, Nombre de joueurs
-            // À compléter ultérieurement, afficher Gagnant et son pointage et si la partie est homologuée
+            
 
             string commande_Lister_Session_Table_Game =
             "SELECT Session.*, _Table.No_Table, Game.*, _Table.Id_Table " +
@@ -152,7 +152,6 @@ namespace WindowsFormsLigueScrabble
             try
             {
                 MySqlConnection sqlConnexion = new MySqlConnection(maConnexionString);
-                List<string> listeJoueursDansJoute = new List<string>();
 
                 using (sqlConnexion)
                 {
@@ -164,6 +163,8 @@ namespace WindowsFormsLigueScrabble
                             while (reader.Read())
                             {
                                 RencontresDataGrid maSession = new RencontresDataGrid();
+                                List<int> idJoueursParticipants = new List<int>();
+                                maSession.ListeIdJoueurs = idJoueursParticipants;
                                 int idSession = (int)reader["Id_Session"];
                                 DateTime dateSession = (DateTime)reader["Date_Session"];
                                 Rencontre maRencontre = new Rencontre();
@@ -175,25 +176,97 @@ namespace WindowsFormsLigueScrabble
                                 maSession.Ronde = (reader["No_Ronde"].GetType() == typeof(DBNull)) ? 0 : (int)reader["No_Ronde"];
                                 maSession.Id_Table = (reader["Id_Table"].GetType() == typeof(DBNull)) ? 0 : (int)reader["Id_Table"];
                                 maSession.Table = (reader["No_Table"].GetType() == typeof(DBNull)) ? 0 : (int)reader["No_Table"];
-                                listeJoueursDansJoute.Clear();
-                                string playerOne = (reader["PlayerOne"].GetType() == typeof(DBNull)) ? "" : (string)reader["PlayerOne"];
-                                if (playerOne != "") listeJoueursDansJoute.Add(playerOne);
-                                string playerTwo = (reader["PlayerTwo"].GetType() == typeof(DBNull)) ? "" : (string)reader["PlayerTwo"];
-                                if (playerTwo != "") listeJoueursDansJoute.Add(playerOne);
-                                string playerThree = (reader["PlayerThree"].GetType() == typeof(DBNull)) ? "" : (string)reader["PlayerThree"];
-                                if (playerThree != "") listeJoueursDansJoute.Add(playerOne);
-                                string playerFour = (reader["PlayerFour"].GetType() == typeof(DBNull)) ? "" : (string)reader["PlayerFour"];
-                                if (playerFour != "") listeJoueursDansJoute.Add(playerOne);
-                                maSession.NombreJoueurs = listeJoueursDansJoute.Count;
+                                maSession.ListeIdJoueurs.Add((reader["Id_PlayerOne"].GetType() == typeof(DBNull)) ? 0 : (int)reader["Id_PlayerOne"]);
+
+                                maSession.ListeIdJoueurs.Add((reader["Id_PlayerTwo"].GetType() == typeof(DBNull)) ? 0 : (int)reader["Id_PlayerTwo"]);
+                                maSession.ListeIdJoueurs.Add((reader["Id_PlayerThree"].GetType() == typeof(DBNull)) ? 0 : (int)reader["Id_PlayerThree"]);
+                                maSession.ListeIdJoueurs.Add((reader["Id_PlayerFour"].GetType() == typeof(DBNull)) ? 0 : (int)reader["Id_PlayerFour"]);
+                                maSession.NombreJoueurs = CompterJoueursParticipante(maSession.ListeIdJoueurs);
                                 sessions.Add(maSession);
                             }
                         }
-                        sqlConnexion.Close();
-                        return sessions;
                     }
+
+                    // Afficher si des parties sont homologuées
+
+                    for (int noSession = 0; noSession < sessions.Count; noSession++)
+                    {
+                        List<Joueur> joueursDansBD = ListerJoueursDansBD(" ORDER By Id_Joueur"); // Quérir infos des joueurs homologués
+                        bool partieHomologuee = true;
+                        foreach (var idJoueurAVerifier in joueursDansBD)
+                        {
+                            for (int noJoueurParticipant = 0; noJoueurParticipant < sessions[noSession].NombreJoueurs; noJoueurParticipant++)
+                            {
+                                if (idJoueurAVerifier.IdJoueur == sessions[noSession].ListeIdJoueurs[noJoueurParticipant] && idJoueurAVerifier.NoFqcsf == 0)
+                                {
+                                    partieHomologuee &= false;
+                                }
+                            }
+                        }
+                        sessions[noSession].Homologation = partieHomologuee;
+
+                        // Afficher le gagnant et son score
+
+                        
+                        int[] scoreIndividuel = new int[joueursDansBD.Count + 1];
+                        int idJoute = sessions[noSession].Id_Ronde;
+                        int idJoueur = 0;
+                        int idScore =0;
+                        for (int noJoueur = 0; noJoueur < sessions[noSession].NombreJoueurs; noJoueur++)
+                        {
+                            idJoueur = sessions[noSession].ListeIdJoueurs[noJoueur];
+                            string cmdRechercheIdScore = "SELECT * FROM Joute_Score_Joueur WHERE Id_joueur = "
+                                                        + idJoueur.ToString() + " AND Id_Joute = " + idJoute.ToString() + ";";
+                            using (MySqlCommand cmd = new MySqlCommand(cmdRechercheIdScore, sqlConnexion))
+                            {
+                                using (MySqlDataReader reader = cmd.ExecuteReader())
+                                {
+                                    while (reader.Read())
+                                    {
+                                        idScore = (int)reader["Id_Score"];
+                                    }
+                                }
+                            }
+                            int scoreJoueur =0;
+                            string cmdRechercheScoreTotal = "SELECT Total from Score WHERE Id_Score = " + idScore.ToString() + ";";
+                            using (MySqlCommand cmd = new MySqlCommand(cmdRechercheScoreTotal, sqlConnexion))
+                            {
+                                using (MySqlDataReader reader = cmd.ExecuteReader())
+                                {
+                                    while (reader.Read())
+                                    {
+                                        scoreJoueur = (int)reader["Total"];
+                                    }
+                                }
+                            }
+                            scoreIndividuel[idJoueur] = scoreJoueur;
+                            sessions[noSession].ScoreGagnant = scoreIndividuel.Max();
+                            if (scoreIndividuel[idJoueur] >= scoreIndividuel.Max())
+                            {
+                                foreach (var joueur in joueursDansBD)
+                                {
+                                        sessions[noSession].Gagnant = joueursDansBD[idJoueur - 1].Nom;
+                                }
+                            }
+
+                        }
+                    }
+                    sqlConnexion.Close();
+
+                    return sessions;
                 }
             }
             catch (Exception) { throw; }
+        }
+
+        private int CompterJoueursParticipante(List<int> listeIdJoueurs)
+        {
+            int total = 0;
+            foreach (var id in listeIdJoueurs)
+            {
+                if (id != 0) total++;
+            }
+            return total;
         }
 
         internal int ModifierJoueurDansBD(Joueur nouveauJoueur)

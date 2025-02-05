@@ -14,7 +14,7 @@ namespace WindowsFormsLigueScrabble
 {
     public partial class FormConsole : Form
     {
-        Controleur controleur = new Controleur();
+        Controleur controleur;
         List<Joueur> joueurs = new List<Joueur>();
         string utilisateur;
 
@@ -25,10 +25,10 @@ namespace WindowsFormsLigueScrabble
         }
         private void FormConsole_Load(object sender, EventArgs e)
         {
-            EssayerConnexionBD(utilisateur);
+            if (EssayerConnexionBD(utilisateur)) controleur = new Controleur();
             this.Shown += new EventHandler(FormConsole_Shown);
         }
-        private void EssayerConnexionBD(string utilisateur)
+        private bool EssayerConnexionBD(string utilisateur)
         {
             try
             {
@@ -38,10 +38,12 @@ namespace WindowsFormsLigueScrabble
                 sqlConnexion.Close();
                 //MessageBox.Show("Connecté à la base de données");
                 labelConnexion.Text += utilisateur + " connecté.";
+                return true;
             }
             catch (Exception)
             {
                 MessageBox.Show("Connexion échouée");
+                return false;
                 //throw;
             }
             
