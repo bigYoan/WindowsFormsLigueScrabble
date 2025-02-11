@@ -72,5 +72,6 @@ namespace WindowsFormsLigueScrabble
         public int Bonus { get => scoreJoueur.Bonus; }
         internal Score ScoreJoueur { get => scoreJoueur; set => scoreJoueur = value; }
         internal Joueur Joueur { get => joueur; set => joueur = value; }
+
     }
 }

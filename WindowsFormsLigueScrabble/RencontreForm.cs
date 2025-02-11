@@ -34,7 +34,7 @@ namespace WindowsFormsLigueScrabble
             dataGridViewSessions.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
             dataGridViewSessions.ColumnHeadersDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
             dataGridViewSessions.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.DisplayedCells;
-            dataGridViewSessions.DataSource = controleur.GererRencontres(null, 0, 0, null, controleur.lister, "");
+            dataGridViewSessions.DataSource = controleur.GererRencontres(null, 0, 0, null, controleur.lister, orderBy);
             dataGridViewSessions.Columns["Table"].DisplayIndex = 3;
             dataGridViewSessions.Columns["IdSession"].Visible = false;
             dataGridViewSessions.Columns["Id_Table"].Visible = false;
@@ -42,9 +42,10 @@ namespace WindowsFormsLigueScrabble
             dataGridViewSessions.Columns["Session"].HeaderText = "Date";
             dataGridViewSessions.Columns["jourRencontre"].HeaderText = "Jour";
             dataGridViewSessions.Columns["heureRencontre"].HeaderText = "Heure";
-            dataGridViewSessions.Columns["nombreJoueurs"].HeaderText = "Nombre\nJoueurs"; 
-            dataGridViewSessions.Columns["scoreGagnant"].HeaderText = "Score du gagnant";
-            dataGridViewSessions.Columns["homologation"].HeaderText = "FQCSF\nhomologué";
+            dataGridViewSessions.Columns["nombreJoueurs"].HeaderText = "Nombre\nJoueurs";
+            dataGridViewSessions.Columns["gagnant"].HeaderText = "Gagnant(e)";
+            dataGridViewSessions.Columns["scoreGagnant"].HeaderText = "Score gagnant";
+            dataGridViewSessions.Columns["homologation"].Visible = false; //=  "FQCSF\nhomologué";
             dataGridViewSessions.Columns["nombreJoueurs"].DefaultCellStyle.Format = "###.##";
             dataGridViewSessions.Columns["Table"].DefaultCellStyle.Format = "###.##";
             dataGridViewSessions.Columns["Ronde"].DefaultCellStyle.Format = "###.##";

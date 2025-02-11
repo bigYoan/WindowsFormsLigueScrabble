@@ -154,12 +154,14 @@ use ligue_scrabble;
 select * from _table;
 select * from game;  
 select * from session;
+select * from joueur;
 delete from game where id_joute = 64;   
 select * from Score;
+select Total from Score WHERE id_Score = 154;
 select * from session_table_game;
 select * from Joute_Score_Joueur;
 delete from joute_Score_joueur where id_joute = 50;
-
+SELECT * FROM Joute_Score_Joueur WHERE Id_joueur = 4 AND Id_Joute = 68;
 
 
 

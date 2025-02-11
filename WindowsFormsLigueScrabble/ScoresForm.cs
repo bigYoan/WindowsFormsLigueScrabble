@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using ZstdSharp.Unsafe;
 using static System.Windows.Forms.LinkLabel;
 
 namespace WindowsFormsLigueScrabble
@@ -19,12 +20,13 @@ namespace WindowsFormsLigueScrabble
         //List<Score[]> scores = new List<Score[]>();
         List<LienJouteScoreJoueur> liensJouteScoreJoueur = new List<LienJouteScoreJoueur>();
         List<ScoreJoueurDataGrid> scoresDataGrid = new List<ScoreJoueurDataGrid>();
+        List<ScoreJoueurDataGrid> backupDataGridScores = new List<ScoreJoueurDataGrid>();
         bool chargementEnCours = false;
         bool changementDataGridNonSauvegarde = false;
 
         int nouveauScore = 1;
         int scoreEnCours = 2;
-
+        int lignesDeScoreSuppl = 2;
         int indexLigneNom;
         int indexLignePseudo;
         int indexLigneRang;
@@ -47,6 +49,7 @@ namespace WindowsFormsLigueScrabble
             if (JouteExiste())
             {
                 InitialiserDataGridViewScores();
+                backupDataGridScores.AddRange(scoresDataGrid);
             }
             //else CreerNouveauxScores();
         }
@@ -57,42 +60,38 @@ namespace WindowsFormsLigueScrabble
             scoresBrut = controleur.ListerScoresJoueurs(controleur.lister, liensJouteScoreJoueur, rencontreAjoutScores.Id_Joute);
             if (scoresBrut == null) controleur.MsgErrDB();
             scoresDataGrid = DeterminerLesRangsDesJoueurs(scoresBrut);
-            int toursNuls = EnleverToursNuls();
+            dataGridViewScores.DataSource = scoresDataGrid;
+            foreach (var scoreJoueur in scoresDataGrid)
+            {
+                scoreJoueur.ScoreJoueur.ToursNonNuls = CompterToursNonNuls(scoreJoueur);
+            }
             RemplirDataGridScores(scoreEnCours, null);
             //ModifierScoresAJouteDejaCommencee();
         }
 
-        private int EnleverToursNuls()
+        private int CompterToursNonNuls(ScoreJoueurDataGrid scoreJoueur)
         {
-            List<int> listeToursNulsParJoueur = new List<int>();
-            
-            int toursNuls = 0;
-            for (int joueur = 0; joueur < scoresDataGrid.Count; joueur ++) 
-            {
-                listeToursNulsParJoueur.Add(0);
-                if (scoresDataGrid[joueur].Tour20 == 0) listeToursNulsParJoueur[joueur]++; else return listeToursNulsParJoueur.Min();
-                if (scoresDataGrid[joueur].Tour19 == 0) listeToursNulsParJoueur[joueur]++;
-                if (scoresDataGrid[joueur].Tour18 == 0) listeToursNulsParJoueur[joueur]++;
-                if (scoresDataGrid[joueur].Tour17 == 0) listeToursNulsParJoueur[joueur]++;
-                if (scoresDataGrid[joueur].Tour16 == 0) listeToursNulsParJoueur[joueur]++;
-                if (scoresDataGrid[joueur].Tour15 == 0) listeToursNulsParJoueur[joueur]++;
-                if (scoresDataGrid[joueur].Tour14 == 0) listeToursNulsParJoueur[joueur]++;
-                if (scoresDataGrid[joueur].Tour13 == 0) listeToursNulsParJoueur[joueur]++;
-                if (scoresDataGrid[joueur].Tour12 == 0) listeToursNulsParJoueur[joueur]++;
-                if (scoresDataGrid[joueur].Tour11 == 0) listeToursNulsParJoueur[joueur]++;
-                if (scoresDataGrid[joueur].Tour10 == 0) listeToursNulsParJoueur[joueur]++;
-                if (scoresDataGrid[joueur].Tour9 == 0) listeToursNulsParJoueur[joueur]++;
-                if (scoresDataGrid[joueur].Tour8 == 0) listeToursNulsParJoueur[joueur]++;
-                if (scoresDataGrid[joueur].Tour7 == 0) listeToursNulsParJoueur[joueur]++;
-                if (scoresDataGrid[joueur].Tour6 == 0) listeToursNulsParJoueur[joueur]++;
-                if (scoresDataGrid[joueur].Tour5 == 0) listeToursNulsParJoueur[joueur]++;
-                if (scoresDataGrid[joueur].Tour4 == 0) listeToursNulsParJoueur[joueur]++;
-                if (scoresDataGrid[joueur].Tour3 == 0) listeToursNulsParJoueur[joueur]++;
-                if (scoresDataGrid[joueur].Tour2 == 0) listeToursNulsParJoueur[joueur]++;
-                if (scoresDataGrid[joueur].Tour1 == 0) listeToursNulsParJoueur[joueur] = 10;
-
-            }
-            return listeToursNulsParJoueur.Min();
+            if (scoreJoueur.Tour20 != 0) return 20;
+            if (scoreJoueur.Tour19 != 0) return 19;
+            if (scoreJoueur.Tour18 != 0) return 18;
+            if (scoreJoueur.Tour17 != 0) return 17;
+            if (scoreJoueur.Tour16 != 0) return 16;
+            if (scoreJoueur.Tour15 != 0) return 15;
+            if (scoreJoueur.Tour14 != 0) return 14;
+            if (scoreJoueur.Tour13 != 0) return 13;
+            if (scoreJoueur.Tour12 != 0) return 12;
+            if (scoreJoueur.Tour11 != 0) return 11;
+            if (scoreJoueur.Tour10 != 0) return 10;
+            if (scoreJoueur.Tour9 != 0)  return 9;
+            if (scoreJoueur.Tour8 != 0)  return 8;
+            if (scoreJoueur.Tour7 != 0)  return 7;
+            if (scoreJoueur.Tour6 != 0)  return 6;
+            if (scoreJoueur.Tour5 != 0)  return 5;
+            if (scoreJoueur.Tour4 != 0)  return 4;
+            if (scoreJoueur.Tour3 != 0)  return 3;
+            if (scoreJoueur.Tour2 != 0)  return 2;
+            if (scoreJoueur.Tour1 != 0)  return 1;
+            return  0;
         }
 
         private List<ScoreJoueurDataGrid> DeterminerLesRangsDesJoueurs(List<ScoreJoueurDataGrid> scores)
@@ -155,13 +154,13 @@ namespace WindowsFormsLigueScrabble
             //On souhaite afficher les scores avec les noms des joueurs dans les colonnes
             // et le pointage dans les lignes. Pour ce faire il faut pivoter les données du datagridview
 
-            // Récupérer les données à afficher
-            chargementEnCours = true; //Bloque l'événement : "Changement dans les cellules"
-            dataGridViewScores.DataSource = null;
-            dataGridViewScores.DataSource = scoresDataGrid;
-            if (scoresModifies != null) dataGridViewScores.DataSource = scoresModifies;
-            if (commande == 3) return;
+            chargementEnCours = true; //Bloque l'événement : "dataGridViewScores_CellValueChanged"
+            
+            //if (scoresModifies != null) dataGridViewScores.DataSource = scoresModifies;
+            //if (commande == 3) return;
+
             // Prépare pour inverser colonnes-lignes du datagridview
+            
             int nbLignes = dataGridViewScores.Rows.Count;
             int nbColonnes = dataGridViewScores.Columns.Count;
 
@@ -176,7 +175,7 @@ namespace WindowsFormsLigueScrabble
                     }
                 }
             }
-
+            
             // Stoquer les titres des colonnes dans une liste temporaire
             List<string> tableauInverseTitres = new List<string>();
 
@@ -185,7 +184,7 @@ namespace WindowsFormsLigueScrabble
             {
                 tableauInverseTitres.Add((string)colonne.HeaderCell.Value);
             }
-
+            
             // Transférer les données temporaires dans un nouveau datagridview dont les lignes-colonnes sont inversées
             dataGridViewScores.DataSource = null;
             dataGridViewScores.ColumnCount = nbLignes;
@@ -205,19 +204,48 @@ namespace WindowsFormsLigueScrabble
                     }
                 }
             }
+            
             FormatterAffichageDataGridViewScores();
+            
             chargementEnCours = false;
             changementDataGridNonSauvegarde = false;
+            //int test = dataGridViewScores.Rows.Count;
+            //int test2 = dataGridViewScores.Columns.Count;
+
         }
+
+        private List<string> AfficherListeHeader (DataGridView dataGridView, string ligneOuColonne)
+        {
+            List<string> valeurs = new List<string>();
+            int nbFinal = dataGridView.Rows.Count;
+            if (ligneOuColonne == "colonnes") nbFinal = dataGridView.Columns.Count;
+            for (int ligne = 0; ligne < nbFinal; ligne++)
+            {
+                if (ligneOuColonne != "colonnes") 
+                    valeurs.Add((string)dataGridViewScores.Rows[ligne].HeaderCell.Value);
+                else valeurs.Add((string)dataGridViewScores.Columns[ligne].HeaderCell.Value);
+                
+            }
+            return valeurs;
+        }   
 
         private void FormatterAffichageDataGridViewScores()
         {
-            int nbToursValides = 20 - EnleverToursNuls();
 
+            dataGridViewScores.ColumnHeadersVisible = false;
             dataGridViewScores.RowHeadersDefaultCellStyle.Font = new Font("Verdana", 9);
             dataGridViewScores.DefaultCellStyle.Font = new Font("Verdana", 12);
 
-            for (int ligne = 0; ligne < dataGridViewScores.RowCount; ligne++)
+            // Enleve les lignes inutiles créées par le pivotage
+            //for (int ligne = 0; ligne < dataGridViewScores.RowCount; ligne++)
+            //{
+            //    valeurs.Add((string)dataGridViewScores.Rows[ligne].HeaderCell.Value);
+            //    if ((string)dataGridViewScores.Rows[ligne].HeaderCell.Value == "")
+            //    {
+            //        dataGridViewScores.Rows.RemoveAt(ligne);
+            //    }
+            //}
+                for (int ligne = 0; ligne < dataGridViewScores.RowCount; ligne++)
             {
                 if ((string)dataGridViewScores.Rows[ligne].HeaderCell.Value == "NomJoueur")
                 {
@@ -244,7 +272,7 @@ namespace WindowsFormsLigueScrabble
                     dataGridViewScores.Rows[ligne].DefaultCellStyle.ForeColor = Color.Blue;
                     indexLigneTotal = ligne;
                 }
-                if ((string)dataGridViewScores.Rows[ligne].HeaderCell.Value == "IdScore")
+                if ((string)dataGridViewScores.Rows[ligne].HeaderCell.FormattedValue == "IdScore")
                 {
                     dataGridViewScores.Rows[ligne].Visible = false;
                 }
@@ -267,13 +295,51 @@ namespace WindowsFormsLigueScrabble
                     indexLigneBonus = ligne;
                 }
             }
+
+            int nbToursNonNulsMin = 20;
+            for (int noJoueur = 0; noJoueur < scoresDataGrid.Count; noJoueur++)
+            {
+                if (nbToursNonNulsMin > scoresDataGrid[noJoueur].ScoreJoueur.ToursNonNuls)
+                {
+                    nbToursNonNulsMin = scoresDataGrid[noJoueur].ScoreJoueur.ToursNonNuls;
+                }
+            }
+            nbToursNonNulsMin = nbToursNonNulsMin + lignesDeScoreSuppl;
+            if (nbToursNonNulsMin < 20) dataGridViewScores.Rows[26].Visible = false;
+            else dataGridViewScores.Rows[26].Visible = true;
+            if (nbToursNonNulsMin < 19) dataGridViewScores.Rows[25].Visible = false;
+            else dataGridViewScores.Rows[25].Visible = true;
+            if (nbToursNonNulsMin < 18) dataGridViewScores.Rows[24].Visible = false;
+            else dataGridViewScores.Rows[24].Visible = true;
+            if (nbToursNonNulsMin < 17) dataGridViewScores.Rows[23].Visible = false;
+            else dataGridViewScores.Rows[23].Visible = true;
+            if (nbToursNonNulsMin < 16) dataGridViewScores.Rows[22].Visible = false;
+            else dataGridViewScores.Rows[22].Visible = true;
+            if (nbToursNonNulsMin < 15) dataGridViewScores.Rows[21].Visible = false;
+            else dataGridViewScores.Rows[21].Visible = true;
+            if (nbToursNonNulsMin < 14) dataGridViewScores.Rows[20].Visible = false;
+            else dataGridViewScores.Rows[20].Visible = true;
+            if (nbToursNonNulsMin < 13) dataGridViewScores.Rows[19].Visible = false;
+            else dataGridViewScores.Rows[19].Visible = true;
+            if (nbToursNonNulsMin < 12) dataGridViewScores.Rows[18].Visible = false;
+            else dataGridViewScores.Rows[18].Visible = true;
+            if (nbToursNonNulsMin < 11) dataGridViewScores.Rows[17].Visible = false;
+            else dataGridViewScores.Rows[17].Visible = true;
+            if (nbToursNonNulsMin < 10) dataGridViewScores.Rows[16].Visible = false;
+            else dataGridViewScores.Rows[16].Visible = true;
+
             dataGridViewScores.AutoResizeRowHeadersWidth(DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders);
             dataGridViewScores.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
         }
 
         private void buttonAnnulerModifs_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("Cette fonctionnalité n'est pas disponible.\n\nPour annuler TOUTES les modifications,\n veuillez fermer cette page sans sauvegarder\npuis modifier à nouveau la session.");
+            scoresDataGrid.Clear();
+            List<string> valeurs = AfficherListeHeader(dataGridViewScores, "colonnes");
+            scoresDataGrid.AddRange(backupDataGridScores);
+            dataGridViewScores.DataSource = scoresDataGrid;
+            InitialiserDataGridViewScores();
+            //MessageBox.Show("Cette fonctionnalité n'est pas disponible.\n\nPour annuler TOUTES les modifications,\n veuillez fermer cette page sans sauvegarder\npuis modifier à nouveau la session.");
         }
 
         private void buttonEnregistrerModifs_Click(object sender, EventArgs e)
@@ -293,6 +359,14 @@ namespace WindowsFormsLigueScrabble
         private List<ScoreJoueurDataGrid> RecupererScoresDansDataGridScores()
         {
             List<ScoreJoueurDataGrid> scoresDansDataGrid = new List<ScoreJoueurDataGrid>();
+            // Enleve les lignes inutiles créées par le pivotage
+            //for (int ligne = 0; ligne < dataGridViewScores.RowCount; ligne++)
+            //{
+            //    if ((string)dataGridViewScores.Rows[ligne].HeaderCell.Value == "")
+            //    {
+            //        dataGridViewScores.Rows.RemoveAt(ligne);
+            //    }
+            //}
             for (int colonne = 0; colonne < dataGridViewScores.Columns.Count; colonne++)
             {
                 Joueur nouveauJoueur = new Joueur();
@@ -377,6 +451,48 @@ namespace WindowsFormsLigueScrabble
                 if (!fermerOk) e.Cancel = true;
                 else return;
             }
+        }
+
+        private void buttonAjouterLignesDePoints_Click(object sender, EventArgs e)
+        {
+            lignesDeScoreSuppl++;
+            FormatterAffichageDataGridViewScores();
+        }
+
+        private void enregistrerToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            int lignesAffectees = 0;
+            List<ScoreJoueurDataGrid> scoresASauvegarderDataGrid = RecupererScoresDansDataGridScores();
+
+            for (int noScore = 0; noScore < scoresASauvegarderDataGrid.Count; noScore++)
+            {
+                lignesAffectees = controleur.GererScore(controleur.ajouter, scoresASauvegarderDataGrid[noScore]);
+            }
+            if (lignesAffectees > 0) MessageBox.Show("Données sauvegardées.");
+            else controleur.MsgErrDB();
+            changementDataGridNonSauvegarde = false;
+        }
+
+        private void modificationsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            // Annule les modifications en rechargeant les données originales
+            scoresDataGrid.Clear();
+            List<string> valeurs = AfficherListeHeader(dataGridViewScores, "colonnes");
+            scoresDataGrid.AddRange(backupDataGridScores);
+            dataGridViewScores.DataSource = scoresDataGrid;
+            InitialiserDataGridViewScores();
+        }
+
+        private void lignesDeScoreToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            // Ajoute des lignes de score supplémentaires 
+            lignesDeScoreSuppl++;
+            FormatterAffichageDataGridViewScores();
+        }
+
+        private void fermerToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.Close();
         }
     }
 }

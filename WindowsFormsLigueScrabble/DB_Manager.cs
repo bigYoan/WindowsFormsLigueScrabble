@@ -235,7 +235,8 @@ namespace WindowsFormsLigueScrabble
                                 {
                                     while (reader.Read())
                                     {
-                                        scoreJoueur = (int)reader["Total"];
+                                        //== typeof(DBNull)) ? 0 : (int)reader["Id_PlayerFour"]
+                                        scoreJoueur = reader["Total"].GetType() == typeof(DBNull) ? 0 : (int)reader["Total"];
                                     }
                                 }
                             }
@@ -879,11 +880,8 @@ namespace WindowsFormsLigueScrabble
                                 monScore.Tour17 = reader["Tour17"] == DBNull.Value ? 0 : (int)reader["Tour17"];
                                 monScore.Tour18 = reader["Tour18"] == DBNull.Value ? 0 : (int)reader["Tour18"];
                                 monScore.Tour19 = reader["Tour19"] == DBNull.Value ? 0 : (int)reader["Tour19"];
-                                monScore.Tour20 = reader["Tour20"] == DBNull.Value ? 0 : (int)reader["Tour20"];
-                                //monScore.Tour21 = reader["Tour21"] == DBNull.Value ? 0 : (int)reader["Tour21"];
-                                //monScore.Tour22 = reader["Tour22"] == DBNull.Value ? 0 : (int)reader["Tour22"];
-
-                                //monScore.Total = reader["Total"] == DBNull.Value ? 0 : (int)reader["Total"];
+                                monScore.Tour20 = reader["Tour20"] == DBNull.Value ? -1 : (int)reader["Tour20"];
+                                
                                 monScore.Bonus = reader["Bonus"] == DBNull.Value ? 0 : (int)reader["Bonus"];
                                 monScore.Penalite = reader["Penalite"] == DBNull.Value ? 0 : (int)reader["Penalite"];
                                 
