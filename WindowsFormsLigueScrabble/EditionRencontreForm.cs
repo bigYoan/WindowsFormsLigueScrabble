@@ -230,8 +230,8 @@ namespace WindowsFormsLigueScrabble
 
             // Temporaire :   seulement ajouter nouvelle session avec joueurs pour l'instant sans vérifier les intrants
 
+            if (!VerifierLesDonnees()) return;
 
-            
             // Ajouter nouvelles Date, heure , table et partie
             Rencontre nouvelleRencontre = new Rencontre();
             int heureNouvelle = ConvertirComboBoxHeure();
@@ -239,7 +239,14 @@ namespace WindowsFormsLigueScrabble
             int.TryParse((string)comboBoxPupitre.SelectedItem, out int result);
             int noTable = result;
             int.TryParse((string)comboBoxRonde.SelectedItem, out result);
-            int noPartie = result;            
+            int noPartie = result;
+
+            // Verifier si la rencontre existe déjà
+            List<RencontresDataGrid> rencontreExiste = controleur.GererRencontres(nouvelleRencontre, noTable, noPartie, null, controleur.verifierSiExiste, "");
+            if (rencontreExiste == null)
+            {
+                MessageBox.Show("Existe déjà"); return;
+            }
 
             // Créer nouvelle session
             List<RencontresDataGrid> sessions = new List<RencontresDataGrid>();
@@ -393,26 +400,40 @@ namespace WindowsFormsLigueScrabble
 
             bool ajoutOk = false;
 
-            if (!pupitreOk || !rondeOk)
-            {
-                MessageBox.Show("Impossible d'ajouter une nouvelle session sans table(s) ni partie(s).");
-                return false;
-            }
+            string erreurDate = string.Empty;
+            string erreurHeure = string.Empty;
+            string erreurPupitre = string.Empty;
+            string erreurRonde = string.Empty;
+            string erreurJoueurs = string.Empty;
+            string erreurNbJoueurs = string.Empty;
+
             if (!heureOk)
             {
-                MessageBox.Show("Choisir une heure pour la session.");
+                erreurHeure = "Choisir une heure pour la session.\n";
             }
-            if (dateOk && heureOk && pupitreOk && rondeOk && !joueursOk)
+            if (!pupitreOk || !rondeOk)
             {
-                if (nbJoueurs == 0 && (modificationAFaire == ajouterNouvelleSession)) ajoutOk = controleur.DemandeDeConfirmation("Créer une session sans joueurs?");
-                else if (nbJoueurs <=2 && (modificationAFaire == ajouterJoueursSeulement)) MessageBox.Show("Le nombre de joueurs est insuffisant (3 min.)");
+                erreurPupitre = ("Impossible d'ajouter une nouvelle session sans table(s) ni partie(s).\n");
             }
-            if (dateOk && heureOk && pupitreOk && rondeOk && joueursOk)
+            if (!joueursOk)
             {
-                ajoutOk = controleur.DemandeDeConfirmation("Créer une session avec les joueurs affichés?");
+                if (nbJoueurs == 0)
+                {
+                    erreurJoueurs = ("Ajouter des joueurs à la session.\n");
+                }
+                else if (nbJoueurs <= 2)
+                {
+                    erreurNbJoueurs ="Le nombre de joueurs est insuffisant (3 min.)\n";
+                }
             }
-            if (dateOk && !heureOk && joueursOk && (!pupitreOk || !rondeOk)) { MessageBox.Show("Erreur de données.\nHeure, Table et/ou Partie manquantes."); }
-
+            if (!(dateOk && heureOk && pupitreOk && rondeOk && joueursOk))
+            {
+                MessageBox.Show("Erreur de données :\n\n" + erreurHeure + erreurPupitre + erreurJoueurs + erreurNbJoueurs);
+            }
+            else
+            {
+                ajoutOk = controleur.DemandeDeConfirmation("Prêt à créer une session avec les joueurs affichés?");
+            }
             return ajoutOk;
         }
 
@@ -423,7 +444,7 @@ namespace WindowsFormsLigueScrabble
                 DialogResult approuveChangement = MessageBox.Show("Effacer toutes les données ?\nConfirmer...", "Attention!", MessageBoxButtons.OKCancel);
                 if (approuveChangement == DialogResult.Cancel) return;
                 dateTimePickerNewSession.Value = TrouverMercrediProchain();
-                comboBoxHeure.SelectedIndex = 1;
+                comboBoxHeure.SelectedIndex = -1;
                 comboBoxRonde.SelectedIndex = -1;
                 comboBoxPupitre.SelectedIndex = -1;
                 comboBoxJoueur1.SelectedIndex = -1;

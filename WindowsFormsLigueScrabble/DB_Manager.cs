@@ -242,13 +242,14 @@ namespace WindowsFormsLigueScrabble
                             }
                             scoreIndividuel[idJoueur] = scoreJoueur;
                             sessions[noSession].ScoreGagnant = scoreIndividuel.Max();
-                            if (scoreIndividuel[idJoueur] >= scoreIndividuel.Max())
+                            if (scoreIndividuel[idJoueur] >= scoreIndividuel.Max() && scoreIndividuel[idJoueur] != 0)
                             {
                                 foreach (var joueur in joueursDansBD)
                                 {
                                         sessions[noSession].Gagnant = joueursDansBD[idJoueur - 1].Nom;
                                 }
                             }
+
 
                         }
                     }
@@ -880,7 +881,7 @@ namespace WindowsFormsLigueScrabble
                                 monScore.Tour17 = reader["Tour17"] == DBNull.Value ? 0 : (int)reader["Tour17"];
                                 monScore.Tour18 = reader["Tour18"] == DBNull.Value ? 0 : (int)reader["Tour18"];
                                 monScore.Tour19 = reader["Tour19"] == DBNull.Value ? 0 : (int)reader["Tour19"];
-                                monScore.Tour20 = reader["Tour20"] == DBNull.Value ? -1 : (int)reader["Tour20"];
+                                monScore.Tour20 = reader["Tour20"] == DBNull.Value ? 0 : (int)reader["Tour20"];
                                 
                                 monScore.Bonus = reader["Bonus"] == DBNull.Value ? 0 : (int)reader["Bonus"];
                                 monScore.Penalite = reader["Penalite"] == DBNull.Value ? 0 : (int)reader["Penalite"];

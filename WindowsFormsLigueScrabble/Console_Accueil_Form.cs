@@ -89,8 +89,10 @@ namespace WindowsFormsLigueScrabble
 
         private void buttonParties_Click(object sender, EventArgs e)
         {
-            PartieForm partieForm = new PartieForm();
-            partieForm.ShowDialog();
+            //PartieForm partieForm = new PartieForm();
+            //partieForm.ShowDialog();
+            JoutesForm joutesForm = new JoutesForm(controleur);
+            joutesForm.ShowDialog();
         }
 
         private void buttonTables_Click(object sender, EventArgs e)

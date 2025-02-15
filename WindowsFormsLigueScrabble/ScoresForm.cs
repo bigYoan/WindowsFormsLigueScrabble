@@ -23,6 +23,8 @@ namespace WindowsFormsLigueScrabble
         List<ScoreJoueurDataGrid> backupDataGridScores = new List<ScoreJoueurDataGrid>();
         bool chargementEnCours = false;
         bool changementDataGridNonSauvegarde = false;
+        bool premierChargementScores = true;
+        int lignesDeScoreAAfficher = 20;
 
         int nouveauScore = 1;
         int scoreEnCours = 2;
@@ -49,9 +51,18 @@ namespace WindowsFormsLigueScrabble
             if (JouteExiste())
             {
                 InitialiserDataGridViewScores();
+                AfficherInfosRencontre(rencontreAjoutScores);
                 backupDataGridScores.AddRange(scoresDataGrid);
             }
             //else CreerNouveauxScores();
+        }
+
+        private void AfficherInfosRencontre(Rencontre rencontreAjoutScores)
+        {
+            labelDate.Text = rencontreAjoutScores.DateDeJeu.ToString("D");
+            labelHeure.Text = rencontreAjoutScores.DateDeJeu.ToString("t");
+            labelTable.Text += rencontreAjoutScores.NoTable.ToString();
+            labelJoute.Text += rencontreAjoutScores.NoJoute.ToString();
         }
 
         private void InitialiserDataGridViewScores()
@@ -128,14 +139,7 @@ namespace WindowsFormsLigueScrabble
             }
             return scores;
         }
-
-        //private void CreerNouveauxScores()
-        //{
-        //    //Créer un nouveau Score et un nouveau lien Joute_Score_Joueur
-        //    int lienJouteScoreJoueurCree = controleur.CreerLienJouteScoreJoueurDansBD(rencontreAjoutScores);
-        //    if (lienJouteScoreJoueurCree == 0) { MessageBox.Show("Une erreur s'est produite lors de la création\ndes nouveaux scores."); }
-        //    RemplirDataGridScores(nouveauScore, null);
-        //}
+        
         private bool JouteExiste()
         {
             bool jouteExiste = false;
@@ -295,39 +299,48 @@ namespace WindowsFormsLigueScrabble
                     indexLigneBonus = ligne;
                 }
             }
-
-            int nbToursNonNulsMin = 20;
-            for (int noJoueur = 0; noJoueur < scoresDataGrid.Count; noJoueur++)
+            if (premierChargementScores)
             {
-                if (nbToursNonNulsMin > scoresDataGrid[noJoueur].ScoreJoueur.ToursNonNuls)
+                int nbToursNonNulsMin = 20;
+                for (int noJoueur = 0; noJoueur < scoresDataGrid.Count; noJoueur++)
                 {
-                    nbToursNonNulsMin = scoresDataGrid[noJoueur].ScoreJoueur.ToursNonNuls;
+                    if (nbToursNonNulsMin > scoresDataGrid[noJoueur].ScoreJoueur.ToursNonNuls)
+                    {
+                        nbToursNonNulsMin = scoresDataGrid[noJoueur].ScoreJoueur.ToursNonNuls;
+                    }
+                    lignesDeScoreAAfficher = nbToursNonNulsMin + lignesDeScoreSuppl;
                 }
             }
-            nbToursNonNulsMin = nbToursNonNulsMin + lignesDeScoreSuppl;
-            if (nbToursNonNulsMin < 20) dataGridViewScores.Rows[26].Visible = false;
-            else dataGridViewScores.Rows[26].Visible = true;
-            if (nbToursNonNulsMin < 19) dataGridViewScores.Rows[25].Visible = false;
-            else dataGridViewScores.Rows[25].Visible = true;
-            if (nbToursNonNulsMin < 18) dataGridViewScores.Rows[24].Visible = false;
-            else dataGridViewScores.Rows[24].Visible = true;
-            if (nbToursNonNulsMin < 17) dataGridViewScores.Rows[23].Visible = false;
-            else dataGridViewScores.Rows[23].Visible = true;
-            if (nbToursNonNulsMin < 16) dataGridViewScores.Rows[22].Visible = false;
-            else dataGridViewScores.Rows[22].Visible = true;
-            if (nbToursNonNulsMin < 15) dataGridViewScores.Rows[21].Visible = false;
-            else dataGridViewScores.Rows[21].Visible = true;
-            if (nbToursNonNulsMin < 14) dataGridViewScores.Rows[20].Visible = false;
-            else dataGridViewScores.Rows[20].Visible = true;
-            if (nbToursNonNulsMin < 13) dataGridViewScores.Rows[19].Visible = false;
-            else dataGridViewScores.Rows[19].Visible = true;
-            if (nbToursNonNulsMin < 12) dataGridViewScores.Rows[18].Visible = false;
-            else dataGridViewScores.Rows[18].Visible = true;
-            if (nbToursNonNulsMin < 11) dataGridViewScores.Rows[17].Visible = false;
-            else dataGridViewScores.Rows[17].Visible = true;
-            if (nbToursNonNulsMin < 10) dataGridViewScores.Rows[16].Visible = false;
-            else dataGridViewScores.Rows[16].Visible = true;
 
+            //lignesDeScoreAAfficher = lignesDeScoreAAfficher + lignesDeScoreSuppl;
+            if (lignesDeScoreAAfficher < 20) dataGridViewScores.Rows[26].Visible = false;
+            else dataGridViewScores.Rows[26].Visible = true;
+            if (lignesDeScoreAAfficher < 19) dataGridViewScores.Rows[25].Visible = false;
+            else dataGridViewScores.Rows[25].Visible = true;
+            if (lignesDeScoreAAfficher < 18) dataGridViewScores.Rows[24].Visible = false;
+            else dataGridViewScores.Rows[24].Visible = true;
+            if (lignesDeScoreAAfficher < 17) dataGridViewScores.Rows[23].Visible = false;
+            else dataGridViewScores.Rows[23].Visible = true;
+            if (lignesDeScoreAAfficher < 16) dataGridViewScores.Rows[22].Visible = false;
+            else dataGridViewScores.Rows[22].Visible = true;
+            if (lignesDeScoreAAfficher < 15) dataGridViewScores.Rows[21].Visible = false;
+            else dataGridViewScores.Rows[21].Visible = true;
+            if (lignesDeScoreAAfficher < 14) dataGridViewScores.Rows[20].Visible = false;
+            else dataGridViewScores.Rows[20].Visible = true;
+            if (lignesDeScoreAAfficher < 13) dataGridViewScores.Rows[19].Visible = false;
+            else dataGridViewScores.Rows[19].Visible = true;
+            if (lignesDeScoreAAfficher < 12) dataGridViewScores.Rows[18].Visible = false;
+            else dataGridViewScores.Rows[18].Visible = true;
+            if (lignesDeScoreAAfficher < 11) dataGridViewScores.Rows[17].Visible = false;
+            else dataGridViewScores.Rows[17].Visible = true;
+            if (lignesDeScoreAAfficher < 10) dataGridViewScores.Rows[16].Visible = false;
+            else dataGridViewScores.Rows[16].Visible = true;
+            if (lignesDeScoreAAfficher < 9) dataGridViewScores.Rows[15].Visible = false;
+            else dataGridViewScores.Rows[15].Visible = true;
+            if (lignesDeScoreAAfficher < 8) dataGridViewScores.Rows[14].Visible = false;
+            else dataGridViewScores.Rows[14].Visible = true;
+
+            premierChargementScores = false;
             dataGridViewScores.AutoResizeRowHeadersWidth(DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders);
             dataGridViewScores.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
         }
@@ -453,12 +466,6 @@ namespace WindowsFormsLigueScrabble
             }
         }
 
-        private void buttonAjouterLignesDePoints_Click(object sender, EventArgs e)
-        {
-            lignesDeScoreSuppl++;
-            FormatterAffichageDataGridViewScores();
-        }
-
         private void enregistrerToolStripMenuItem_Click(object sender, EventArgs e)
         {
             int lignesAffectees = 0;
@@ -486,7 +493,13 @@ namespace WindowsFormsLigueScrabble
         private void lignesDeScoreToolStripMenuItem_Click(object sender, EventArgs e)
         {
             // Ajoute des lignes de score supplémentaires 
-            lignesDeScoreSuppl++;
+            lignesDeScoreAAfficher++;
+            if (lignesDeScoreAAfficher > 20) 
+            {
+                MessageBox.Show("Le nombre de lignes de score ne peut pas dépasser 20.");
+                lignesDeScoreAAfficher = 20;
+            }
+            
             FormatterAffichageDataGridViewScores();
         }
 

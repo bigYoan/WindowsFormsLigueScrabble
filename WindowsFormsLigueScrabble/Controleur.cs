@@ -17,6 +17,8 @@ namespace WindowsFormsLigueScrabble
         public int ajouter = 1;
         public int supprimer = 2;
         public int modifier = 3;
+        public int verifierSiExiste = 4;
+
         public string orderBy = "ORDER BY Session.Date_Session DESC, _Table.No_Table; ";
 
         public Controleur()
@@ -136,20 +138,18 @@ namespace WindowsFormsLigueScrabble
                         newLienT_S_P.NoPartie = noPartie;
 
                         int nbLiensCrees = AjouterTable(newLienT_S_P);
-                        if (nbLiensCrees > 0) 
+                        if (nbLiensCrees == 0) 
                         {
-                            MessageBox.Show("Ajout de lien réussi");
+                            MsgErrDB();
+                            return null;
                         }
-                        //int idJoute = dB_Manager.TrouverIdJoute(newLienTable_Session_Joute);
-                        //newLienT_S_P.NoPartie = dB_Manager.TrouverNoJoute(idJoute);
-
+                       
                         // Ajouter joueurs à la joute
                         int ajoutReussi = GererJoute(newLienT_S_P.IdPartie, newLienT_S_P.NoPartie, joueurs);
 
                         // Ajouter nombre de joueurs à rencontres data grid
                         if (ajoutReussi > 0)
                         {
-                            MessageBox.Show("Ajout de joueurs réussi.");
                             foreach (var rencontreATrouver in rencontres)
                             {
                                 if (idNouvelleSession == rencontreATrouver.IdSession)
@@ -159,14 +159,22 @@ namespace WindowsFormsLigueScrabble
                                 }
                             }
                         }
+                        else
+                        {
+                            MsgErrDB();
+                            return null;
+                        }
 
                         // Créer lien Joute_Score_Joueur
                         int newLienJoute_Score_Joueur = CreerLienJouteScoreJoueurDansBD(newLienT_S_P);
 
-                        if (newLienJoute_Score_Joueur > 0)
+                        if (newLienJoute_Score_Joueur == 0)
                         {
-                            MessageBox.Show("Ajout de lien réussi : " + newLienJoute_Score_Joueur.ToString() + " joueurs.");
+                            MsgErrDB();
+                            return null;
                         }
+                        MessageBox.Show("Ajout réussi");
+
                     }
                     else
                     {
@@ -212,7 +220,24 @@ namespace WindowsFormsLigueScrabble
                     lignesAffectees = dB_Manager.ModifierRencontreDansBD(newRencontre, modifier);
                     if (lignesAffectees == 0) { MessageBox.Show("Exécution annulée"); }
                 }
-            
+                
+                if (newRencontre != null && ordre == verifierSiExiste)
+                {
+                    // Vérifier si rencontre existe
+                    foreach (var rencontreATrouver in rencontres)
+                    {
+                        if (newRencontre.DateNouvelle.ToString("D") == rencontreATrouver.Session.DateNouvelle.ToString("D"))
+                        {
+                            if (noTable == rencontreATrouver.Table)
+                            {
+                                if (noPartie == rencontreATrouver.Ronde)
+                                {
+                                    return null;
+                                }
+                            }
+                        }
+                    }
+                }
                 rencontres = dB_Manager.ListerRencontresDansBD(orderBy);
             }
             catch (Exception ex)
@@ -342,7 +367,11 @@ namespace WindowsFormsLigueScrabble
         {
             try
             {
-                return dB_Manager.ListerLiensJouteScoreJoueur(" WHERE Id_Joute =" + rencontreAjoutScores.Id_Joute.ToString());
+                if (commande.Contains("Id_Joueur"))
+                {
+                    return dB_Manager.ListerLiensJouteScoreJoueur(commande);
+                }
+                else return dB_Manager.ListerLiensJouteScoreJoueur(" WHERE Id_Joute =" + rencontreAjoutScores.Id_Joute.ToString());
             }
             catch (Exception ex)
             {
@@ -437,6 +466,12 @@ namespace WindowsFormsLigueScrabble
         internal void MsgErrDB()
         {
             MessageBox.Show("Erreur interne 1218 : Base de données.\nContacter votre service informatique.");
+        }
+
+        internal List <Partie> ListerJoute(int idJoute)
+        {
+            return dB_Manager.ListerPartiesDansBD(null, "WHERE Id_Joute = " + idJoute.ToString());
+            //return dB_Manager.ListerPartiesDansBD(null, "WHERE Id_Partie = " + idJoute.ToString());
         }
     }
 }

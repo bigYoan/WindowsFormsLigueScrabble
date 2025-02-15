@@ -99,8 +99,8 @@ namespace WindowsFormsLigueScrabble
             int nombreDeJoueurs = (int)dataGridViewSessions["NombreJoueurs", dataGridViewSessions.CurrentRow.Index].Value;
             if (nombreDeJoueurs != 0)
             {
-                string rubrique = "Vous allez être dirigé vers la page d'ajout de scores.";
-                if (!controleur.DemandeDeConfirmation(rubrique)) return;
+                //string rubrique = "Vous allez être dirigé vers la page d'ajout de scores.";
+                //if (!controleur.DemandeDeConfirmation(rubrique)) return;
                 ScoresForm scoresForm = new ScoresForm(controleur, rencontreAModifier);
                 scoresForm.ShowDialog();
                 RemplirDataGridViewRencontre();
@@ -128,7 +128,7 @@ namespace WindowsFormsLigueScrabble
         {
             toolTipActionne.SetToolTip(buttonAjouterSession, "Ajouter nouvelle session");
             toolTipActionne.SetToolTip(buttonSupprimerSession, "Supprimer session");
-            toolTipActionne.SetToolTip(buttonModifierSession, "Ajouter joueurs");
+            toolTipActionne.SetToolTip(buttonModifierSession, "Modifier partie");
         }
 
         

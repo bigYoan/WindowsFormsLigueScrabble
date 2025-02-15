@@ -120,6 +120,12 @@
       <DependentUpon>Console_Accueil_Form.cs</DependentUpon>
     </Compile>
     <Compile Include="Joueur.cs" />
+    <Compile Include="JoutesForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="JoutesForm.Designer.cs">
+      <DependentUpon>JoutesForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="LienJouteScoreJoueur.cs" />
     <Compile Include="LiensSessionTablePartie.cs" />
     <Compile Include="LienTableSession.cs" />
@@ -157,6 +163,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Console_Accueil_Form.resx">
       <DependentUpon>Console_Accueil_Form.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="JoutesForm.resx">
+      <DependentUpon>JoutesForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
