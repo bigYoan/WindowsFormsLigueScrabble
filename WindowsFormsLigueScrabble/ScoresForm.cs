@@ -74,35 +74,10 @@ namespace WindowsFormsLigueScrabble
             dataGridViewScores.DataSource = scoresDataGrid;
             foreach (var scoreJoueur in scoresDataGrid)
             {
-                scoreJoueur.ScoreJoueur.ToursNonNuls = CompterToursNonNuls(scoreJoueur);
+                scoreJoueur.ScoreJoueur.ToursNonNuls = controleur.CalculerNbToursJoues(scoreJoueur);
             }
             RemplirDataGridScores(scoreEnCours, null);
             //ModifierScoresAJouteDejaCommencee();
-        }
-
-        private int CompterToursNonNuls(ScoreJoueurDataGrid scoreJoueur)
-        {
-            if (scoreJoueur.Tour20 != 0) return 20;
-            if (scoreJoueur.Tour19 != 0) return 19;
-            if (scoreJoueur.Tour18 != 0) return 18;
-            if (scoreJoueur.Tour17 != 0) return 17;
-            if (scoreJoueur.Tour16 != 0) return 16;
-            if (scoreJoueur.Tour15 != 0) return 15;
-            if (scoreJoueur.Tour14 != 0) return 14;
-            if (scoreJoueur.Tour13 != 0) return 13;
-            if (scoreJoueur.Tour12 != 0) return 12;
-            if (scoreJoueur.Tour11 != 0) return 11;
-            if (scoreJoueur.Tour10 != 0) return 10;
-            if (scoreJoueur.Tour9 != 0)  return 9;
-            if (scoreJoueur.Tour8 != 0)  return 8;
-            if (scoreJoueur.Tour7 != 0)  return 7;
-            if (scoreJoueur.Tour6 != 0)  return 6;
-            if (scoreJoueur.Tour5 != 0)  return 5;
-            if (scoreJoueur.Tour4 != 0)  return 4;
-            if (scoreJoueur.Tour3 != 0)  return 3;
-            if (scoreJoueur.Tour2 != 0)  return 2;
-            if (scoreJoueur.Tour1 != 0)  return 1;
-            return  0;
         }
 
         private List<ScoreJoueurDataGrid> DeterminerLesRangsDesJoueurs(List<ScoreJoueurDataGrid> scores)

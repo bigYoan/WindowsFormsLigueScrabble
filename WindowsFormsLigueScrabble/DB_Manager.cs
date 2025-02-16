@@ -1001,6 +1001,44 @@ namespace WindowsFormsLigueScrabble
             }
             catch (Exception) { throw; }
         }
+
+        internal Rencontre TrouverSessionTablePartie(int idJoute)
+        {
+            Rencontre maRencontre = new Rencontre();
+            try
+            {
+                MySqlConnection sqlConnexion = new MySqlConnection(maConnexionString);
+                using (sqlConnexion)
+                {
+                    sqlConnexion.Open();
+                    using (MySqlCommand cmd = new MySqlCommand("SELECT * FROM session_table_game WHERE Id_Joute = " + idJoute.ToString(), sqlConnexion))
+                    {
+                        using (MySqlDataReader reader = cmd.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                maRencontre.IdSession = (int)reader["Id_Session"];
+                                maRencontre.Id_Table = (int)reader["Id_Table"];
+                                maRencontre.Id_Joute = idJoute;
+                            }
+                        }
+                    }
+                    using (MySqlCommand cmd = new MySqlCommand("SELECT * FROM Session WHERE Id_Session = " + maRencontre.IdSession.ToString(), sqlConnexion))
+                    {
+                        using (MySqlDataReader reader = cmd.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                maRencontre.DateDeJeu = (DateTime)reader["Date_Session"];
+                            }
+                        }
+                    }
+                    sqlConnexion.Close();
+                    return maRencontre;                    
+                }
+            }
+            catch (Exception) { throw; }
+        }
     }
     
 }

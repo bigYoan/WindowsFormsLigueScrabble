@@ -36,6 +36,7 @@ namespace WindowsFormsLigueScrabble
 
         private void joueurToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            RendreInvisibleTousDataGrid();
             dataGridViewJoueurs.Visible = true;
             dataGridViewJoueurs.DataSource = null;
             dataGridViewJoueurs.DataSource = controleur.GererJoueur(null, controleur.lister, "ORDER BY Nom");
@@ -69,12 +70,42 @@ namespace WindowsFormsLigueScrabble
             List<Partie> parties = new List<Partie>();
             List<Partie> partiesBidon = new List<Partie>();
             List<LienJouteScoreJoueur> lienJouteScoreJoueurs = controleur.ListerLiensJouteScoreJoueur(null, commande);
+            List<JoutesDataGrid> joutesTrouvees = new List<JoutesDataGrid>();
             foreach (var lienChoisi in lienJouteScoreJoueurs)
             {
+                JoutesDataGrid jouteEnCours = new JoutesDataGrid();
+
+                // Trouver la session de la joute
+                Rencontre rencontreSelonPartie = controleur.TrouverSession(lienChoisi.IdJoute);
+
+                // Trouver le no de table et le no de joute
                 partiesBidon = controleur.ListerJoute(lienChoisi.IdJoute);
-                parties.Add(partiesBidon[0]);
+
+                // Charger les infos du score du joueur
+                ScoreJoueurDataGrid scoreJoueur = controleur.ListerScore(controleur.lister, lienChoisi.IdScore);
+
+                int pointageTotalToutesParties = 0;
+
+                jouteEnCours.IdJoueur = idJoueurChoisi;
+                jouteEnCours.NomJoueur = nomJoueurChoisi;
+                jouteEnCours.DateSession = rencontreSelonPartie.DateDeJeu;
+                jouteEnCours.NoJoute = rencontreSelonPartie.NoJoute;
+                jouteEnCours.NoTable = rencontreSelonPartie.NoTable;
+                jouteEnCours.ScoreFinal = scoreJoueur.TotalJoueur;
+                pointageTotalToutesParties += scoreJoueur.TotalJoueur;
+                scoreJoueur.Rang = controleur.DeterminerRangDuJoueur(lienChoisi, idJoueurChoisi);
+                jouteEnCours.RangDansPartie = scoreJoueur.Rang;
+                jouteEnCours.NbToursNonNuls = controleur.CalculerNbToursJoues(scoreJoueur);
+                if (jouteEnCours.NbToursNonNuls !=0) jouteEnCours.MoyenneParTour = (double)scoreJoueur.TotalJoueur / (double)jouteEnCours.NbToursNonNuls;
+
+                parties.Add(partiesBidon[0]); // parties ne contient qu'un seul élément
+                joutesTrouvees.Add(jouteEnCours);
+                jouteEnCours.NbPartiesJouees = joutesTrouvees.Count;
+                jouteEnCours.MoyenneParPartie = (double)pointageTotalToutesParties / (double)joutesTrouvees.Count;
+
             }
-            dataGridViewJoutes.DataSource = parties;
+
+            dataGridViewJoutes.DataSource = joutesTrouvees;
             dataGridViewJoutes.Visible = true;
             dataGridViewJoutes.Rows[0].HeaderCell.Value = nomJoueurChoisi;
         }

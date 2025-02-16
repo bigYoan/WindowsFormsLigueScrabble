@@ -120,6 +120,7 @@
       <DependentUpon>Console_Accueil_Form.cs</DependentUpon>
     </Compile>
     <Compile Include="Joueur.cs" />
+    <Compile Include="JoutesDataGrid.cs" />
     <Compile Include="JoutesForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -154,6 +155,7 @@
     <Compile Include="ScoresForm.Designer.cs">
       <DependentUpon>ScoresForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="ScoreTotalRangJoueur.cs" />
     <Compile Include="Table.cs" />
     <EmbeddedResource Include="EditionRencontreForm.resx">
       <DependentUpon>EditionRencontreForm.cs</DependentUpon>

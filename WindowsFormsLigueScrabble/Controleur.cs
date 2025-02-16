@@ -473,5 +473,77 @@ namespace WindowsFormsLigueScrabble
             return dB_Manager.ListerPartiesDansBD(null, "WHERE Id_Joute = " + idJoute.ToString());
             //return dB_Manager.ListerPartiesDansBD(null, "WHERE Id_Partie = " + idJoute.ToString());
         }
+
+        internal Rencontre TrouverSession(int idJoute)
+        {
+            Rencontre rencontreTrouvee = dB_Manager.TrouverSessionTablePartie(idJoute);
+            List<Table> tables = dB_Manager.ListerTablesDansBD("WHERE ID_Table = " + rencontreTrouvee.Id_Table.ToString());
+            rencontreTrouvee.NoTable = tables[0].NoTable;  // tables ne contient qu'un seul élément
+            List<Partie> parties = dB_Manager.ListerPartiesDansBD(null, "WHERE Id_Joute = " + rencontreTrouvee.Id_Joute.ToString());
+            rencontreTrouvee.NoJoute = parties[0].NoPartie;  // parties ne contient qu'un seul élément
+            return rencontreTrouvee;
+        }
+
+        internal ScoreJoueurDataGrid ListerScore(int commande, int idScore)
+        {
+            ScoreJoueurDataGrid scoreJoueur = new ScoreJoueurDataGrid();
+            if (commande == lister)
+            {
+                List<Score> scores = dB_Manager.ListerScoresDansBD("WHERE ID_Score = " + idScore.ToString());
+                scoreJoueur.ScoreJoueur = scores[0];
+                return scoreJoueur;
+            }
+            else return null;
+        }
+
+        internal int CalculerNbToursJoues(ScoreJoueurDataGrid scoreJoueur)
+        {
+            if (scoreJoueur.Tour20 != 0) return 20;
+            if (scoreJoueur.Tour19 != 0) return 19;
+            if (scoreJoueur.Tour18 != 0) return 18;
+            if (scoreJoueur.Tour17 != 0) return 17;
+            if (scoreJoueur.Tour16 != 0) return 16;
+            if (scoreJoueur.Tour15 != 0) return 15;
+            if (scoreJoueur.Tour14 != 0) return 14;
+            if (scoreJoueur.Tour13 != 0) return 13;
+            if (scoreJoueur.Tour12 != 0) return 12;
+            if (scoreJoueur.Tour11 != 0) return 11;
+            if (scoreJoueur.Tour10 != 0) return 10;
+            if (scoreJoueur.Tour9 != 0) return 9;
+            if (scoreJoueur.Tour8 != 0) return 8;
+            if (scoreJoueur.Tour7 != 0) return 7;
+            if (scoreJoueur.Tour6 != 0) return 6;
+            if (scoreJoueur.Tour5 != 0) return 5;
+            if (scoreJoueur.Tour4 != 0) return 4;
+            if (scoreJoueur.Tour3 != 0) return 3;
+            if (scoreJoueur.Tour2 != 0) return 2;
+            if (scoreJoueur.Tour1 != 0) return 1;
+            return 0;
+        }
+        internal string DeterminerRangDuJoueur(LienJouteScoreJoueur lien_J_S_J, int idJoueur)
+        {
+            List<ScoreTotalRangJoueur> scoresEtRangs = new List<ScoreTotalRangJoueur>();
+            List<LienJouteScoreJoueur> liens = dB_Manager.ListerLiensJouteScoreJoueur("WHERE Id_Joute = " + lien_J_S_J.IdJoute.ToString());
+            foreach (var lien in liens)
+            {
+                ScoreTotalRangJoueur scoreEtRang = new ScoreTotalRangJoueur();
+                Score score = dB_Manager.ListerScoresDansBD("WHERE ID_Score = " + lien.IdScore.ToString())[0];
+                scoreEtRang.IdJoueur = lien.IdJoueur;
+                scoreEtRang.PointageTotal = score.Total;
+                scoreEtRang.RangJoueur = "";
+                scoresEtRangs.Add(scoreEtRang);
+            }
+            scoresEtRangs = scoresEtRangs.OrderBy(x => - x.PointageTotal).ToList();
+            scoresEtRangs[0].RangJoueur = "1er";
+            scoresEtRangs[1].RangJoueur = "2e";
+            scoresEtRangs[2].RangJoueur = "3e";
+            if (scoresEtRangs.Count > 3) scoresEtRangs[3].RangJoueur = "4e";
+            
+            foreach (var scoreEtRang in scoresEtRangs)
+            {
+                if (scoreEtRang.IdJoueur == idJoueur) return scoreEtRang.RangJoueur;
+            }
+            return "";
+        }
     }
 }
