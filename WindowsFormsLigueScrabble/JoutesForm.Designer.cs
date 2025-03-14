@@ -37,6 +37,7 @@
             this.sToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.nombreDeToursToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.captureToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.fermerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.dataGridViewJoueurs = new System.Windows.Forms.DataGridView();
             this.dataGridViewJoutes = new System.Windows.Forms.DataGridView();
             this.labelTotalParties = new System.Windows.Forms.Label();
@@ -65,7 +66,6 @@
             this.labelScoreMax = new System.Windows.Forms.Label();
             this.labelTopScore = new System.Windows.Forms.Label();
             this.labelTendanceMoyenne = new System.Windows.Forms.Label();
-            this.fermerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewJoueurs)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewJoutes)).BeginInit();
@@ -143,8 +143,16 @@
             this.captureToolStripMenuItem.Text = "Capture";
             this.captureToolStripMenuItem.Click += new System.EventHandler(this.captureToolStripMenuItem_Click);
             // 
+            // fermerToolStripMenuItem
+            // 
+            this.fermerToolStripMenuItem.Name = "fermerToolStripMenuItem";
+            this.fermerToolStripMenuItem.Size = new System.Drawing.Size(69, 24);
+            this.fermerToolStripMenuItem.Text = "Fermer";
+            this.fermerToolStripMenuItem.Click += new System.EventHandler(this.fermerToolStripMenuItem_Click);
+            // 
             // dataGridViewJoueurs
             // 
+            this.dataGridViewJoueurs.BackgroundColor = System.Drawing.SystemColors.Control;
             this.dataGridViewJoueurs.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewJoueurs.Location = new System.Drawing.Point(40, 46);
             this.dataGridViewJoueurs.Name = "dataGridViewJoueurs";
@@ -158,6 +166,8 @@
             // 
             this.dataGridViewJoutes.AllowUserToAddRows = false;
             this.dataGridViewJoutes.AllowUserToDeleteRows = false;
+            this.dataGridViewJoutes.BackgroundColor = System.Drawing.SystemColors.Control;
+            this.dataGridViewJoutes.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.dataGridViewJoutes.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewJoutes.Location = new System.Drawing.Point(40, 211);
             this.dataGridViewJoutes.Name = "dataGridViewJoutes";
@@ -425,7 +435,7 @@
             this.panelInfosGenerales.Controls.Add(this.labelParties3Joueurs);
             this.panelInfosGenerales.Controls.Add(this.labelNomJoueur);
             this.panelInfosGenerales.Controls.Add(this.labelTotalParties);
-            this.panelInfosGenerales.Location = new System.Drawing.Point(49, 31);
+            this.panelInfosGenerales.Location = new System.Drawing.Point(17, 31);
             this.panelInfosGenerales.Name = "panelInfosGenerales";
             this.panelInfosGenerales.Size = new System.Drawing.Size(933, 180);
             this.panelInfosGenerales.TabIndex = 4;
@@ -474,13 +484,6 @@
             this.labelTendanceMoyenne.TabIndex = 3;
             this.labelTendanceMoyenne.Text = "Tendance :";
             this.labelTendanceMoyenne.Click += new System.EventHandler(this.label1_Click);
-            // 
-            // fermerToolStripMenuItem
-            // 
-            this.fermerToolStripMenuItem.Name = "fermerToolStripMenuItem";
-            this.fermerToolStripMenuItem.Size = new System.Drawing.Size(69, 24);
-            this.fermerToolStripMenuItem.Text = "Fermer";
-            this.fermerToolStripMenuItem.Click += new System.EventHandler(this.fermerToolStripMenuItem_Click);
             // 
             // JoutesForm
             // 
