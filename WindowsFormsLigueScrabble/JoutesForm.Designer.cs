@@ -36,6 +36,7 @@
             this.tableToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.sToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.nombreDeToursToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.captureToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.dataGridViewJoueurs = new System.Windows.Forms.DataGridView();
             this.dataGridViewJoutes = new System.Windows.Forms.DataGridView();
             this.labelTotalParties = new System.Windows.Forms.Label();
@@ -64,7 +65,7 @@
             this.labelScoreMax = new System.Windows.Forms.Label();
             this.labelTopScore = new System.Windows.Forms.Label();
             this.labelTendanceMoyenne = new System.Windows.Forms.Label();
-            this.captureToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.fermerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewJoueurs)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewJoutes)).BeginInit();
@@ -76,7 +77,8 @@
             this.menuStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.rechercheParToolStripMenuItem,
-            this.captureToolStripMenuItem});
+            this.captureToolStripMenuItem,
+            this.fermerToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(1055, 28);
@@ -133,6 +135,13 @@
             this.nombreDeToursToolStripMenuItem.Name = "nombreDeToursToolStripMenuItem";
             this.nombreDeToursToolStripMenuItem.Size = new System.Drawing.Size(205, 26);
             this.nombreDeToursToolStripMenuItem.Text = "Nombre de tours";
+            // 
+            // captureToolStripMenuItem
+            // 
+            this.captureToolStripMenuItem.Name = "captureToolStripMenuItem";
+            this.captureToolStripMenuItem.Size = new System.Drawing.Size(75, 24);
+            this.captureToolStripMenuItem.Text = "Capture";
+            this.captureToolStripMenuItem.Click += new System.EventHandler(this.captureToolStripMenuItem_Click);
             // 
             // dataGridViewJoueurs
             // 
@@ -466,12 +475,12 @@
             this.labelTendanceMoyenne.Text = "Tendance :";
             this.labelTendanceMoyenne.Click += new System.EventHandler(this.label1_Click);
             // 
-            // captureToolStripMenuItem
+            // fermerToolStripMenuItem
             // 
-            this.captureToolStripMenuItem.Name = "captureToolStripMenuItem";
-            this.captureToolStripMenuItem.Size = new System.Drawing.Size(75, 24);
-            this.captureToolStripMenuItem.Text = "Capture";
-            this.captureToolStripMenuItem.Click += new System.EventHandler(this.captureToolStripMenuItem_Click);
+            this.fermerToolStripMenuItem.Name = "fermerToolStripMenuItem";
+            this.fermerToolStripMenuItem.Size = new System.Drawing.Size(69, 24);
+            this.fermerToolStripMenuItem.Text = "Fermer";
+            this.fermerToolStripMenuItem.Click += new System.EventHandler(this.fermerToolStripMenuItem_Click);
             // 
             // JoutesForm
             // 
@@ -482,6 +491,7 @@
             this.Controls.Add(this.menuStrip1);
             this.Controls.Add(this.panelInfosGenerales);
             this.Controls.Add(this.dataGridViewJoueurs);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "JoutesForm";
             this.Text = "JoutesForm";
@@ -536,5 +546,6 @@
         private System.Windows.Forms.Label labelnbPente;
         private System.Windows.Forms.Label labelTendanceMoyenne;
         private System.Windows.Forms.ToolStripMenuItem captureToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem fermerToolStripMenuItem;
     }
 }

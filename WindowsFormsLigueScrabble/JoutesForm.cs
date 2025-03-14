@@ -324,13 +324,25 @@ namespace WindowsFormsLigueScrabble
 
         private void captureToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Rectangle bounds = this.Bounds;
-            Bitmap b = new Bitmap(bounds.Width, bounds.Height, PixelFormat.Format32bppArgb);
-            using (Graphics g = Graphics.FromImage(b))
+            var frm = Form.ActiveForm;
+            using (var bmp = new Bitmap(frm.Width, frm.Height))
             {
-                g.CopyFromScreen(bounds.X, bounds.Y, 0, 0, bounds.Size, CopyPixelOperation.SourceCopy);
+                frm.DrawToBitmap(bmp, new Rectangle(0, 0, bmp.Width, bmp.Height));
+                bmp.Save("Fiche-" + labelNomJoueur.Text + ".bmp");
             }
-            b.Save("Capture " + labelNomJoueur.Text);
+            //Rectangle bounds = this.Bounds;
+            //Bitmap b = new Bitmap(bounds.Width, bounds.Height, PixelFormat.Format32bppArgb);
+            //using (Graphics g = Graphics.FromImage(b))
+            //{
+            //    g.CopyFromScreen(0, 0, 0, 0, bounds.Size, CopyPixelOperation.SourceCopy);
+            //    //g.CopyFromScreen(bounds.X, bounds.Y, 0, 0, bounds.Size, CopyPixelOperation.SourceCopy);
+            //}
+            //b.Save("Capture " + labelNomJoueur.Text + ".bmp");
+        }
+
+        private void fermerToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.Close();
         }
     }
 }
