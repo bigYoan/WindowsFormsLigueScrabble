@@ -157,6 +157,12 @@
       <DependentUpon>ScoresForm.cs</DependentUpon>
     </Compile>
     <Compile Include="ScoreTotalRangJoueur.cs" />
+    <Compile Include="StatsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="StatsForm.Designer.cs">
+      <DependentUpon>StatsForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Table.cs" />
     <EmbeddedResource Include="EditionRencontreForm.resx">
       <DependentUpon>EditionRencontreForm.cs</DependentUpon>
@@ -184,6 +190,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="ScoresForm.resx">
       <DependentUpon>ScoresForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="StatsForm.resx">
+      <DependentUpon>StatsForm.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">

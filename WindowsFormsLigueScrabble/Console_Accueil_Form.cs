@@ -112,7 +112,9 @@ namespace WindowsFormsLigueScrabble
 
         private void buttonScores_Click(object sender, EventArgs e)
         {
-            AfficherMessageNonDisponible();
+            StatsForm statsForm = new StatsForm(controleur);
+            statsForm.ShowDialog();
+            //AfficherMessageNonDisponible();
         }
 
         private void buttonCreerSaison_Click(object sender, EventArgs e)

@@ -468,10 +468,15 @@ namespace WindowsFormsLigueScrabble
             MessageBox.Show("Erreur interne 1218 : Base de données.\nContacter votre service informatique.");
         }
 
-        internal List <Partie> ListerJoute(int idJoute)
+        internal List <Partie> ListerJoutes(int commande)
         {
-            return dB_Manager.ListerPartiesDansBD(null, "WHERE Id_Joute = " + idJoute.ToString());
+            if (commande == lister) return dB_Manager.ListerPartiesDansBD(null, "");
+            //else
+            //{
+            //    return dB_Manager.ListerPartiesDansBD(null, "WHERE Id_Joute = " + idJoute.ToString());
+            //}
             //return dB_Manager.ListerPartiesDansBD(null, "WHERE Id_Partie = " + idJoute.ToString());
+            return null;
         }
 
         internal Rencontre TrouverSession(int idJoute)
