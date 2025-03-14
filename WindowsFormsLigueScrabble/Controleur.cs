@@ -418,14 +418,14 @@ namespace WindowsFormsLigueScrabble
             return lignesAffectees;
         }
 
-        internal List<ScoreJoueurDataGrid> ListerScoresJoueurs(int lister, List<LienJouteScoreJoueur> liensJouteScoreJoueur, int idJoute)
+        internal List<ScoreJoueurDataGrid> ListerScoresJoueurs(int lister, List<LienJouteScoreJoueur> liensJouteScoreJoueur, int idJoute, int idJoueur)
         {
             try
             {
                 List<ScoreJoueurDataGrid> scoresDataGrid = new List<ScoreJoueurDataGrid>();
                 foreach (var lien in liensJouteScoreJoueur)
                 {
-                    if (lien.IdJoute == idJoute)
+                    if (lien.IdJoute == idJoute) // && (idJoueur == 0  || lien.IdJoueur == idJoueur))
                     {
                         //Trouver joueur
                         Joueur joueur = dB_Manager.ListerJoueursDansBD("WHERE ID_Joueur = " + lien.IdJoueur.ToString())[0];
@@ -544,6 +544,13 @@ namespace WindowsFormsLigueScrabble
                 if (scoreEtRang.IdJoueur == idJoueur) return scoreEtRang.RangJoueur;
             }
             return "";
+        }
+
+        internal int CompterJoueurDansJoute(int idJoute)
+        {
+            List<LienJouteScoreJoueur> nbLiens = new List<LienJouteScoreJoueur>();
+            nbLiens = dB_Manager.ListerLiensJouteScoreJoueur("WHERE Id_Joute = " + idJoute.ToString());
+            return nbLiens.Count;
         }
     }
 }

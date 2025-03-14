@@ -30,6 +30,12 @@
         {
             this.dataGridViewScores = new System.Windows.Forms.DataGridView();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+            this.choisirToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.joueurToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.dateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.heureToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.tableToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.jouteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.enregistrerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.annulerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.modificationsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -41,28 +47,25 @@
             this.labelHeure = new System.Windows.Forms.Label();
             this.labelTable = new System.Windows.Forms.Label();
             this.labelJoute = new System.Windows.Forms.Label();
-            this.choisirToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.joueurToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
-            this.dateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.heureToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.tableToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.jouteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewScores)).BeginInit();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // dataGridViewScores
             // 
+            this.dataGridViewScores.AllowUserToDeleteRows = false;
             this.dataGridViewScores.BackgroundColor = System.Drawing.Color.DeepSkyBlue;
             this.dataGridViewScores.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.dataGridViewScores.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewScores.Location = new System.Drawing.Point(50, 93);
+            this.dataGridViewScores.MultiSelect = false;
             this.dataGridViewScores.Name = "dataGridViewScores";
             this.dataGridViewScores.RowHeadersWidth = 51;
             this.dataGridViewScores.RowTemplate.Height = 24;
             this.dataGridViewScores.Size = new System.Drawing.Size(737, 645);
             this.dataGridViewScores.TabIndex = 0;
             this.dataGridViewScores.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewScores_CellValueChanged);
+            this.dataGridViewScores.KeyUp += new System.Windows.Forms.KeyEventHandler(this.dataGridViewScores_KeyUp);
             // 
             // menuStrip1
             // 
@@ -79,6 +82,48 @@
             this.menuStrip1.Size = new System.Drawing.Size(846, 28);
             this.menuStrip1.TabIndex = 3;
             this.menuStrip1.Text = "menuStrip1";
+            // 
+            // choisirToolStripMenuItem
+            // 
+            this.choisirToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.joueurToolStripMenuItem1,
+            this.dateToolStripMenuItem,
+            this.heureToolStripMenuItem,
+            this.tableToolStripMenuItem,
+            this.jouteToolStripMenuItem});
+            this.choisirToolStripMenuItem.Name = "choisirToolStripMenuItem";
+            this.choisirToolStripMenuItem.Size = new System.Drawing.Size(68, 24);
+            this.choisirToolStripMenuItem.Text = "Choisir";
+            // 
+            // joueurToolStripMenuItem1
+            // 
+            this.joueurToolStripMenuItem1.Name = "joueurToolStripMenuItem1";
+            this.joueurToolStripMenuItem1.Size = new System.Drawing.Size(135, 26);
+            this.joueurToolStripMenuItem1.Text = "Joueur";
+            // 
+            // dateToolStripMenuItem
+            // 
+            this.dateToolStripMenuItem.Name = "dateToolStripMenuItem";
+            this.dateToolStripMenuItem.Size = new System.Drawing.Size(135, 26);
+            this.dateToolStripMenuItem.Text = "Date";
+            // 
+            // heureToolStripMenuItem
+            // 
+            this.heureToolStripMenuItem.Name = "heureToolStripMenuItem";
+            this.heureToolStripMenuItem.Size = new System.Drawing.Size(135, 26);
+            this.heureToolStripMenuItem.Text = "Heure";
+            // 
+            // tableToolStripMenuItem
+            // 
+            this.tableToolStripMenuItem.Name = "tableToolStripMenuItem";
+            this.tableToolStripMenuItem.Size = new System.Drawing.Size(135, 26);
+            this.tableToolStripMenuItem.Text = "Table";
+            // 
+            // jouteToolStripMenuItem
+            // 
+            this.jouteToolStripMenuItem.Name = "jouteToolStripMenuItem";
+            this.jouteToolStripMenuItem.Size = new System.Drawing.Size(135, 26);
+            this.jouteToolStripMenuItem.Text = "Joute";
             // 
             // enregistrerToolStripMenuItem
             // 
@@ -100,7 +145,7 @@
             this.modificationsToolStripMenuItem.Name = "modificationsToolStripMenuItem";
             this.modificationsToolStripMenuItem.Size = new System.Drawing.Size(183, 26);
             this.modificationsToolStripMenuItem.Text = "Modifications";
-            this.modificationsToolStripMenuItem.Click += new System.EventHandler(this.modificationsToolStripMenuItem_Click);
+            this.modificationsToolStripMenuItem.Click += new System.EventHandler(this.AnnulerModificationsToolStripMenuItem_Click);
             // 
             // ajouterToolStripMenuItem
             // 
@@ -116,7 +161,7 @@
             this.lignesDeScoreToolStripMenuItem.Name = "lignesDeScoreToolStripMenuItem";
             this.lignesDeScoreToolStripMenuItem.Size = new System.Drawing.Size(196, 26);
             this.lignesDeScoreToolStripMenuItem.Text = "Lignes de Score";
-            this.lignesDeScoreToolStripMenuItem.Click += new System.EventHandler(this.lignesDeScoreToolStripMenuItem_Click);
+            this.lignesDeScoreToolStripMenuItem.Click += new System.EventHandler(this.AjouterlignesDeScoreToolStripMenuItem_Click);
             // 
             // joueurToolStripMenuItem
             // 
@@ -170,48 +215,6 @@
             this.labelJoute.Size = new System.Drawing.Size(78, 25);
             this.labelJoute.TabIndex = 4;
             this.labelJoute.Text = "Partie : ";
-            // 
-            // choisirToolStripMenuItem
-            // 
-            this.choisirToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.joueurToolStripMenuItem1,
-            this.dateToolStripMenuItem,
-            this.heureToolStripMenuItem,
-            this.tableToolStripMenuItem,
-            this.jouteToolStripMenuItem});
-            this.choisirToolStripMenuItem.Name = "choisirToolStripMenuItem";
-            this.choisirToolStripMenuItem.Size = new System.Drawing.Size(68, 24);
-            this.choisirToolStripMenuItem.Text = "Choisir";
-            // 
-            // joueurToolStripMenuItem1
-            // 
-            this.joueurToolStripMenuItem1.Name = "joueurToolStripMenuItem1";
-            this.joueurToolStripMenuItem1.Size = new System.Drawing.Size(224, 26);
-            this.joueurToolStripMenuItem1.Text = "Joueur";
-            // 
-            // dateToolStripMenuItem
-            // 
-            this.dateToolStripMenuItem.Name = "dateToolStripMenuItem";
-            this.dateToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
-            this.dateToolStripMenuItem.Text = "Date";
-            // 
-            // heureToolStripMenuItem
-            // 
-            this.heureToolStripMenuItem.Name = "heureToolStripMenuItem";
-            this.heureToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
-            this.heureToolStripMenuItem.Text = "Heure";
-            // 
-            // tableToolStripMenuItem
-            // 
-            this.tableToolStripMenuItem.Name = "tableToolStripMenuItem";
-            this.tableToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
-            this.tableToolStripMenuItem.Text = "Table";
-            // 
-            // jouteToolStripMenuItem
-            // 
-            this.jouteToolStripMenuItem.Name = "jouteToolStripMenuItem";
-            this.jouteToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
-            this.jouteToolStripMenuItem.Text = "Joute";
             // 
             // ScoresForm
             // 

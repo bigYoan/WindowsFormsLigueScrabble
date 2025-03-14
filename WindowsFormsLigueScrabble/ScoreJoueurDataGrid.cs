@@ -47,7 +47,8 @@ namespace WindowsFormsLigueScrabble
         public string PseudoJoueur { get => joueur.Pseudo; }
         public int TotalJoueur { get => scoreJoueur.Total; }
 
-        public string Rang { get => rang; set => rang = value; }
+        public string Rang { get => (rang == "1" || rang == "1er") ? "1er" : (rang == "2" || rang == "2e") ? "2e" 
+                                        : (rang == "3" || rang == "3e") ? "3e" : (rang == "4" || rang =="4e") ? "4e" : "" ; set => rang = value; }
         public int Tour1 { get => scoreJoueur.Tour1; }
         public int Tour2 { get => scoreJoueur.Tour2; }
         public int Tour3 { get => scoreJoueur.Tour3; }
@@ -73,5 +74,6 @@ namespace WindowsFormsLigueScrabble
         internal Score ScoreJoueur { get => scoreJoueur; set => scoreJoueur = value; }
         internal Joueur Joueur { get => joueur; set => joueur = value; }
 
+       
     }
 }

@@ -98,6 +98,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataGridIndexLigne.cs" />
     <Compile Include="DonneesRencontre.cs" />
     <Compile Include="EditionRencontreForm.cs">
       <SubType>Form</SubType>

@@ -769,7 +769,7 @@ namespace WindowsFormsLigueScrabble
                     ", Tour6 = @Tour6, Tour7 = @Tour7, Tour8 = @Tour8, Tour9 = @Tour9, Tour10 = @Tour10" +
                     ", Tour11 = @Tour11, Tour12 = @Tour12, Tour13 = @Tour13, Tour14 = @Tour14, Tour15 = @Tour15" +
                     ", Tour16 = @Tour16, Tour17 = @Tour17, Tour18 = @Tour18, Tour19 = @Tour19, Tour20 = @Tour20";
-            setCompilations = ", Bonus = @Bonus, Penalite = @Penalite, Total = @Total ";
+            setCompilations = ", Bonus = @Bonus, Penalite = @Penalite, Total = @Total, Rang = @Rang";
             whereCommand = " WHERE Id_Score = " + id_Score.ToString() + ";";
             commandeModifier = commandeModifier + setTours + setCompilations + whereCommand;
             try
@@ -782,29 +782,30 @@ namespace WindowsFormsLigueScrabble
 
                     using (MySqlCommand cmd = new MySqlCommand(commandeModifier, sqlConnexion))
                     {
-                        cmd.Parameters.Add(new MySqlParameter("@Tour1", scoreAAjouter.ScoreJoueur.Tour1));
-                        cmd.Parameters.Add(new MySqlParameter("@Tour2", scoreAAjouter.ScoreJoueur.Tour2));
-                        cmd.Parameters.Add(new MySqlParameter("@Tour3", scoreAAjouter.ScoreJoueur.Tour3));
-                        cmd.Parameters.Add(new MySqlParameter("@Tour4", scoreAAjouter.ScoreJoueur.Tour4));
-                        cmd.Parameters.Add(new MySqlParameter("@Tour5", scoreAAjouter.ScoreJoueur.Tour5));
-                        cmd.Parameters.Add(new MySqlParameter("@Tour6", scoreAAjouter.ScoreJoueur.Tour6));
-                        cmd.Parameters.Add(new MySqlParameter("@Tour7", scoreAAjouter.ScoreJoueur.Tour7));
-                        cmd.Parameters.Add(new MySqlParameter("@Tour8", scoreAAjouter.ScoreJoueur.Tour8));
-                        cmd.Parameters.Add(new MySqlParameter("@Tour9", scoreAAjouter.ScoreJoueur.Tour9));
-                        cmd.Parameters.Add(new MySqlParameter("@Tour10", scoreAAjouter.ScoreJoueur.Tour10));
-                        cmd.Parameters.Add(new MySqlParameter("@Tour11", scoreAAjouter.ScoreJoueur.Tour11));
-                        cmd.Parameters.Add(new MySqlParameter("@Tour12", scoreAAjouter.ScoreJoueur.Tour12));
-                        cmd.Parameters.Add(new MySqlParameter("@Tour13", scoreAAjouter.ScoreJoueur.Tour13));
-                        cmd.Parameters.Add(new MySqlParameter("@Tour14", scoreAAjouter.ScoreJoueur.Tour14));
-                        cmd.Parameters.Add(new MySqlParameter("@Tour15", scoreAAjouter.ScoreJoueur.Tour15));
-                        cmd.Parameters.Add(new MySqlParameter("@Tour16", scoreAAjouter.ScoreJoueur.Tour16));
-                        cmd.Parameters.Add(new MySqlParameter("@Tour17", scoreAAjouter.ScoreJoueur.Tour17));
-                        cmd.Parameters.Add(new MySqlParameter("@Tour18", scoreAAjouter.ScoreJoueur.Tour18));
-                        cmd.Parameters.Add(new MySqlParameter("@Tour19", scoreAAjouter.ScoreJoueur.Tour19));
-                        cmd.Parameters.Add(new MySqlParameter("@Tour20", scoreAAjouter.ScoreJoueur.Tour20));
+                        cmd.Parameters.Add(new MySqlParameter("@Tour1", scoreAAjouter.ScoreJoueur.Tours[0]));
+                        cmd.Parameters.Add(new MySqlParameter("@Tour2", scoreAAjouter.ScoreJoueur.Tours[1]));
+                        cmd.Parameters.Add(new MySqlParameter("@Tour3", scoreAAjouter.ScoreJoueur.Tours[2]));
+                        cmd.Parameters.Add(new MySqlParameter("@Tour4", scoreAAjouter.ScoreJoueur.Tours[3]));
+                        cmd.Parameters.Add(new MySqlParameter("@Tour5", scoreAAjouter.ScoreJoueur.Tours[4]));
+                        cmd.Parameters.Add(new MySqlParameter("@Tour6", scoreAAjouter.ScoreJoueur.Tours[5]));
+                        cmd.Parameters.Add(new MySqlParameter("@Tour7", scoreAAjouter.ScoreJoueur.Tours[6]));
+                        cmd.Parameters.Add(new MySqlParameter("@Tour8", scoreAAjouter.ScoreJoueur.Tours[7]));
+                        cmd.Parameters.Add(new MySqlParameter("@Tour9", scoreAAjouter.ScoreJoueur.Tours[8]));
+                        cmd.Parameters.Add(new MySqlParameter("@Tour10", scoreAAjouter.ScoreJoueur.Tours[9]));
+                        cmd.Parameters.Add(new MySqlParameter("@Tour11", scoreAAjouter.ScoreJoueur.Tours[10]));
+                        cmd.Parameters.Add(new MySqlParameter("@Tour12", scoreAAjouter.ScoreJoueur.Tours[11]));
+                        cmd.Parameters.Add(new MySqlParameter("@Tour13", scoreAAjouter.ScoreJoueur.Tours[12]));
+                        cmd.Parameters.Add(new MySqlParameter("@Tour14", scoreAAjouter.ScoreJoueur.Tours[13]));
+                        cmd.Parameters.Add(new MySqlParameter("@Tour15", scoreAAjouter.ScoreJoueur.Tours[14]));
+                        cmd.Parameters.Add(new MySqlParameter("@Tour16", scoreAAjouter.ScoreJoueur.Tours[15]));
+                        cmd.Parameters.Add(new MySqlParameter("@Tour17", scoreAAjouter.ScoreJoueur.Tours[16]));
+                        cmd.Parameters.Add(new MySqlParameter("@Tour18", scoreAAjouter.ScoreJoueur.Tours[17]));
+                        cmd.Parameters.Add(new MySqlParameter("@Tour19", scoreAAjouter.ScoreJoueur.Tours[18]));
+                        cmd.Parameters.Add(new MySqlParameter("@Tour20", scoreAAjouter.ScoreJoueur.Tours[19]));
                         cmd.Parameters.Add(new MySqlParameter("@Bonus", scoreAAjouter.Bonus));
                         cmd.Parameters.Add(new MySqlParameter("@Penalite", scoreAAjouter.Penalite));
                         cmd.Parameters.Add(new MySqlParameter("@Total", scoreAAjouter.TotalJoueur));
+                        cmd.Parameters.Add(new MySqlParameter("@Rang", scoreAAjouter.Rang));
                         lignesAffectees = cmd.ExecuteNonQuery();
                     }
                     sqlConnexion.Close();
@@ -847,6 +848,10 @@ namespace WindowsFormsLigueScrabble
         internal List<Score> ListerScoresDansBD(string orderBy)
         {
             List<Score> scores = new List<Score>();
+            Score monScore = new Score();
+            List<int> tours = new List<int> { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+            monScore.Tours = tours;
+
             try
             {
                 MySqlConnection sqlConnexion = new MySqlConnection(maConnexionString);
@@ -860,32 +865,31 @@ namespace WindowsFormsLigueScrabble
                         {
                             while (reader.Read())
                             {
-                                Score monScore = new Score();
                                 monScore.IdScore = (int)reader["Id_Score"];
-                                monScore.Tour1 = reader["Tour1"] == DBNull.Value ? 0 : (int)reader["Tour1"];
-                                monScore.Tour2 = reader["Tour2"] == DBNull.Value ? 0 : (int)reader["Tour2"];
-                                monScore.Tour3 = reader["Tour3"] == DBNull.Value ? 0 : (int)reader["Tour3"];
-                                monScore.Tour4 = reader["Tour4"] == DBNull.Value ? 0 : (int)reader["Tour4"];
-                                monScore.Tour5 = reader["Tour5"] == DBNull.Value ? 0 : (int)reader["Tour5"];
-                                monScore.Tour6 = reader["Tour6"] == DBNull.Value ? 0 : (int)reader["Tour6"];
-                                monScore.Tour7 = reader["Tour7"] == DBNull.Value ? 0 : (int)reader["Tour7"];
-                                monScore.Tour8 = reader["Tour8"] == DBNull.Value ? 0 : (int)reader["Tour8"];
-                                monScore.Tour9 = reader["Tour9"] == DBNull.Value ? 0 : (int)reader["Tour9"];
-                                monScore.Tour10 = reader["Tour10"] == DBNull.Value ? 0 : (int)reader["Tour10"];
-                                monScore.Tour11 = reader["Tour11"] == DBNull.Value ? 0 : (int)reader["Tour11"];
-                                monScore.Tour12 = reader["Tour12"] == DBNull.Value ? 0 : (int)reader["Tour12"];
-                                monScore.Tour13 = reader["Tour13"] == DBNull.Value ? 0 : (int)reader["Tour13"];
-                                monScore.Tour14 = reader["Tour14"] == DBNull.Value ? 0 : (int)reader["Tour14"];
-                                monScore.Tour15 = reader["Tour15"] == DBNull.Value ? 0 : (int)reader["Tour15"];
-                                monScore.Tour16 = reader["Tour16"] == DBNull.Value ? 0 : (int)reader["Tour16"];
-                                monScore.Tour17 = reader["Tour17"] == DBNull.Value ? 0 : (int)reader["Tour17"];
-                                monScore.Tour18 = reader["Tour18"] == DBNull.Value ? 0 : (int)reader["Tour18"];
-                                monScore.Tour19 = reader["Tour19"] == DBNull.Value ? 0 : (int)reader["Tour19"];
-                                monScore.Tour20 = reader["Tour20"] == DBNull.Value ? 0 : (int)reader["Tour20"];
-                                
+                                monScore.Tours[0] = reader["Tour1"] == DBNull.Value ? 0 : (int)reader["Tour1"];
+                                monScore.Tours[1] = reader["Tour2"] == DBNull.Value ? 0 : (int)reader["Tour2"];
+                                monScore.Tours[2] = reader["Tour3"] == DBNull.Value ? 0 : (int)reader["Tour3"];
+                                monScore.Tours[3] = reader["Tour4"] == DBNull.Value ? 0 : (int)reader["Tour4"];
+                                monScore.Tours[4] = reader["Tour5"] == DBNull.Value ? 0 : (int)reader["Tour5"];
+                                monScore.Tours[5] = reader["Tour6"] == DBNull.Value ? 0 : (int)reader["Tour6"];
+                                monScore.Tours[6] = reader["Tour7"] == DBNull.Value ? 0 : (int)reader["Tour7"];
+                                monScore.Tours[7] = reader["Tour8"] == DBNull.Value ? 0 : (int)reader["Tour8"];
+                                monScore.Tours[8] = reader["Tour9"] == DBNull.Value ? 0 : (int)reader["Tour9"];
+                                monScore.Tours[9] = reader["Tour10"] == DBNull.Value ? 0 : (int)reader["Tour10"];
+                                monScore.Tours[10] = reader["Tour11"] == DBNull.Value ? 0 : (int)reader["Tour11"];
+                                monScore.Tours[11] = reader["Tour12"] == DBNull.Value ? 0 : (int)reader["Tour12"];
+                                monScore.Tours[12] = reader["Tour13"] == DBNull.Value ? 0 : (int)reader["Tour13"];
+                                monScore.Tours[13] = reader["Tour14"] == DBNull.Value ? 0 : (int)reader["Tour14"];
+                                monScore.Tours[14] = reader["Tour15"] == DBNull.Value ? 0 : (int)reader["Tour15"];
+                                monScore.Tours[15] = reader["Tour16"] == DBNull.Value ? 0 : (int)reader["Tour16"];
+                                monScore.Tours[16] = reader["Tour17"] == DBNull.Value ? 0 : (int)reader["Tour17"];
+                                monScore.Tours[17] = reader["Tour18"] == DBNull.Value ? 0 : (int)reader["Tour18"];
+                                monScore.Tours[18] = reader["Tour19"] == DBNull.Value ? 0 : (int)reader["Tour19"];
+                                monScore.Tours[19] = reader["Tour20"] == DBNull.Value ? 0 : (int)reader["Tour20"];
+                                monScore.Rang = reader["Rang"] == DBNull.Value ? "" : (string)reader["Rang"];
                                 monScore.Bonus = reader["Bonus"] == DBNull.Value ? 0 : (int)reader["Bonus"];
                                 monScore.Penalite = reader["Penalite"] == DBNull.Value ? 0 : (int)reader["Penalite"];
-                                
+
                                 scores.Add(monScore);
                             }
                         }
